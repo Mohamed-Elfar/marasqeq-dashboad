@@ -1,13 +1,9 @@
-import Footer from '@/components/layout/Footer';
 import React from 'react';
-import Chart from './components/Chart';
-import User from './components/User';
 import Link from 'next/link';
 import IconifyIcon from '@/components/wrapper/IconifyIcon';
-import { Col, Row } from 'react-bootstrap';
-import Cards from './components/Cards';
+import { Card, CardBody, CardHeader, Col, Row } from 'react-bootstrap';
 export const metadata = {
-  title: 'Analytics'
+  title: 'Dashboard'
 };
 const page = () => {
   return <>
@@ -17,7 +13,7 @@ const page = () => {
             <h4 className="mb-0">Dashboard</h4>
             <ol className="breadcrumb mb-0">
               <li className="breadcrumb-item">
-                <Link href="/">Taplox</Link>
+                <Link href="/">Maraseq</Link>
               </li>
               <div className="mx-1" style={{
               height: 24,
@@ -30,10 +26,44 @@ const page = () => {
           </div>
         </Col>
       </Row>
-      <Cards />
-      <Chart />
-      <User />
-      <Footer />
+      <Row>
+        <Col lg={4}>
+          <Card>
+            <CardHeader>
+              <h5 className="mb-0">Edit Website Pages</h5>
+            </CardHeader>
+            <CardBody>
+              <p className="text-muted mb-3">Manage content and section visibility for Home, About, FAQ, Contact, News, and Property pages.</p>
+              <Link href="/content-management/pages/home" className="btn btn-primary btn-sm">Open Pages</Link>
+            </CardBody>
+          </Card>
+        </Col>
+        <Col lg={4}>
+          <Card>
+            <CardHeader>
+              <h5 className="mb-0">Manage Properties & News</h5>
+            </CardHeader>
+            <CardBody>
+              <p className="text-muted mb-3">Add, edit, and remove property and news entries with images, videos, and details.</p>
+              <div className="d-flex gap-2">
+                <Link href="/content-management/properties" className="btn btn-outline-primary btn-sm">Properties</Link>
+                <Link href="/content-management/news" className="btn btn-outline-primary btn-sm">News</Link>
+              </div>
+            </CardBody>
+          </Card>
+        </Col>
+        <Col lg={4}>
+          <Card>
+            <CardHeader>
+              <h5 className="mb-0">Support Center</h5>
+            </CardHeader>
+            <CardBody>
+              <p className="text-muted mb-3">Review contact messages from website users and mark them as open or resolved.</p>
+              <Link href="/content-management/support-center" className="btn btn-outline-primary btn-sm">Open Support Center</Link>
+            </CardBody>
+          </Card>
+        </Col>
+      </Row>
     </>;
 };
 export default page;

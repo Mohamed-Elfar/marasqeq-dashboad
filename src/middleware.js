@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 export function middleware(request) {
   const response = NextResponse.next();
   if (request.nextUrl.pathname === '/') {
-    return NextResponse.redirect(new URL('/dashboards', request.url));
+    return NextResponse.redirect(new URL('/content-management/pages/home', request.url));
   }
   return response;
 }
