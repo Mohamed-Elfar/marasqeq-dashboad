@@ -1,4 +1,3 @@
-import PageTitle from '@/components/PageTitle';
 import React from 'react';
 
 export const metadata = {
@@ -8,7 +7,6 @@ export const metadata = {
 const ContentManagementLayout = ({ children }) => {
   return (
     <>
-      <PageTitle pageTitle="Website Content Management" />
       {children}
     </>
   );
