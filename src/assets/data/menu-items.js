@@ -53,6 +53,12 @@ export const MENU_ITEMS = [
     url: '/content-management/form-options'
   },
   {
+    key: 'contact-info',
+    label: 'Contact Info',
+    icon: 'solar:phone-outline',
+    url: '/content-management/contact-info'
+  },
+  {
     key: 'logout',
     label: 'Logout',
     icon: 'solar:logout-3-outline',

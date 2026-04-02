@@ -1,0 +1,44 @@
+{
+  "emails": [
+    {
+      "id": "1",
+      "email": "info@maraseqgroup.com",
+      "label": "General Inquiries",
+      "visible": true,
+      "order": 1
+    },
+    {
+      "id": "2",
+      "email": "support@maraseqgroup.com",
+      "label": "Support",
+      "visible": true,
+      "order": 2
+    }
+  ],
+  "phones": [
+    {
+      "id": "1",
+      "phone": "+201102223231",
+      "label": "Main Office",
+      "visible": true,
+      "order": 1
+    },
+    {
+      "id": "2",
+      "phone": "+20102223232",
+      "label": "Customer Service",
+      "visible": true,
+      "order": 2
+    }
+  ],
+  "addresses": [
+    {
+      "id": "1",
+      "line1": "Qutur, Tanta",
+      "line2": "Gharbia Governorate, Egypt",
+      "label": "Main Office",
+      "visible": true,
+      "order": 1
+    }
+  ]
+}
