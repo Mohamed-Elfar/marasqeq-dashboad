@@ -1,21 +1,18 @@
 'use client';
 
 import { SessionProvider } from 'next-auth/react';
-import { ToastContainer } from 'react-toastify';
 import dynamic from 'next/dynamic';
+import { ToastContainer } from 'react-toastify';
 const LayoutProvider = dynamic(() => import('@/context/useLayoutContext').then(mod => mod.LayoutProvider), {
   ssr: false
 });
-import { NotificationProvider } from '@/context/useNotificationContext';
 const AppProvidersWrapper = ({
   children
 }) => {
   return <SessionProvider>
       <LayoutProvider>
-        <NotificationProvider>
-          {children}
-          <ToastContainer theme="colored" />
-        </NotificationProvider>
+        {children}
+        <ToastContainer theme="colored" />
       </LayoutProvider>
     </SessionProvider>;
 };

@@ -3,7 +3,6 @@ import ThemeModeToggle from './components/ThemeModeToggle';
 import GoToWebsiteEditButton from './components/GoToWebsiteEditButton';
 import { Container } from 'react-bootstrap';
 import IconifyIcon from '@/components/wrapper/IconifyIcon';
-import Notifications from './components/Notifications';
 const page = () => {
   return <header className="app-topbar">
       <div>
@@ -21,7 +20,6 @@ const page = () => {
             <div className="d-flex align-items-center gap-2">
               <ThemeModeToggle />
               <GoToWebsiteEditButton />
-              <Notifications />
             </div>
           </div>
         </Container>
