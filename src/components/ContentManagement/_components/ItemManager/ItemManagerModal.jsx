@@ -70,7 +70,7 @@ const ItemManagerModal = ({ show, onHide, editingItem, formData, itemType, categ
         </Modal.Title>
       </Modal.Header>
 
-      <Modal.Body style={{ background: '#f8f9fa', padding: '0' }}>
+      <Modal.Body style={{ padding: '0' }}>
         <style>{`
           .custom-tabs .nav-tabs {
             border-bottom: 2px solid #e9ecef;
@@ -219,9 +219,9 @@ const ItemManagerModal = ({ show, onHide, editingItem, formData, itemType, categ
       <Modal.Footer
         className="border-0"
         style={{
-          background: '#ffffff',
-          padding: '1.5rem 2rem',
+          padding: '1rem 1.5rem',
           boxShadow: '0 -2px 10px rgba(0,0,0,0.05)',
+          backgroundColor: 'transparent',
         }}>
         <Button
           variant="light"

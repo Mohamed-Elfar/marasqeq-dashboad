@@ -281,7 +281,7 @@ const FormOptionsManager = () => {
             </span>
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{ background: '#f8f9fa', padding: '2rem' }}>
+        <Modal.Body style={{ padding: '1.5rem' }}>
           <Form>
             <Form.Group className="mb-3">
               <Form.Label>
@@ -330,9 +330,9 @@ const FormOptionsManager = () => {
         <Modal.Footer 
           className="border-0"
           style={{
-            background: '#ffffff',
-            padding: '1.5rem 2rem',
-            boxShadow: '0 -2px 10px rgba(0,0,0,0.05)'
+            padding: '1rem 1.5rem',
+            boxShadow: '0 -2px 10px rgba(0,0,0,0.05)',
+            backgroundColor: 'transparent'
           }}
         >
           <Button 

@@ -188,7 +188,7 @@ const CategoriesPage = () => {
         </Card.Body>
       </Card>
 
-      <Modal show={showModal} onHide={() => setShowModal(false)} size="lg" centered backdrop="static">
+      <Modal show={showModal} onHide={() => setShowModal(false)} size="md" centered backdrop="static">
         <Modal.Header
           closeButton
           closeVariant="white"
@@ -204,13 +204,13 @@ const CategoriesPage = () => {
           </Modal.Title>
         </Modal.Header>
 
-        <Modal.Body style={{ background: '#f8f9fa', padding: '2rem' }}>
+        <Modal.Body style={{ padding: '1.5rem' }}>
           <Form>
-            <Card className="mb-4 border-0 shadow-sm">
-              <Card.Body className="p-4">
+            <Card className="mb-3 border-0 shadow-sm">
+              <Card.Body className="p-3">
                 <Row>
                   <Col md={12}>
-                    <Form.Group className="mb-4">
+                    <Form.Group className="mb-3">
                       <Form.Label className="fw-semibold mb-2">
                         Category Name <span className="text-danger">*</span>
                       </Form.Label>
@@ -230,7 +230,7 @@ const CategoriesPage = () => {
                   </Col>
 
                   <Col md={12}>
-                    <Form.Group className="mb-4">
+                    <Form.Group className="mb-3">
                       <Form.Label className="fw-semibold mb-2">Description</Form.Label>
                       <Form.Control
                         as="textarea"
@@ -274,9 +274,9 @@ const CategoriesPage = () => {
         <Modal.Footer
           className="border-0"
           style={{
-            background: '#ffffff',
-            padding: '1.5rem 2rem',
+            padding: '1rem 1.5rem',
             boxShadow: '0 -2px 10px rgba(0,0,0,0.05)',
+            backgroundColor: 'transparent',
           }}>
           <Button
             variant="light"

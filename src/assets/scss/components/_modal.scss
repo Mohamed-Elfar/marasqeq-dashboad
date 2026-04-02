@@ -52,3 +52,23 @@
         color: $white !important;
     }
 }
+
+// Dark mode support for modals
+html[data-bs-theme="dark"] {
+    .modal-content {
+        background-color: var(--#{$prefix}body-bg);
+        color: var(--#{$prefix}body-color);
+    }
+
+    .modal-header {
+        border-bottom-color: var(--#{$prefix}border-color);
+    }
+
+    .modal-footer {
+        border-top-color: var(--#{$prefix}border-color);
+    }
+
+    .modal-body {
+        background-color: var(--#{$prefix}body-bg) !important;
+    }
+}
