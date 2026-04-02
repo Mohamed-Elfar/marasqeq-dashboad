@@ -86,5 +86,68 @@
       "id": "1775049016233"
     }
   ],
-  "news": []
+  "news": [],
+  "undefined": [
+    {
+      "title": "Tempor tempor est ea",
+      "shortDescription": "Magna quis ullamco a",
+      "fullDescription": "Dolores et perspicia",
+      "thumbImage": "In ex et magni magni",
+      "img": "Excepteur eius non a",
+      "icon": "Excepturi aperiam mo",
+      "category": [
+        "Consulting"
+      ],
+      "buttonText": "Assumenda et corpori",
+      "active": false,
+      "featured": false,
+      "coreFeature": false,
+      "captions": {
+        "image1": "",
+        "image2": "",
+        "caption": "",
+        "captionFullDescription": "",
+        "captionShortDescription": ""
+      },
+      "id": "1775059288228"
+    }
+  ],
+  "social": [
+    {
+      "id": "1",
+      "name": "Facebook",
+      "icon": "FaFacebookF",
+      "url": "https://www.facebook.com/maraseqgroup",
+      "position": "both",
+      "active": true,
+      "order": 2
+    },
+    {
+      "id": "2",
+      "name": "Twitter",
+      "icon": "FaTwitter",
+      "url": "https://twitter.com/maraseqgroup",
+      "position": "both",
+      "active": true,
+      "order": 1
+    },
+    {
+      "id": "3",
+      "name": "Instagram",
+      "icon": "FaInstagram",
+      "url": "https://www.instagram.com/maraseqgroup/",
+      "position": "both",
+      "active": true,
+      "order": 4
+    },
+    {
+      "id": "4",
+      "name": "LinkedIn",
+      "icon": "FaLinkedin",
+      "url": "https://www.linkedin.com/in/maraseqgroup/",
+      "position": "both",
+      "active": true,
+      "order": 3
+    }
+  ]
 }

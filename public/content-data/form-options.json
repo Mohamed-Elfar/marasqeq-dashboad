@@ -1,0 +1,344 @@
+{
+  "locations": [
+    {
+      "id": "1",
+      "value": "All Locations",
+      "label": "All Locations",
+      "active": true,
+      "order": 1
+    },
+    {
+      "id": "2",
+      "value": "New Cairo",
+      "label": "New Cairo",
+      "active": true,
+      "order": 2
+    },
+    {
+      "id": "3",
+      "value": "New Capital",
+      "label": "New Capital",
+      "active": true,
+      "order": 3
+    },
+    {
+      "id": "4",
+      "value": "Sheikh Zayed",
+      "label": "Sheikh Zayed",
+      "active": true,
+      "order": 4
+    },
+    {
+      "id": "5",
+      "value": "Fifth Settlement",
+      "label": "Fifth Settlement",
+      "active": true,
+      "order": 5
+    },
+    {
+      "id": "6",
+      "value": "North Coast",
+      "label": "North Coast",
+      "active": true,
+      "order": 6
+    },
+    {
+      "id": "7",
+      "value": "Cairo",
+      "label": "Cairo",
+      "active": true,
+      "order": 7
+    },
+    {
+      "id": "8",
+      "value": "Giza",
+      "label": "Giza",
+      "active": true,
+      "order": 8
+    },
+    {
+      "id": "9",
+      "value": "Alexandria",
+      "label": "Alexandria",
+      "active": true,
+      "order": 9
+    },
+    {
+      "id": "10",
+      "value": "Qalyubia",
+      "label": "Qalyubia",
+      "active": true,
+      "order": 10
+    },
+    {
+      "id": "11",
+      "value": "Dakahlia",
+      "label": "Dakahlia",
+      "active": true,
+      "order": 11
+    },
+    {
+      "id": "12",
+      "value": "Sharqia",
+      "label": "Sharqia",
+      "active": true,
+      "order": 12
+    },
+    {
+      "id": "13",
+      "value": "Gharbia",
+      "label": "Gharbia",
+      "active": true,
+      "order": 13
+    },
+    {
+      "id": "14",
+      "value": "Monufia",
+      "label": "Monufia",
+      "active": true,
+      "order": 14
+    },
+    {
+      "id": "15",
+      "value": "Beheira",
+      "label": "Beheira",
+      "active": true,
+      "order": 15
+    },
+    {
+      "id": "16",
+      "value": "Kafr El Sheikh",
+      "label": "Kafr El Sheikh",
+      "active": true,
+      "order": 16
+    },
+    {
+      "id": "17",
+      "value": "Damietta",
+      "label": "Damietta",
+      "active": true,
+      "order": 17
+    },
+    {
+      "id": "18",
+      "value": "Port Said",
+      "label": "Port Said",
+      "active": true,
+      "order": 18
+    },
+    {
+      "id": "19",
+      "value": "Ismailia",
+      "label": "Ismailia",
+      "active": true,
+      "order": 19
+    },
+    {
+      "id": "20",
+      "value": "Suez",
+      "label": "Suez",
+      "active": true,
+      "order": 20
+    },
+    {
+      "id": "21",
+      "value": "Fayoum",
+      "label": "Fayoum",
+      "active": true,
+      "order": 21
+    },
+    {
+      "id": "22",
+      "value": "Beni Suef",
+      "label": "Beni Suef",
+      "active": true,
+      "order": 22
+    },
+    {
+      "id": "23",
+      "value": "Minya",
+      "label": "Minya",
+      "active": true,
+      "order": 23
+    },
+    {
+      "id": "24",
+      "value": "Assiut",
+      "label": "Assiut",
+      "active": true,
+      "order": 24
+    },
+    {
+      "id": "25",
+      "value": "Sohag",
+      "label": "Sohag",
+      "active": true,
+      "order": 25
+    },
+    {
+      "id": "26",
+      "value": "Qena",
+      "label": "Qena",
+      "active": true,
+      "order": 26
+    },
+    {
+      "id": "27",
+      "value": "Luxor",
+      "label": "Luxor",
+      "active": true,
+      "order": 27
+    },
+    {
+      "id": "28",
+      "value": "Aswan",
+      "label": "Aswan",
+      "active": true,
+      "order": 28
+    },
+    {
+      "id": "29",
+      "value": "Red Sea",
+      "label": "Red Sea",
+      "active": true,
+      "order": 29
+    },
+    {
+      "id": "30",
+      "value": "New Valley",
+      "label": "New Valley",
+      "active": true,
+      "order": 30
+    },
+    {
+      "id": "31",
+      "value": "Matrouh",
+      "label": "Matrouh",
+      "active": true,
+      "order": 31
+    },
+    {
+      "id": "32",
+      "value": "North Sinai",
+      "label": "North Sinai",
+      "active": true,
+      "order": 32
+    },
+    {
+      "id": "33",
+      "value": "South Sinai",
+      "label": "South Sinai",
+      "active": true,
+      "order": 33
+    }
+  ],
+  "propertyTypes": [
+    {
+      "id": "1",
+      "value": "All Opportunities",
+      "label": "All Opportunities",
+      "active": true,
+      "order": 1
+    },
+    {
+      "id": "2",
+      "value": "Apartment",
+      "label": "Apartment",
+      "active": true,
+      "order": 2
+    },
+    {
+      "id": "3",
+      "value": "Villa",
+      "label": "Villa",
+      "active": true,
+      "order": 3
+    },
+    {
+      "id": "4",
+      "value": "Duplex",
+      "label": "Duplex",
+      "active": true,
+      "order": 4
+    },
+    {
+      "id": "5",
+      "value": "Penthouse",
+      "label": "Penthouse",
+      "active": true,
+      "order": 5
+    },
+    {
+      "id": "6",
+      "value": "Office",
+      "label": "Office",
+      "active": true,
+      "order": 6
+    },
+    {
+      "id": "7",
+      "value": "Retail",
+      "label": "Retail",
+      "active": true,
+      "order": 7
+    },
+    {
+      "id": "8",
+      "value": "Land",
+      "label": "Land",
+      "active": true,
+      "order": 8
+    }
+  ],
+  "objectives": [
+    {
+      "id": "1",
+      "value": "All",
+      "label": "All",
+      "active": true,
+      "order": 1
+    },
+    {
+      "id": "2",
+      "value": "Living",
+      "label": "Living",
+      "active": true,
+      "order": 2
+    },
+    {
+      "id": "3",
+      "value": "Investment",
+      "label": "Investment",
+      "active": true,
+      "order": 3
+    },
+    {
+      "id": "4",
+      "value": "Passive Income",
+      "label": "Passive Income",
+      "active": true,
+      "order": 4
+    },
+    {
+      "id": "5",
+      "value": "Resale",
+      "label": "Resale",
+      "active": true,
+      "order": 5
+    },
+    {
+      "id": "6",
+      "value": "Ready",
+      "label": "Ready",
+      "active": true,
+      "order": 6
+    },
+    {
+      "id": "7",
+      "value": "Under Construction",
+      "label": "Under Construction",
+      "active": true,
+      "order": 7
+    }
+  ]
+}

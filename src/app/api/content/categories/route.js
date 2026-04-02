@@ -7,6 +7,16 @@ let categories = [
   { id: '3', name: 'Investment', description: 'Investment opportunities', type: 'properties' },
   { id: '4', name: 'Company News', description: 'Company updates and announcements', type: 'news' },
   { id: '5', name: 'Market Insights', description: 'Real estate market insights', type: 'news' },
+  { id: '6', name: 'Real Estate Investment', description: 'Real estate investment services', type: 'services' },
+  { id: '7', name: 'Property Marketing', description: 'Property marketing and promotion', type: 'services' },
+  { id: '8', name: 'Opportunity Development', description: 'Opportunity development services', type: 'services' },
+  { id: '9', name: 'Consulting', description: 'Real estate consulting services', type: 'services' },
+  { id: '10', name: 'Property Management', description: 'Property management services', type: 'services' },
+  { id: '11', name: 'Buying', description: 'Portfolio items related to buying properties', type: 'portfolio' },
+  { id: '12', name: 'Renting', description: 'Portfolio items related to renting properties', type: 'portfolio' },
+  { id: '13', name: 'Selling', description: 'Portfolio items related to selling properties', type: 'portfolio' },
+  { id: '14', name: 'Development', description: 'Property development projects', type: 'portfolio' },
+  { id: '15', name: 'Investment Projects', description: 'Investment-focused portfolio items', type: 'portfolio' },
 ]
 
 export async function GET(request) {

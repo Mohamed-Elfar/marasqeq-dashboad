@@ -64,9 +64,28 @@
     padding-bottom: $spacer;
     border-right: $card-border-width solid $sidebar-border-color !important;
     border-left: $card-border-width solid $sidebar-border-color;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 
     .scrollbar {
         height: calc(100% - $topbar-height);
+        flex: 1;
+        overflow: auto;
+    }
+
+    .sidebar-logout-section {
+        margin-top: auto;
+        padding-bottom: 1rem;
+
+        .sidebar-divider {
+            margin: 0.5rem 1rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            border-bottom: none;
+            border-left: none;
+            border-right: none;
+            opacity: 0.5;
+        }
     }
 
     .menu-arrow {

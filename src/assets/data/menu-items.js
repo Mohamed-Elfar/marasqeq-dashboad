@@ -11,6 +11,30 @@ export const MENU_ITEMS = [
     url: '/content-management/properties?new=true'
   },
   {
+    key: 'add-service',
+    label: 'Add Services',
+    icon: 'bi-plus-circle',
+    url: '/content-management/services?new=true'
+  },
+  {
+    key: 'add-portfolio',
+    label: 'Add Portfolio',
+    icon: 'bi-briefcase',
+    url: '/content-management/portfolio?new=true'
+  },
+  {
+    key: 'manage-faq',
+    label: 'Manage FAQ',
+    icon: 'bi-question-circle',
+    url: '/content-management/faq'
+  },
+  {
+    key: 'manage-social',
+    label: 'Social Media',
+    icon: 'bi-share',
+    url: '/content-management/social'
+  },
+  {
     key: 'manage-news',
     label: 'Manage News',
     icon: 'bi-newspaper',
@@ -23,14 +47,15 @@ export const MENU_ITEMS = [
     url: '/content-management/categories'
   },
   {
-    key: 'actions',
-    label: 'ACTIONS',
-    isTitle: true
+    key: 'form-options',
+    label: 'Form Options',
+    icon: 'solar:settings-outline',
+    url: '/content-management/form-options'
   },
   {
     key: 'logout',
     label: 'Logout',
-    icon: 'solar:document-text-outline',
+    icon: 'solar:logout-3-outline',
     url: '/'
   }
 ];

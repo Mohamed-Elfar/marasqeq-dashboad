@@ -113,7 +113,7 @@ const CategoriesPage = () => {
       <Row className="mb-4">
         <Col>
           <h3>Categories Management</h3>
-          <p className="text-muted">Manage categories for properties and news</p>
+          <p className="text-muted">Manage categories for properties, news, services, and portfolio</p>
         </Col>
         <Col className="text-end">
           <Button variant="primary" onClick={() => initializeForm()}>
@@ -158,7 +158,16 @@ const CategoriesPage = () => {
                       </td>
                       <td>{category.description || '-'}</td>
                       <td>
-                        <span className={`badge ${category.type === 'properties' ? 'bg-primary' : 'bg-info'}`}>
+                        <span
+                          className={`badge ${
+                            category.type === 'properties'
+                              ? 'bg-primary'
+                              : category.type === 'news'
+                                ? 'bg-info'
+                                : category.type === 'services'
+                                  ? 'bg-success'
+                                  : 'bg-warning'
+                          }`}>
                           {category.type}
                         </span>
                       </td>
@@ -251,6 +260,8 @@ const CategoriesPage = () => {
                         }}>
                         <option value="properties">Properties</option>
                         <option value="news">News</option>
+                        <option value="services">Services</option>
+                        <option value="portfolio">Portfolio</option>
                       </Form.Select>
                     </Form.Group>
                   </Col>

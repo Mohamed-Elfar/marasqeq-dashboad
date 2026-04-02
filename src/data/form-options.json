@@ -1,0 +1,71 @@
+{
+  "locations": [
+    {
+      "id": "1",
+      "value": "new-york",
+      "label": "New York",
+      "active": true,
+      "order": 1
+    },
+    {
+      "id": "2",
+      "value": "los-angeles",
+      "label": "Los Angeles",
+      "active": true,
+      "order": 2
+    },
+    {
+      "id": "3",
+      "value": "chicago",
+      "label": "Chicago",
+      "active": true,
+      "order": 3
+    }
+  ],
+  "propertyTypes": [
+    {
+      "id": "1",
+      "value": "residential",
+      "label": "Residential",
+      "active": true,
+      "order": 1
+    },
+    {
+      "id": "2",
+      "value": "commercial",
+      "label": "Commercial",
+      "active": true,
+      "order": 2
+    },
+    {
+      "id": "3",
+      "value": "industrial",
+      "label": "Industrial",
+      "active": true,
+      "order": 3
+    }
+  ],
+  "objectives": [
+    {
+      "id": "1",
+      "value": "buy",
+      "label": "Buy",
+      "active": true,
+      "order": 1
+    },
+    {
+      "id": "2",
+      "value": "rent",
+      "label": "Rent",
+      "active": true,
+      "order": 2
+    },
+    {
+      "id": "3",
+      "value": "invest",
+      "label": "Invest",
+      "active": true,
+      "order": 3
+    }
+  ]
+}
