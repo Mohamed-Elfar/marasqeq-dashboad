@@ -37,7 +37,7 @@ const FormOptionsManager = () => {
   const fetchFormOptions = async () => {
     try {
       setLoading(true)
-      const response = await fetch('/api/form-options')
+      const response = await fetch('/api/form-options?includeInactive=true')
       const data = await response.json()
       setFormOptions(data)
     } catch (err) {

@@ -7,7 +7,7 @@ export const getProperties = async () => {
     .select('*')
     .eq('visible', true)
     .order('order_index', { ascending: true })
-  
+
   if (error) throw error
   return data
 }
@@ -18,7 +18,7 @@ export const getProperty = async (id) => {
     .select('*')
     .eq('id', id)
     .single()
-  
+
   if (error) throw error
   return data
 }
@@ -28,7 +28,7 @@ export const createProperty = async (property) => {
     .from('properties')
     .insert([property])
     .select()
-  
+
   if (error) throw error
   return data[0]
 }
@@ -39,7 +39,7 @@ export const updateProperty = async (id, property) => {
     .update(property)
     .eq('id', id)
     .select()
-  
+
   if (error) throw error
   return data[0]
 }
@@ -49,7 +49,7 @@ export const deleteProperty = async (id) => {
     .from('properties')
     .delete()
     .eq('id', id)
-  
+
   if (error) throw error
 }
 
@@ -60,11 +60,11 @@ export const getCategories = async (type = null) => {
     .select('*')
     .eq('visible', true)
     .order('order_index', { ascending: true })
-  
+
   if (type) {
     query = query.eq('type', type)
   }
-  
+
   const { data, error } = await query
   if (error) throw error
   return data
@@ -75,7 +75,7 @@ export const createCategory = async (category) => {
     .from('categories')
     .insert([category])
     .select()
-  
+
   if (error) throw error
   return data[0]
 }
@@ -86,7 +86,7 @@ export const updateCategory = async (id, category) => {
     .update(category)
     .eq('id', id)
     .select()
-  
+
   if (error) throw error
   return data[0]
 }
@@ -96,7 +96,7 @@ export const deleteCategory = async (id) => {
     .from('categories')
     .delete()
     .eq('id', id)
-  
+
   if (error) throw error
 }
 
@@ -108,7 +108,7 @@ export const getNews = async () => {
     .eq('visible', true)
     .eq('published', true)
     .order('published_at', { ascending: false })
-  
+
   if (error) throw error
   return data
 }
@@ -118,7 +118,7 @@ export const createNews = async (news) => {
     .from('news')
     .insert([news])
     .select()
-  
+
   if (error) throw error
   return data[0]
 }
@@ -129,7 +129,7 @@ export const updateNews = async (id, news) => {
     .update(news)
     .eq('id', id)
     .select()
-  
+
   if (error) throw error
   return data[0]
 }
@@ -139,7 +139,7 @@ export const deleteNews = async (id) => {
     .from('news')
     .delete()
     .eq('id', id)
-  
+
   if (error) throw error
 }
 
@@ -150,7 +150,7 @@ export const getServices = async () => {
     .select('*, categories(name)')
     .eq('visible', true)
     .order('order_index', { ascending: true })
-  
+
   if (error) throw error
   return data
 }
@@ -160,7 +160,7 @@ export const createService = async (service) => {
     .from('services')
     .insert([service])
     .select()
-  
+
   if (error) throw error
   return data[0]
 }
@@ -171,7 +171,7 @@ export const updateService = async (id, service) => {
     .update(service)
     .eq('id', id)
     .select()
-  
+
   if (error) throw error
   return data[0]
 }
@@ -181,7 +181,7 @@ export const deleteService = async (id) => {
     .from('services')
     .delete()
     .eq('id', id)
-  
+
   if (error) throw error
 }
 
@@ -192,7 +192,7 @@ export const getPortfolio = async () => {
     .select('*')
     .eq('visible', true)
     .order('order_index', { ascending: true })
-  
+
   if (error) throw error
   return data
 }
@@ -202,7 +202,7 @@ export const createPortfolio = async (portfolio) => {
     .from('portfolio')
     .insert([portfolio])
     .select()
-  
+
   if (error) throw error
   return data[0]
 }
@@ -213,7 +213,7 @@ export const updatePortfolio = async (id, portfolio) => {
     .update(portfolio)
     .eq('id', id)
     .select()
-  
+
   if (error) throw error
   return data[0]
 }
@@ -223,7 +223,7 @@ export const deletePortfolio = async (id) => {
     .from('portfolio')
     .delete()
     .eq('id', id)
-  
+
   if (error) throw error
 }
 
@@ -233,7 +233,7 @@ export const getContactMessages = async () => {
     .from('contact_messages')
     .select('*')
     .order('created_at', { ascending: false })
-  
+
   if (error) throw error
   return data
 }
@@ -243,7 +243,7 @@ export const createContactMessage = async (message) => {
     .from('contact_messages')
     .insert([message])
     .select()
-  
+
   if (error) throw error
   return data[0]
 }
@@ -254,20 +254,25 @@ export const updateContactMessage = async (id, message) => {
     .update(message)
     .eq('id', id)
     .select()
-  
+
   if (error) throw error
   return data[0]
 }
 
 // Form Options
-export const getFormOptions = async (type) => {
-  const { data, error } = await supabase
+export const getFormOptions = async (type, includeInactive = false) => {
+  let query = supabase
     .from('form_options')
     .select('*')
     .eq('type', type)
-    .eq('active', true)
     .order('order_index', { ascending: true })
-  
+
+  // Only filter active if not requesting all items
+  if (!includeInactive) {
+    query = query.eq('active', true)
+  }
+
+  const { data, error } = await query
   if (error) throw error
   return data
 }
@@ -277,7 +282,7 @@ export const createFormOption = async (option) => {
     .from('form_options')
     .insert([option])
     .select()
-  
+
   if (error) throw error
   return data[0]
 }
@@ -288,7 +293,7 @@ export const updateFormOption = async (id, option) => {
     .update(option)
     .eq('id', id)
     .select()
-  
+
   if (error) throw error
   return data[0]
 }
@@ -298,7 +303,7 @@ export const deleteFormOption = async (id) => {
     .from('form_options')
     .delete()
     .eq('id', id)
-  
+
   if (error) throw error
 }
 
@@ -309,11 +314,11 @@ export const getContactInfo = async (type = null) => {
     .select('*')
     .eq('visible', true)
     .order('order_index', { ascending: true })
-  
+
   if (type) {
     query = query.eq('type', type)
   }
-  
+
   const { data, error } = await query
   if (error) throw error
   return data
@@ -324,7 +329,7 @@ export const createContactInfo = async (info) => {
     .from('contact_info')
     .insert([info])
     .select()
-  
+
   if (error) throw error
   return data[0]
 }
@@ -335,7 +340,7 @@ export const updateContactInfo = async (id, info) => {
     .update(info)
     .eq('id', id)
     .select()
-  
+
   if (error) throw error
   return data[0]
 }
@@ -345,7 +350,7 @@ export const deleteContactInfo = async (id) => {
     .from('contact_info')
     .delete()
     .eq('id', id)
-  
+
   if (error) throw error
 }
 
@@ -356,7 +361,7 @@ export const getSocialLinks = async () => {
     .select('*')
     .eq('active', true)
     .order('order_index', { ascending: true })
-  
+
   if (error) throw error
   return data
 }
@@ -366,7 +371,7 @@ export const createSocialLink = async (link) => {
     .from('social_links')
     .insert([link])
     .select()
-  
+
   if (error) throw error
   return data[0]
 }
@@ -377,7 +382,7 @@ export const updateSocialLink = async (id, link) => {
     .update(link)
     .eq('id', id)
     .select()
-  
+
   if (error) throw error
   return data[0]
 }
@@ -387,7 +392,7 @@ export const deleteSocialLink = async (id) => {
     .from('social_links')
     .delete()
     .eq('id', id)
-  
+
   if (error) throw error
 }
 
@@ -398,7 +403,7 @@ export const getPages = async () => {
     .select('*')
     .eq('visible', true)
     .order('slug', { ascending: true })
-  
+
   if (error) throw error
   return data
 }
@@ -409,7 +414,7 @@ export const getPage = async (slug) => {
     .select('*')
     .eq('slug', slug)
     .single()
-  
+
   if (error) throw error
   return data
 }
@@ -419,7 +424,7 @@ export const createPage = async (page) => {
     .from('pages')
     .insert([page])
     .select()
-  
+
   if (error) throw error
   return data[0]
 }
@@ -430,7 +435,7 @@ export const updatePage = async (slug, page) => {
     .update(page)
     .eq('slug', slug)
     .select()
-  
+
   if (error) throw error
   return data[0]
 }
@@ -439,8 +444,8 @@ export const updatePage = async (slug, page) => {
 export const subscribeToTable = (table, callback) => {
   return supabase
     .channel(`table-changes-${table}`)
-    .on('postgres_changes', 
-      { event: '*', schema: 'public', table }, 
+    .on('postgres_changes',
+      { event: '*', schema: 'public', table },
       callback
     )
     .subscribe()

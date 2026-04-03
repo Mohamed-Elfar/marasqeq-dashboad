@@ -5,17 +5,18 @@ export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url)
     const type = searchParams.get('type') // locations, propertyTypes, or objectives
+    const includeInactive = searchParams.get('includeInactive') === 'true'
 
     if (type) {
-      const options = await getFormOptions(type)
+      const options = await getFormOptions(type, includeInactive)
       return NextResponse.json({ [type]: options })
     }
 
     // Return all types
     const [locations, propertyTypes, objectives] = await Promise.all([
-      getFormOptions('locations'),
-      getFormOptions('property_types'),
-      getFormOptions('objectives')
+      getFormOptions('locations', includeInactive),
+      getFormOptions('property_types', includeInactive),
+      getFormOptions('objectives', includeInactive)
     ])
 
     return NextResponse.json({
