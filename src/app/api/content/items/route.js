@@ -6,7 +6,7 @@ const TABLE_MAP = {
     news: 'news',
     services: 'services',
     portfolio: 'portfolio',
-    faq: 'faq',
+    faq: 'faqs',
     social: 'social_links'
 }
 
@@ -64,10 +64,13 @@ const mapToDatabase = (itemType, item) => {
     }
 
     if (itemType === 'faq') {
-        const { order, ...rest } = item
+        const orderValue = Number(item.order ?? item.order_index ?? 1)
         return {
-            ...rest,
-            order_index: order ?? rest.order_index ?? 1
+            question: item.question || '',
+            answer: item.answer || '',
+            category: item.category || 'general',
+            active: item.active !== false,
+            order_index: Number.isFinite(orderValue) && orderValue > 0 ? orderValue : 1
         }
     }
 
