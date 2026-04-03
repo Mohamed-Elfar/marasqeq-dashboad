@@ -1,126 +1,244 @@
-import { readFileSync, writeFileSync } from 'fs';
-import { join } from 'path';
+import { NextResponse } from 'next/server'
+import { supabase } from '@/lib/supabase'
 
-const dataDir = join(process.cwd(), 'public/content-data');
-const itemsFile = join(dataDir, 'items.json');
+const TABLE_MAP = {
+    properties: 'properties',
+    news: 'news',
+    services: 'services',
+    portfolio: 'portfolio',
+    faq: 'faq',
+    social: 'social_links'
+}
 
-const defaultData = { properties: [], news: [], services: [], portfolio: [], faq: [], social: [] };
+const DEFAULT_RESPONSE = {
+    properties: [],
+    news: [],
+    services: [],
+    portfolio: [],
+    faq: [],
+    social: []
+}
 
-function getItemsFile() {
-    try {
-        const data = readFileSync(itemsFile, 'utf-8');
-        return JSON.parse(data);
-    } catch {
-        writeFileSync(itemsFile, JSON.stringify(defaultData, null, 2));
-        return defaultData;
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+
+const isUuid = (value) => typeof value === 'string' && UUID_PATTERN.test(value)
+
+const mapFromDatabase = (itemType, item) => {
+    if (!item) {
+        return item
     }
+
+    if (itemType === 'social') {
+        return {
+            ...item,
+            order: item.order ?? item.order_index ?? 1
+        }
+    }
+
+    if (itemType === 'faq') {
+        return {
+            ...item,
+            order: item.order ?? item.order_index ?? 1
+        }
+    }
+
+    return item
+}
+
+const mapToDatabase = (itemType, item) => {
+    if (itemType === 'social') {
+        const mapped = {
+            name: item.name || '',
+            icon: item.icon || '',
+            url: item.url || '',
+            position: item.position || 'both',
+            active: item.active !== false,
+            order_index: item.order ?? item.order_index ?? 1
+        }
+
+        if (isUuid(item.id)) {
+            mapped.id = item.id
+        }
+
+        return mapped
+    }
+
+    if (itemType === 'faq') {
+        const { order, ...rest } = item
+        return {
+            ...rest,
+            order_index: order ?? rest.order_index ?? 1
+        }
+    }
+
+    return item
+}
+
+const fetchTableItems = async (itemType) => {
+    const table = TABLE_MAP[itemType]
+
+    if (!table) {
+        return []
+    }
+
+    const { data, error } = await supabase.from(table).select('*')
+
+    if (error) {
+        throw error
+    }
+
+    const items = (data || []).map((item) => mapFromDatabase(itemType, item))
+
+    if (itemType === 'social' || itemType === 'faq') {
+        return items.sort((left, right) => {
+            const leftOrder = left.order ?? left.order_index ?? 0
+            const rightOrder = right.order ?? right.order_index ?? 0
+            return leftOrder - rightOrder
+        })
+    }
+
+    return items
+}
+
+const getNextSocialOrder = async () => {
+    const { data, error } = await supabase
+        .from('social_links')
+        .select('order_index')
+        .order('order_index', { ascending: false })
+        .limit(1)
+
+    if (error) {
+        throw error
+    }
+
+    const currentMaxOrder = Number(data?.[0]?.order_index ?? 0)
+    return currentMaxOrder + 1
+}
+
+const buildResponseForType = async (itemType) => {
+    const items = await fetchTableItems(itemType)
+    return { [itemType]: items }
 }
 
 export async function GET(req) {
     try {
-        const { searchParams } = new URL(req.url);
-        const type = searchParams.get('type'); // 'properties', 'news', 'services', 'portfolio', 'faq', 'social'
+        const { searchParams } = new URL(req.url)
+        const type = searchParams.get('type')
 
-        const data = getItemsFile();
-
-        // Initialize social media data if it doesn't exist
-        if (!data.social || data.social.length === 0) {
-            data.social = [
-                {
-                    id: '1',
-                    name: 'Facebook',
-                    icon: 'FaFacebookF',
-                    url: 'https://www.facebook.com/maraseqgroup',
-                    position: 'both',
-                    active: true,
-                    order: 1
-                },
-                {
-                    id: '2', 
-                    name: 'Twitter',
-                    icon: 'FaTwitter',
-                    url: 'https://twitter.com/maraseqgroup',
-                    position: 'both',
-                    active: true,
-                    order: 2
-                },
-                {
-                    id: '3',
-                    name: 'Instagram', 
-                    icon: 'FaInstagram',
-                    url: 'https://www.instagram.com/maraseqgroup/',
-                    position: 'both',
-                    active: true,
-                    order: 3
-                },
-                {
-                    id: '4',
-                    name: 'LinkedIn',
-                    icon: 'FaLinkedin', 
-                    url: 'https://www.linkedin.com/in/maraseqgroup/',
-                    position: 'both',
-                    active: true,
-                    order: 4
-                }
-            ];
-            writeFileSync(itemsFile, JSON.stringify(data, null, 2));
+        if (type) {
+            return NextResponse.json(await buildResponseForType(type))
         }
 
-        if (type && data[type]) {
-            return Response.json({ [type]: data[type] });
-        }
+        const [properties, news, services, portfolio, faq, social] = await Promise.all([
+            fetchTableItems('properties'),
+            fetchTableItems('news'),
+            fetchTableItems('services'),
+            fetchTableItems('portfolio'),
+            fetchTableItems('faq'),
+            fetchTableItems('social')
+        ])
 
-        return Response.json(data);
+        return NextResponse.json({
+            ...DEFAULT_RESPONSE,
+            properties,
+            news,
+            services,
+            portfolio,
+            faq,
+            social
+        })
     } catch (error) {
-        return Response.json({ error: 'Failed to fetch items' }, { status: 500 });
+        console.error('Error fetching content items:', error)
+        return NextResponse.json({ error: 'Failed to fetch items' }, { status: 500 })
     }
 }
 
 export async function POST(req) {
     try {
-        const body = await req.json();
-        const { itemType, item, id } = body; // itemType: 'properties', 'news', 'services', 'portfolio', 'faq'
+        const body = await req.json()
+        const { itemType, item, id } = body
 
-        const data = getItemsFile();
+        const table = TABLE_MAP[itemType]
 
-        if (!data[itemType]) {
-            data[itemType] = [];
+        if (!table || !item) {
+            return NextResponse.json({ error: 'Item type and item are required' }, { status: 400 })
         }
 
-        // Generate ID if not present
-        if (!item.id) {
-            item.id = Date.now().toString();
+        const targetId = id || item.id
+        const isUpdate = Boolean(targetId && (itemType !== 'social' || isUuid(targetId)))
+        const payload = mapToDatabase(itemType, item)
+
+        console.log(`[${itemType}] isUpdate=${isUpdate}, targetId=${targetId}, payload=`, payload)
+
+        if (!isUpdate && itemType === 'social') {
+            const providedOrder = Number(payload.order_index ?? 0)
+            payload.order_index = providedOrder > 0 ? providedOrder : await getNextSocialOrder()
         }
 
-        // Update or add item
-        const itemIndex = data[itemType].findIndex(i => i.id === item.id);
-        if (itemIndex >= 0) {
-            data[itemType][itemIndex] = item;
+        let result
+
+        if (isUpdate) {
+            console.log(`[${itemType}] Updating item with id=${targetId}`)
+            const { data, error } = await supabase
+                .from(table)
+                .update(payload)
+                .eq('id', targetId)
+                .select()
+
+            if (error) {
+                console.error(`[${itemType}] Update error:`, error)
+                throw error
+            }
+
+            console.log(`[${itemType}] Update result:`, data)
+            result = data?.[0] || payload
         } else {
-            data[itemType].push(item);
+            console.log(`[${itemType}] Inserting new item`)
+            const { data, error } = await supabase
+                .from(table)
+                .insert(payload)
+                .select()
+
+            if (error) {
+                console.error(`[${itemType}] Insert error:`, error)
+                throw error
+            }
+
+            console.log(`[${itemType}] Insert result:`, data)
+            result = data?.[0] || payload
         }
 
-        writeFileSync(itemsFile, JSON.stringify(data, null, 2));
-        return Response.json(item);
+        return NextResponse.json(mapFromDatabase(itemType, result))
     } catch (error) {
-        return Response.json({ error: 'Failed to save item' }, { status: 500 });
+        console.error('Error saving content item:', error)
+        return NextResponse.json({ error: 'Failed to save item' }, { status: 500 })
     }
 }
 
 export async function DELETE(req) {
     try {
-        const body = await req.json();
-        const { itemType, id } = body; // itemType: 'properties', 'news', 'services', 'portfolio', 'faq'
+        const body = await req.json()
+        const { itemType, id } = body
 
-        const data = getItemsFile();
+        const table = TABLE_MAP[itemType]
 
-        if (data[itemType]) {
-            data[itemType] = data[itemType].filter(item => item.id !== id);
-            writeFileSync(itemsFile, JSON.stringify(data, null, 2));
+        if (!table || !id) {
+            return NextResponse.json({ error: 'Item type and id are required' }, { status: 400 })
         }
 
-        return Response.json({ success: true });
+        if (itemType === 'social' && !isUuid(id)) {
+            return NextResponse.json({ error: 'Invalid social link id' }, { status: 400 })
+        }
+
+        const { error } = await supabase.from(table).delete().eq('id', id)
+
+        if (error) {
+            throw error
+        }
+
+        return NextResponse.json({ success: true })
     } catch (error) {
-        return Response.json({ error: 'Failed to delete item' }, { status: 500 });
+        console.error('Error deleting content item:', error)
+        return NextResponse.json({ error: 'Failed to delete item' }, { status: 500 })
     }
 }

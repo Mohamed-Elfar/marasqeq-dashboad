@@ -35,10 +35,20 @@ const ContentItemManager = ({ itemType }) => {
       const data = await response.json()
       const items = data[itemType] || []
 
-      // Sort by date (newest first)
-      const sortedItems = items.sort((a, b) => {
-        const dateA = new Date(a.date || 0)
-        const dateB = new Date(b.date || 0)
+      const sortedItems = [...items].sort((left, right) => {
+        if (itemType === 'social' || itemType === 'faq') {
+          const leftOrder = Number(left.order ?? left.order_index ?? 0)
+          const rightOrder = Number(right.order ?? right.order_index ?? 0)
+
+          if (leftOrder !== rightOrder) {
+            return leftOrder - rightOrder
+          }
+
+          return String(left.name || left.question || '').localeCompare(String(right.name || right.question || ''))
+        }
+
+        const dateA = new Date(left.date || 0)
+        const dateB = new Date(right.date || 0)
         return dateB - dateA
       })
 
@@ -91,21 +101,31 @@ const ContentItemManager = ({ itemType }) => {
           reviews: [],
         })
       } else if (itemType === 'faq') {
+        const nextFaqOrder = items.reduce((highest, currentItem) => {
+          const currentOrder = Number(currentItem.order ?? currentItem.order_index ?? 0)
+          return currentOrder > highest ? currentOrder : highest
+        }, 0) + 1
+
         setFormData({
           question: '',
           answer: '',
           category: 'general',
           active: true,
-          order: 1,
+          order: nextFaqOrder,
         })
       } else if (itemType === 'social') {
+        const nextSocialOrder = items.reduce((highest, currentItem) => {
+          const currentOrder = Number(currentItem.order ?? currentItem.order_index ?? 0)
+          return currentOrder > highest ? currentOrder : highest
+        }, 0) + 1
+
         setFormData({
           name: '',
           icon: 'FaFacebookF',
           url: '',
           position: 'both',
           active: true,
-          order: 1,
+          order: nextSocialOrder,
         })
       } else {
         setFormData({
@@ -190,6 +210,12 @@ const ContentItemManager = ({ itemType }) => {
       setSuccess(false)
       setError(null)
 
+      console.log(`[${itemType}] Saving item:`, {
+        id: editingItem?.id,
+        formData,
+        isEditing: Boolean(editingItem?.id),
+      })
+
       const response = await fetch('/api/content/items', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -201,9 +227,9 @@ const ContentItemManager = ({ itemType }) => {
       })
 
       if (response.ok) {
-        setSuccess(true)
         setShowModal(false)
-        fetchItems()
+        await fetchItems()
+        setSuccess(true)
         setTimeout(() => setSuccess(false), 3000)
       } else {
         setError('Failed to save item')

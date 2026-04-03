@@ -37,9 +37,15 @@ const ContactInfoManager = () => {
   const fetchContactInfo = async () => {
     try {
       setLoading(true)
-      const response = await fetch('/api/contact-info')
+      const response = await fetch('/api/contact-info?includeHidden=true')
       const data = await response.json()
-      setContactInfo(data)
+      
+      // Clear previous data and set new data
+      setContactInfo({
+        emails: data.emails || [],
+        phones: data.phones || [],
+        addresses: data.addresses || []
+      })
     } catch (err) {
       setError('Failed to load contact information')
       console.error(err)
@@ -66,7 +72,35 @@ const ContactInfoManager = () => {
   const handleEdit = (type, item) => {
     setCurrentType(type)
     setEditingItem(item)
-    setFormData({ ...item })
+    
+    // Map database value to appropriate form fields
+    if (type === 'emails') {
+      setFormData({ 
+        email: item.value || item.email || '', 
+        label: item.label || '', 
+        visible: item.visible !== undefined ? item.visible : true 
+      })
+    } else if (type === 'phones') {
+      setFormData({ 
+        phone: item.value || item.phone || '', 
+        label: item.label || '', 
+        visible: item.visible !== undefined ? item.visible : true 
+      })
+    } else if (type === 'addresses') {
+      // Split the value back into line1 and line2 if it contains a comma
+      const addressValue = item.value || item.line1 || ''
+      const [line1, line2] = addressValue.includes(',') 
+        ? addressValue.split(',').map(part => part.trim())
+        : [addressValue, '']
+      
+      setFormData({ 
+        line1, 
+        line2, 
+        label: item.label || '', 
+        visible: item.visible !== undefined ? item.visible : true 
+      })
+    }
+    
     setShowModal(true)
   }
 
@@ -101,7 +135,10 @@ const ContactInfoManager = () => {
       if (response.ok) {
         setSuccess(true)
         setShowModal(false)
-        fetchContactInfo()
+        // Add small delay to ensure database consistency
+        setTimeout(() => {
+          fetchContactInfo()
+        }, 500)
         setTimeout(() => setSuccess(false), 3000)
       } else {
         setError('Failed to save item')
@@ -205,7 +242,7 @@ const ContactInfoManager = () => {
                   <tr key={item.id}>
                     <td className="fw-semibold">
                       <i className="bi bi-envelope me-2 text-muted"></i>
-                      {item.email}
+                      {item.email || item.value}
                     </td>
                     <td>{item.label || '-'}</td>
                     <td>
@@ -291,7 +328,7 @@ const ContactInfoManager = () => {
                   <tr key={item.id}>
                     <td className="fw-semibold">
                       <i className="bi bi-telephone me-2 text-muted"></i>
-                      {item.phone}
+                      {item.phone || item.value}
                     </td>
                     <td>{item.label || '-'}</td>
                     <td>
@@ -377,7 +414,7 @@ const ContactInfoManager = () => {
                   <tr key={item.id}>
                     <td className="fw-semibold">
                       <i className="bi bi-geo-alt me-2 text-muted"></i>
-                      {item.line1}
+                      {item.line1 || item.value}
                       {item.line2 && <><br /><small className="text-muted">{item.line2}</small></>}
                     </td>
                     <td>{item.label || '-'}</td>
