@@ -188,7 +188,7 @@ const CategoriesPage = () => {
         </Card.Body>
       </Card>
 
-      <Modal show={showModal} onHide={() => setShowModal(false)} size="md" centered backdrop="static">
+      <Modal show={showModal} onHide={() => setShowModal(false)} size="md" centered backdrop="static" dialogClassName="compact-form-modal">
         <Modal.Header
           closeButton
           closeVariant="white"
@@ -204,7 +204,7 @@ const CategoriesPage = () => {
           </Modal.Title>
         </Modal.Header>
 
-        <Modal.Body style={{ padding: '1.5rem' }}>
+        <Modal.Body style={{ padding: '1.5rem', maxHeight: '62vh', overflowY: 'auto' }}>
           <Form>
             <Card className="mb-3 border-0 shadow-sm">
               <Card.Body className="p-3">

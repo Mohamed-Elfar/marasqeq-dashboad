@@ -50,7 +50,13 @@ const ItemManagerModal = ({ show, onHide, editingItem, formData, itemType, categ
   }
 
   return (
-    <Modal show={show} onHide={onHide} size="lg" centered backdrop="static">
+    <Modal
+      show={show}
+      onHide={onHide}
+      size="lg"
+      centered
+      backdrop="static"
+      dialogClassName="item-manager-modal">
       <Modal.Header
         closeButton
         closeVariant="white"
@@ -72,6 +78,12 @@ const ItemManagerModal = ({ show, onHide, editingItem, formData, itemType, categ
 
       <Modal.Body style={{ padding: '0' }}>
         <style>{`
+          .item-manager-modal .modal-content {
+            max-height: 84vh;
+          }
+          .item-manager-modal .modal-body {
+            overflow-y: auto;
+          }
           .custom-tabs .nav-tabs {
             border-bottom: 2px solid #e9ecef;
             background: #ffffff;
@@ -107,6 +119,9 @@ const ItemManagerModal = ({ show, onHide, editingItem, formData, itemType, categ
             background: #ffffff;
             min-height: 400px;
           }
+          .item-manager-modal .custom-tabs .tab-content {
+            min-height: 300px;
+          }
         `}</style>
         <Tabs
           activeKey={activeTab}
@@ -114,7 +129,7 @@ const ItemManagerModal = ({ show, onHide, editingItem, formData, itemType, categ
           className="custom-tabs border-0">
           {shouldShowTab('basic') && (
             <Tab eventKey="basic" title={getTabTitle('basic')}>
-              <div style={{ padding: '2rem' }}>
+              <div style={{ padding: '1.5rem' }}>
                 <ItemManagerForm
                   formData={formData}
                   itemType={itemType}
@@ -131,7 +146,7 @@ const ItemManagerModal = ({ show, onHide, editingItem, formData, itemType, categ
 
           {shouldShowTab('category') && (
             <Tab eventKey="category" title={getTabTitle('category')}>
-              <div style={{ padding: '2rem' }}>
+              <div style={{ padding: '1.5rem' }}>
                 <ItemManagerForm
                   formData={formData}
                   itemType={itemType}
@@ -148,7 +163,7 @@ const ItemManagerModal = ({ show, onHide, editingItem, formData, itemType, categ
 
           {shouldShowTab('media') && (
             <Tab eventKey="media" title={getTabTitle('media')}>
-              <div style={{ padding: '2rem' }}>
+              <div style={{ padding: '1.5rem' }}>
                 <ItemManagerForm
                   formData={formData}
                   itemType={itemType}
@@ -165,7 +180,7 @@ const ItemManagerModal = ({ show, onHide, editingItem, formData, itemType, categ
 
           {shouldShowTab('specific') && (
             <Tab eventKey="specific" title={getTabTitle('specific')}>
-              <div style={{ padding: '2rem' }}>
+              <div style={{ padding: '1.5rem' }}>
                 <ItemManagerForm
                   formData={formData}
                   itemType={itemType}
@@ -182,7 +197,7 @@ const ItemManagerModal = ({ show, onHide, editingItem, formData, itemType, categ
 
           {shouldShowTab('author') && (
             <Tab eventKey="author" title={getTabTitle('author')}>
-              <div style={{ padding: '2rem' }}>
+              <div style={{ padding: '1.5rem' }}>
                 <ItemManagerForm
                   formData={formData}
                   itemType={itemType}
@@ -199,7 +214,7 @@ const ItemManagerModal = ({ show, onHide, editingItem, formData, itemType, categ
 
           {shouldShowTab('settings') && (
             <Tab eventKey="settings" title={getTabTitle('settings')}>
-              <div style={{ padding: '2rem' }}>
+              <div style={{ padding: '1.5rem' }}>
                 <ItemManagerForm
                   formData={formData}
                   itemType={itemType}

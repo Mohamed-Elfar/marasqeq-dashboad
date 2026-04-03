@@ -506,7 +506,7 @@ const ContactInfoManager = () => {
       </Row>
 
       {/* Add/Edit Modal */}
-      <Modal show={showModal} onHide={() => setShowModal(false)} size="md" centered backdrop="static">
+      <Modal show={showModal} onHide={() => setShowModal(false)} size="md" centered backdrop="static" dialogClassName="compact-form-modal">
         <Modal.Header 
           closeButton 
           closeVariant="white"
@@ -524,7 +524,7 @@ const ContactInfoManager = () => {
             </span>
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{ padding: '1.5rem' }}>
+        <Modal.Body style={{ padding: '1.5rem', maxHeight: '62vh', overflowY: 'auto' }}>
           <Form>
             {currentType === 'emails' && (
               <>
