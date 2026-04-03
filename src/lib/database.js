@@ -54,12 +54,15 @@ export const deleteProperty = async (id) => {
 }
 
 // Categories
-export const getCategories = async (type = null) => {
+export const getCategories = async (type = null, includeHidden = false) => {
   let query = supabase
     .from('categories')
     .select('*')
-    .eq('visible', true)
     .order('order_index', { ascending: true })
+
+  if (!includeHidden) {
+    query = query.eq('visible', true)
+  }
 
   if (type) {
     query = query.eq('type', type)

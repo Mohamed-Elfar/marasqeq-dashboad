@@ -20,9 +20,14 @@ const CategoriesPage = () => {
   const fetchCategories = async () => {
     try {
       setLoading(true)
-      const response = await fetch('/api/content/categories')
+      const response = await fetch('/api/categories?includeHidden=true')
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch categories')
+      }
+
       const data = await response.json()
-      setCategories(data.categories || [])
+      setCategories(Array.isArray(data) ? data : [])
     } catch (err) {
       setError('Failed to load categories')
       console.error(err)
@@ -46,13 +51,26 @@ const CategoriesPage = () => {
     try {
       setSaving(true)
       setSuccess(false)
-      const response = await fetch('/api/content/categories', {
-        method: 'POST',
+
+      const payload = {
+        ...formData,
+        visible: formData.visible !== false,
+        order_index: Number(formData.order_index ?? 0),
+      }
+
+      const isEditMode = Boolean(editingCategory?.id)
+
+      const response = await fetch('/api/categories', {
+        method: isEditMode ? 'PUT' : 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          category: formData,
-          id: editingCategory?.id,
-        }),
+        body: JSON.stringify(
+          isEditMode
+            ? {
+                id: editingCategory.id,
+                ...payload,
+              }
+            : payload,
+        ),
       })
 
       if (response.ok) {
@@ -74,7 +92,7 @@ const CategoriesPage = () => {
   const handleDeleteCategory = async (categoryId) => {
     if (confirm('Are you sure you want to delete this category?')) {
       try {
-        const response = await fetch(`/api/content/categories?id=${categoryId}`, { method: 'DELETE' })
+        const response = await fetch(`/api/categories?id=${categoryId}`, { method: 'DELETE' })
 
         if (response.ok) {
           fetchCategories()

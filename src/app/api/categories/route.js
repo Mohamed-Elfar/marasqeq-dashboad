@@ -5,8 +5,9 @@ export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url)
     const type = searchParams.get('type')
-    
-    const categories = await getCategories(type)
+    const includeHidden = ['1', 'true', 'yes'].includes((searchParams.get('includeHidden') || '').toLowerCase())
+
+    const categories = await getCategories(type, includeHidden)
     return NextResponse.json(categories)
   } catch (error) {
     console.error('Error fetching categories:', error)
@@ -50,14 +51,14 @@ export async function DELETE(request) {
   try {
     const { searchParams } = new URL(request.url)
     const id = searchParams.get('id')
-    
+
     if (!id) {
       return NextResponse.json(
         { error: 'Category ID is required' },
         { status: 400 }
       )
     }
-    
+
     await deleteCategory(id)
     return NextResponse.json({ success: true })
   } catch (error) {
