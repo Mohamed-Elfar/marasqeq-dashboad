@@ -42,6 +42,21 @@ const mapFromDatabase = (itemType, item) => {
         }
     }
 
+    if (itemType === 'services') {
+        const categoryName = item.categories?.name || item.category_name || ''
+        return {
+            ...item,
+            shortDescription: item.meta_description ?? item.shortDescription ?? '',
+            fullDescription: item.description ?? item.fullDescription ?? '',
+            thumbImage: item.featured_image ?? item.thumbImage ?? '',
+            img: item.featured_image ?? item.img ?? '',
+            category: categoryName ? [categoryName] : [],
+            active: item.visible !== false,
+            buttonText: item.buttonText ?? 'Explore Path',
+            coreFeature: false,
+        }
+    }
+
     return item
 }
 
@@ -74,6 +89,22 @@ const mapToDatabase = (itemType, item) => {
         }
     }
 
+    if (itemType === 'services') {
+        return {
+            title: item.title || '',
+            description: item.fullDescription || item.description || item.shortDescription || '',
+            icon: item.icon || '',
+            featured_image: item.thumbImage || item.featured_image || item.img || '',
+            price: item.price ?? null,
+            category_id: item.category_id || null,
+            featured: item.featured === true,
+            meta_title: item.meta_title || item.title || '',
+            meta_description: item.meta_description || item.shortDescription || '',
+            visible: item.visible !== false && item.active !== false,
+            order_index: Number(item.order_index ?? 0)
+        }
+    }
+
     return item
 }
 
@@ -84,7 +115,13 @@ const fetchTableItems = async (itemType) => {
         return []
     }
 
-    const { data, error } = await supabase.from(table).select('*')
+    let query = supabase.from(table).select('*')
+
+    if (itemType === 'services') {
+        query = supabase.from(table).select('*, categories(name)')
+    }
+
+    const { data, error } = await query
 
     if (error) {
         throw error
@@ -116,6 +153,48 @@ const getNextSocialOrder = async () => {
 
     const currentMaxOrder = Number(data?.[0]?.order_index ?? 0)
     return currentMaxOrder + 1
+}
+
+const getNextServiceOrder = async () => {
+    const { data, error } = await supabase
+        .from('services')
+        .select('order_index')
+        .order('order_index', { ascending: false })
+        .limit(1)
+
+    if (error) {
+        throw error
+    }
+
+    const currentMaxOrder = Number(data?.[0]?.order_index ?? 0)
+    return currentMaxOrder + 1
+}
+
+const resolveServiceCategoryId = async (item) => {
+    if (isUuid(item?.category_id)) {
+        return item.category_id
+    }
+
+    const categoryInput = Array.isArray(item?.category)
+        ? item.category.find(Boolean)
+        : item?.category
+
+    if (!categoryInput) {
+        return null
+    }
+
+    const { data, error } = await supabase
+        .from('categories')
+        .select('id')
+        .eq('type', 'services')
+        .ilike('name', String(categoryInput))
+        .limit(1)
+
+    if (error) {
+        throw error
+    }
+
+    return data?.[0]?.id || null
 }
 
 const buildResponseForType = async (itemType) => {
@@ -176,6 +255,19 @@ export async function POST(req) {
         if (!isUpdate && itemType === 'social') {
             const providedOrder = Number(payload.order_index ?? 0)
             payload.order_index = providedOrder > 0 ? providedOrder : await getNextSocialOrder()
+        }
+
+        if (itemType === 'services') {
+            payload.category_id = await resolveServiceCategoryId(item)
+
+            if (!payload.category_id) {
+                return NextResponse.json({ error: 'Please select a valid services category before saving.' }, { status: 400 })
+            }
+
+            const providedOrder = Number(payload.order_index ?? 0)
+            payload.order_index = providedOrder > 0
+                ? providedOrder
+                : (isUpdate ? providedOrder : await getNextServiceOrder())
         }
 
         let result

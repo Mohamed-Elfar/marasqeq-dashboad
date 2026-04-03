@@ -197,7 +197,20 @@ const ContentItemManager = ({ itemType }) => {
 
     const missingFields = requiredFields.filter((field) => {
       const value = field.split('.').reduce((obj, key) => obj && obj[key], formData)
-      return !value || value === ''
+
+      if (value === null || value === undefined || value === '') {
+        return true
+      }
+
+      if (Array.isArray(value)) {
+        return value.length === 0
+      }
+
+      if (typeof value === 'object') {
+        return Object.keys(value).length === 0
+      }
+
+      return false
     })
 
     if (missingFields.length > 0) {
