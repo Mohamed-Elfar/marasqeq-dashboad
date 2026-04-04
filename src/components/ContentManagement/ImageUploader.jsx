@@ -53,17 +53,23 @@ const ImageUploader = ({ onUpload, currentImage }) => {
       const formData = new FormData();
       formData.append('file', file);
 
+      console.log('ImageUploader - Uploading file:', file.name, 'Size:', file.size);
+      
       const response = await fetch('/api/content/upload', {
         method: 'POST',
         body: formData
       });
 
+      console.log('ImageUploader - Response status:', response.status);
+      
       if (!response.ok) {
         const errorData = await response.json().catch(() => null);
+        console.error('ImageUploader - Upload failed:', errorData);
         throw new Error(errorData?.error || 'Upload failed');
       }
 
       const data = await response.json();
+      console.log('ImageUploader - Upload success:', data);
       onUpload(data.url);
     } catch (err) {
       setError(err?.message || 'Failed to upload image');

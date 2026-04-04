@@ -31,9 +31,17 @@ const ContentItemManager = ({ itemType }) => {
   const fetchItems = async () => {
     try {
       setLoading(true)
-      const response = await fetch(`/api/content/items?type=${itemType}`)
+      
+      // Use dashboard's news API for news items
+      const apiUrl = itemType === 'news' ? '/api/news' : `/api/content/items?type=${itemType}`
+      const response = await fetch(apiUrl)
       const data = await response.json()
-      const items = data[itemType] || []
+      
+      // For news API, data is the array directly, for others, extract from response
+      const items = itemType === 'news' ? data : (data[itemType] || [])
+      
+      console.log(`Dashboard fetchItems - Raw response for ${itemType}:`, data);
+      console.log(`Dashboard fetchItems - Items array for ${itemType}:`, items);
 
       const sortedItems = [...items].sort((left, right) => {
         if (itemType === 'social' || itemType === 'faq') {
@@ -73,6 +81,7 @@ const ContentItemManager = ({ itemType }) => {
 
   const initializeForm = (item = null) => {
     if (item) {
+      console.log('Dashboard initializeForm - Item data:', item);
       setEditingItem(item)
       setFormData(item)
     } else {
@@ -123,9 +132,29 @@ const ContentItemManager = ({ itemType }) => {
           name: '',
           icon: 'FaFacebookF',
           url: '',
-          position: 'both',
+          position: ['header', 'footer', 'news'],
           active: true,
           order: nextSocialOrder,
+        })
+      } else if (itemType === 'news') {
+        const nextNewsOrder = items.reduce((highest, currentItem) => {
+          const currentOrder = Number(currentItem.order ?? currentItem.order_index ?? 0)
+          return currentOrder > highest ? currentOrder : highest
+        }, 0) + 1
+
+        setFormData({
+          title: '',
+          shortDescription: '',
+          fullDescription: '',
+          featured_image: '',
+          excerpt: '',
+          category_id: null,
+          published: true,
+          featured: false,
+          visible: true,
+          order_index: nextNewsOrder,
+          meta_title: '',
+          meta_description: '',
         })
       } else {
         setFormData({
@@ -231,14 +260,22 @@ const ContentItemManager = ({ itemType }) => {
         isEditing: Boolean(editingItem?.id),
       })
 
-      const response = await fetch('/api/content/items', {
-        method: 'POST',
+      // Use dashboard's news API for news items
+      const apiUrl = itemType === 'news' ? '/api/news' : '/api/content/items'
+      const method = editingItem?.id ? 'PUT' : 'POST'
+      
+      const response = await fetch(apiUrl, {
+        method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          itemType,
-          item: formData,
-          id: editingItem?.id,
-        }),
+        body: JSON.stringify(
+          itemType === 'news' 
+            ? formData 
+            : {
+                itemType,
+                item: formData,
+                id: editingItem?.id,
+              }
+        ),
       })
 
       if (response.ok) {
@@ -261,10 +298,12 @@ const ContentItemManager = ({ itemType }) => {
   const handleDeleteItem = async (itemId) => {
     if (confirm('Are you sure you want to delete this item?')) {
       try {
-        const response = await fetch('/api/content/items', {
+        // Use dashboard's news API for news items
+        const apiUrl = itemType === 'news' ? '/api/news' : '/api/content/items'
+        const response = await fetch(apiUrl, {
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ itemType, id: itemId }),
+          body: JSON.stringify({ id: itemId }),
         })
 
         if (response.ok) {

@@ -19,11 +19,12 @@ const ItemManagerList = ({ items, loading, itemType, onEdit, onDelete }) => {
         }
       case 'news':
         return {
-          columns: ['Title', 'Category', 'Type', 'Author', 'Date', 'Actions'],
+          columns: ['Title', 'Category', 'Status', 'Visibility', 'Author', 'Date', 'Actions'],
           getRowData: (item) => [
             item.title,
             item.category,
-            item.type,
+            item.status,
+            item.visibility,
             item.author?.name,
             item.date,
             null, // Actions column
@@ -70,7 +71,9 @@ const ItemManagerList = ({ items, loading, itemType, onEdit, onDelete }) => {
           getRowData: (item) => [
             item.name,
             <SocialIcon key={`icon-${item.id}`} icon={item.icon} className="text-primary" />,
-            item.position === 'both' ? 'Header & Footer' : item.position === 'header' ? 'Header Only' : 'Footer Only',
+            Array.isArray(item.position) 
+              ? item.position.join(', ').charAt(0).toUpperCase() + item.position.join(', ').slice(1)
+              : item.position,
             item.order || 1,
             item.active ? 'Active' : 'Inactive',
             null, // Actions column

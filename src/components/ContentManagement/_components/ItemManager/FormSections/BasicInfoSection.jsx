@@ -75,6 +75,55 @@ const BasicInfoSection = ({ formData, itemType, onFormChange }) => {
               />
             </Form.Group>
           </Col>
+
+          <Col md={12}>
+            <Form.Group className="mb-4">
+              <Form.Label className="fw-semibold mb-2">
+                Position <span className="text-danger">*</span>
+              </Form.Label>
+              <div className="d-flex gap-4 flex-wrap">
+                <Form.Check
+                  type="checkbox"
+                  id="position-header"
+                  label="Header"
+                  checked={Array.isArray(formData.position) ? formData.position.includes('header') : false}
+                  onChange={(e) => {
+                    const currentPositions = Array.isArray(formData.position) ? formData.position : [];
+                    const newPositions = e.target.checked 
+                      ? [...currentPositions, 'header']
+                      : currentPositions.filter(pos => pos !== 'header');
+                    onFormChange('position', newPositions);
+                  }}
+                />
+                <Form.Check
+                  type="checkbox"
+                  id="position-footer"
+                  label="Footer"
+                  checked={Array.isArray(formData.position) ? formData.position.includes('footer') : false}
+                  onChange={(e) => {
+                    const currentPositions = Array.isArray(formData.position) ? formData.position : [];
+                    const newPositions = e.target.checked 
+                      ? [...currentPositions, 'footer']
+                      : currentPositions.filter(pos => pos !== 'footer');
+                    onFormChange('position', newPositions);
+                  }}
+                />
+                <Form.Check
+                  type="checkbox"
+                  id="position-news"
+                  label="News"
+                  checked={Array.isArray(formData.position) ? formData.position.includes('news') : false}
+                  onChange={(e) => {
+                    const currentPositions = Array.isArray(formData.position) ? formData.position : [];
+                    const newPositions = e.target.checked 
+                      ? [...currentPositions, 'news']
+                      : currentPositions.filter(pos => pos !== 'news');
+                    onFormChange('position', newPositions);
+                  }}
+                />
+              </div>
+            </Form.Group>
+          </Col>
         </>
       )}
 

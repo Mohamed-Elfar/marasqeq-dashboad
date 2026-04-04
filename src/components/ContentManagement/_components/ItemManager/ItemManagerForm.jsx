@@ -19,7 +19,7 @@ const ItemManagerForm = ({ formData, itemType, categories, onFormChange, section
       case 'specific':
         return <SpecificDetailsSection formData={formData} itemType={itemType} onFormChange={onFormChange} />
       case 'author':
-        return <AuthorSection formData={formData} itemType={itemType} onFormChange={onFormChange} />
+        return <AuthorSection itemType={itemType} />
       case 'settings':
         return <SettingsSection formData={formData} itemType={itemType} onFormChange={onFormChange} />
       default:
@@ -30,7 +30,7 @@ const ItemManagerForm = ({ formData, itemType, categories, onFormChange, section
             <CategorySection formData={formData} itemType={itemType} categories={categories} onFormChange={onFormChange} />
             <MediaSection formData={formData} itemType={itemType} onFormChange={onFormChange} />
             <SpecificDetailsSection formData={formData} itemType={itemType} onFormChange={onFormChange} />
-            <AuthorSection formData={formData} itemType={itemType} onFormChange={onFormChange} />
+            <AuthorSection itemType={itemType} />
             <SettingsSection formData={formData} itemType={itemType} onFormChange={onFormChange} />
           </>
         )

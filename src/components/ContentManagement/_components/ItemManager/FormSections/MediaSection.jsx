@@ -10,6 +10,7 @@ const MediaSection = ({ formData, itemType, onFormChange }) => {
 
   const isService = itemType === 'services'
   const isPortfolio = itemType === 'portfolio'
+  const isNews = itemType === 'news'
   const getCaptionImage = (key) => {
     if (isService && key === 'image1') {
       return formData.detail_image_1 || formData.captions?.image1 || ''
@@ -27,12 +28,12 @@ const MediaSection = ({ formData, itemType, onFormChange }) => {
       <Col md={6}>
         <Form.Group className="mb-4">
           <Form.Label className="fw-semibold mb-2">
-            {isService || isPortfolio ? 'Thumbnail Image' : 'Image'}{' '}
+            {isService || isPortfolio ? 'Thumbnail Image' : isNews ? 'Featured Image' : 'Image'}{' '}
             {itemType !== 'news' ? <span className="text-danger">*</span> : <span className="text-muted small">(optional)</span>}
           </Form.Label>
           <ImageUploader
-            currentImage={isService || isPortfolio ? formData.thumbImage : formData.image}
-            onUpload={(url) => onFormChange(isService || isPortfolio ? 'thumbImage' : 'image', url)}
+            currentImage={isService || isPortfolio ? formData.thumbImage : isNews ? formData.featured_image : formData.image}
+            onUpload={(url) => onFormChange(isService || isPortfolio ? 'thumbImage' : isNews ? 'featured_image' : 'image', url)}
           />
         </Form.Group>
       </Col>

@@ -21,6 +21,16 @@ export async function POST(req) {
     }
 }
 
+export async function PUT(req) {
+    try {
+        const result = await handlePost(req)
+        return NextResponse.json(result)
+    } catch (error) {
+        console.error('Error updating content item:', error)
+        return NextResponse.json({ error: error.message || 'Failed to update item' }, { status: 500 })
+    }
+}
+
 export async function DELETE(req) {
     try {
         const result = await handleDelete(req)

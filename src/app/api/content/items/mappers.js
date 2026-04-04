@@ -52,7 +52,7 @@ export const mapToDatabase = (itemType, item) => {
             name: item.name || '',
             icon: item.icon || '',
             url: item.url || '',
-            position: item.position || 'both',
+            position: item.position || ['header', 'footer', 'news'],
             active: item.active !== false,
             order_index: item.order ?? item.order_index ?? 1
         }
