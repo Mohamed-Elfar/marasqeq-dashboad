@@ -1,10 +1,16 @@
 import { NextResponse } from 'next/server'
-import { getServices, createService, updateService, deleteService } from '@/lib/database'
+import { supabase } from '@/lib/supabase'
 
-export async function GET(request) {
+export async function GET() {
   try {
-    const services = await getServices()
-    return NextResponse.json(services)
+    const { data, error } = await supabase
+      .from('services')
+      .select('*, categories(name)')
+      .eq('visible', true)
+      .order('order_index', { ascending: true })
+
+    if (error) throw error
+    return NextResponse.json(data)
   } catch (error) {
     console.error('Error fetching services:', error)
     return NextResponse.json(
@@ -17,8 +23,13 @@ export async function GET(request) {
 export async function POST(request) {
   try {
     const body = await request.json()
-    const service = await createService(body)
-    return NextResponse.json(service)
+    const { data, error } = await supabase
+      .from('services')
+      .insert([body])
+      .select()
+
+    if (error) throw error
+    return NextResponse.json(data[0])
   } catch (error) {
     console.error('Error creating service:', error)
     return NextResponse.json(
@@ -31,9 +42,15 @@ export async function POST(request) {
 export async function PUT(request) {
   try {
     const body = await request.json()
-    const { id, ...updateData } = body
-    const service = await updateService(id, updateData)
-    return NextResponse.json(service)
+    const { id, ...service } = body
+    const { data, error } = await supabase
+      .from('services')
+      .update(service)
+      .eq('id', id)
+      .select()
+
+    if (error) throw error
+    return NextResponse.json(data[0])
   } catch (error) {
     console.error('Error updating service:', error)
     return NextResponse.json(
@@ -47,15 +64,20 @@ export async function DELETE(request) {
   try {
     const { searchParams } = new URL(request.url)
     const id = searchParams.get('id')
-    
+
     if (!id) {
       return NextResponse.json(
         { error: 'Service ID is required' },
         { status: 400 }
       )
     }
-    
-    await deleteService(id)
+
+    const { error } = await supabase
+      .from('services')
+      .delete()
+      .eq('id', id)
+
+    if (error) throw error
     return NextResponse.json({ success: true })
   } catch (error) {
     console.error('Error deleting service:', error)

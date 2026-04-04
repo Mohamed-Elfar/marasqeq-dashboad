@@ -1,10 +1,16 @@
 import { NextResponse } from 'next/server'
-import { getPortfolio, createPortfolio, updatePortfolio, deletePortfolio } from '@/lib/database'
+import { supabase } from '@/lib/supabase'
 
-export async function GET(request) {
+export async function GET() {
   try {
-    const portfolio = await getPortfolio()
-    return NextResponse.json(portfolio)
+    const { data, error } = await supabase
+      .from('portfolio')
+      .select('*')
+      .eq('visible', true)
+      .order('order_index', { ascending: true })
+
+    if (error) throw error
+    return NextResponse.json(data)
   } catch (error) {
     console.error('Error fetching portfolio:', error)
     return NextResponse.json(
@@ -17,8 +23,13 @@ export async function GET(request) {
 export async function POST(request) {
   try {
     const body = await request.json()
-    const portfolio = await createPortfolio(body)
-    return NextResponse.json(portfolio)
+    const { data, error } = await supabase
+      .from('portfolio')
+      .insert([body])
+      .select()
+
+    if (error) throw error
+    return NextResponse.json(data[0])
   } catch (error) {
     console.error('Error creating portfolio:', error)
     return NextResponse.json(
@@ -31,9 +42,15 @@ export async function POST(request) {
 export async function PUT(request) {
   try {
     const body = await request.json()
-    const { id, ...updateData } = body
-    const portfolio = await updatePortfolio(id, updateData)
-    return NextResponse.json(portfolio)
+    const { id, ...portfolioItem } = body
+    const { data, error } = await supabase
+      .from('portfolio')
+      .update(portfolioItem)
+      .eq('id', id)
+      .select()
+
+    if (error) throw error
+    return NextResponse.json(data[0])
   } catch (error) {
     console.error('Error updating portfolio:', error)
     return NextResponse.json(
@@ -47,15 +64,20 @@ export async function DELETE(request) {
   try {
     const { searchParams } = new URL(request.url)
     const id = searchParams.get('id')
-    
+
     if (!id) {
       return NextResponse.json(
         { error: 'Portfolio ID is required' },
         { status: 400 }
       )
     }
-    
-    await deletePortfolio(id)
+
+    const { error } = await supabase
+      .from('portfolio')
+      .delete()
+      .eq('id', id)
+
+    if (error) throw error
     return NextResponse.json({ success: true })
   } catch (error) {
     console.error('Error deleting portfolio:', error)
