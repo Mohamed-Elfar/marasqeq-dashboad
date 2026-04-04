@@ -134,10 +134,12 @@ const ContentItemManager = ({ itemType }) => {
           fullDescription: '',
           thumbImage: '',
           img: '',
+          detail_image_1: '',
+          detail_image_2: '',
           icon: '',
           category: [],
           buttonText: 'Explore Path',
-          active: false,
+          active: true,
           featured: false,
           coreFeature: false,
           captions: {
@@ -186,7 +188,7 @@ const ContentItemManager = ({ itemType }) => {
     } else if (itemType === 'news') {
       requiredFields = ['title', 'fullDescription', 'shortDescription', 'category', 'type', 'author.name']
     } else if (itemType === 'services') {
-      requiredFields = ['title', 'shortDescription', 'fullDescription', 'thumbImage', 'img', 'icon', 'category']
+      requiredFields = ['title', 'shortDescription', 'fullDescription', 'icon', 'category']
     } else if (itemType === 'portfolio') {
       requiredFields = ['title', 'designation', 'shortDescription', 'fullDescription', 'thumbImage', 'img', 'category', 'filter']
     } else if (itemType === 'faq') {
@@ -245,7 +247,8 @@ const ContentItemManager = ({ itemType }) => {
         setSuccess(true)
         setTimeout(() => setSuccess(false), 3000)
       } else {
-        setError('Failed to save item')
+        const errorData = await response.json().catch(() => null)
+        setError(errorData?.error || 'Failed to save item')
       }
     } catch (err) {
       setError('Failed to save item')
@@ -273,7 +276,8 @@ const ContentItemManager = ({ itemType }) => {
         }
       } catch (err) {
         setError('Failed to delete item')
-        console.error(err)
+            const errorData = await response.json().catch(() => null)
+            setError(errorData?.error || 'Failed to save item')
       }
     }
   }

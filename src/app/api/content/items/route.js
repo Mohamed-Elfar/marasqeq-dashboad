@@ -23,6 +23,7 @@ const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3
 
 const isUuid = (value) => typeof value === 'string' && UUID_PATTERN.test(value)
 
+
 const mapFromDatabase = (itemType, item) => {
     if (!item) {
         return item
@@ -49,11 +50,20 @@ const mapFromDatabase = (itemType, item) => {
             shortDescription: item.meta_description ?? item.shortDescription ?? '',
             fullDescription: item.description ?? item.fullDescription ?? '',
             thumbImage: item.featured_image ?? item.thumbImage ?? '',
-            img: item.featured_image ?? item.img ?? '',
+            img: item.img ?? item.featured_image ?? '',
             category: categoryName ? [categoryName] : [],
             active: item.visible !== false,
-            buttonText: item.buttonText ?? 'Explore Path',
+            buttonText: 'Explore Path',
             coreFeature: false,
+            detail_image_1: item.detail_image_1 || '',
+            detail_image_2: item.detail_image_2 || '',
+            captions: {
+                image1: item.detail_image_1 || '',
+                image2: item.detail_image_2 || '',
+                caption: item.title || '',
+                captionFullDescription: item.description || '',
+                captionShortDescription: item.meta_description || '',
+            },
         }
     }
 
@@ -90,11 +100,20 @@ const mapToDatabase = (itemType, item) => {
     }
 
     if (itemType === 'services') {
+        // Handle image deletion - check if images are explicitly cleared
+        const detailImage1 = item.detail_image_1 === '' || item.detail_image_1 === null ? '31.jpg' : (item.detail_image_1 || '31.jpg')
+        const detailImage2 = item.detail_image_2 === '' || item.detail_image_2 === null ? '32.jpg' : (item.detail_image_2 || '32.jpg')
+        const featuredImage = (item.thumbImage === '' || item.thumbImage === null) ? '21.jpg' : (item.thumbImage || item.featured_image || '21.jpg')
+        const mainImage = (item.img === '' || item.img === null) ? featuredImage : (item.img || featuredImage)
+
         return {
             title: item.title || '',
             description: item.fullDescription || item.description || item.shortDescription || '',
             icon: item.icon || '',
-            featured_image: item.thumbImage || item.featured_image || item.img || '',
+            featured_image: featuredImage,
+            img: mainImage,
+            detail_image_1: detailImage1,
+            detail_image_2: detailImage2,
             price: item.price ?? null,
             category_id: item.category_id || null,
             featured: item.featured === true,
@@ -268,20 +287,21 @@ export async function POST(req) {
             payload.order_index = providedOrder > 0
                 ? providedOrder
                 : (isUpdate ? providedOrder : await getNextServiceOrder())
+
+            // No captions column handling needed - captions are generated from database fields
         }
 
         let result
 
         if (isUpdate) {
             console.log(`[${itemType}] Updating item with id=${targetId}`)
-            const { data, error } = await supabase
+            let { data, error } = await supabase
                 .from(table)
                 .update(payload)
                 .eq('id', targetId)
                 .select()
 
             if (error) {
-                console.error(`[${itemType}] Update error:`, error)
                 throw error
             }
 
@@ -289,10 +309,12 @@ export async function POST(req) {
             result = data?.[0] || payload
         } else {
             console.log(`[${itemType}] Inserting new item`)
-            const { data, error } = await supabase
+            let { data, error } = await supabase
                 .from(table)
                 .insert(payload)
                 .select()
+
+            // No captions column handling needed
 
             if (error) {
                 console.error(`[${itemType}] Insert error:`, error)
@@ -306,7 +328,7 @@ export async function POST(req) {
         return NextResponse.json(mapFromDatabase(itemType, result))
     } catch (error) {
         console.error('Error saving content item:', error)
-        return NextResponse.json({ error: 'Failed to save item' }, { status: 500 })
+        return NextResponse.json({ error: error?.message || 'Failed to save item' }, { status: 500 })
     }
 }
 

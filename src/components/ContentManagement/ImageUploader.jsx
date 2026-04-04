@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Form, Button, Alert, Spinner } from 'react-bootstrap';
 
 const ImageUploader = ({ onUpload, currentImage }) => {
@@ -8,6 +8,19 @@ const ImageUploader = ({ onUpload, currentImage }) => {
   const [error, setError] = useState(null);
   const [preview, setPreview] = useState(currentImage);
   const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    setPreview(currentImage || '');
+  }, [currentImage]);
+
+  const handleRemoveImage = () => {
+    setPreview('');
+    onUpload('');
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
 
   const handleFileChange = async (e) => {
     const file = e.target.files?.[0];
@@ -46,13 +59,14 @@ const ImageUploader = ({ onUpload, currentImage }) => {
       });
 
       if (!response.ok) {
-        throw new Error('Upload failed');
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.error || 'Upload failed');
       }
 
       const data = await response.json();
       onUpload(data.url);
     } catch (err) {
-      setError('Failed to upload image');
+      setError(err?.message || 'Failed to upload image');
       console.error(err);
     } finally {
       setUploading(false);
@@ -84,6 +98,11 @@ const ImageUploader = ({ onUpload, currentImage }) => {
             alt="Preview"
             style={{ maxWidth: '100%', maxHeight: '300px', borderRadius: '4px' }}
           />
+          <div className="mt-2">
+            <Button variant="outline-danger" size="sm" onClick={handleRemoveImage}>
+              Delete Image
+            </Button>
+          </div>
           {uploading && (
             <div className="mt-2">
               <Spinner animation="border" role="status" size="sm" className="me-2" />

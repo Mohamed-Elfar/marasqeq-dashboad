@@ -8,30 +8,79 @@ const MediaSection = ({ formData, itemType, onFormChange }) => {
     return null
   }
 
+  const isService = itemType === 'services'
+  const isPortfolio = itemType === 'portfolio'
+  const getCaptionImage = (key) => {
+    if (isService && key === 'image1') {
+      return formData.detail_image_1 || formData.captions?.image1 || ''
+    }
+
+    if (isService && key === 'image2') {
+      return formData.detail_image_2 || formData.captions?.image2 || ''
+    }
+
+    return formData.captions?.[key] || ''
+  }
+
   return (
     <Row>
       <Col md={6}>
         <Form.Group className="mb-4">
           <Form.Label className="fw-semibold mb-2">
-            {itemType === 'services' || itemType === 'portfolio' ? 'Thumbnail Image' : 'Image'}{' '}
+            {isService || isPortfolio ? 'Thumbnail Image' : 'Image'}{' '}
             {itemType !== 'news' ? <span className="text-danger">*</span> : <span className="text-muted small">(optional)</span>}
           </Form.Label>
           <ImageUploader
-            currentImage={itemType === 'services' || itemType === 'portfolio' ? formData.thumbImage : formData.image}
-            onUpload={(url) => onFormChange(itemType === 'services' || itemType === 'portfolio' ? 'thumbImage' : 'image', url)}
+            currentImage={isService || isPortfolio ? formData.thumbImage : formData.image}
+            onUpload={(url) => onFormChange(isService || isPortfolio ? 'thumbImage' : 'image', url)}
           />
         </Form.Group>
       </Col>
 
-      {(itemType === 'services' || itemType === 'portfolio') && (
+      {(isService || isPortfolio) && (
         <Col md={6}>
           <Form.Group className="mb-4">
             <Form.Label className="fw-semibold mb-2">
-              Main Image <span className="text-danger">*</span>
+              {isService ? 'Banner' : 'Main Image'} <span className="text-danger">*</span>
             </Form.Label>
             <ImageUploader currentImage={formData.img} onUpload={(url) => onFormChange('img', url)} />
           </Form.Group>
         </Col>
+      )}
+
+      {isService && (
+        <>
+          <Col md={6}>
+            <Form.Group className="mb-4">
+              <Form.Label className="fw-semibold mb-2">
+                Detail Image 1 <span className="text-danger">*</span>
+              </Form.Label>
+              <ImageUploader
+                currentImage={getCaptionImage('image1')}
+                onUpload={(url) => {
+                  onFormChange('detail_image_1', url)
+                  onFormChange('captions.image1', url)
+                }}
+              />
+            </Form.Group>
+          </Col>
+
+          <Col md={6}>
+            <Form.Group className="mb-4">
+              <Form.Label className="fw-semibold mb-2">
+                Detail Image 2 <span className="text-danger">*</span>
+              </Form.Label>
+              <ImageUploader
+                currentImage={getCaptionImage('image2')}
+                onUpload={(url) => {
+                  onFormChange('detail_image_2', url)
+                  onFormChange('captions.image2', url)
+                }}
+              />
+            </Form.Group>
+          </Col>
+
+        </>
       )}
     </Row>
   )
