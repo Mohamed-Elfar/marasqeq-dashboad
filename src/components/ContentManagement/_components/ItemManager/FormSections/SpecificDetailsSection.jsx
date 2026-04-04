@@ -181,6 +181,59 @@ const SpecificDetailsSection = ({ formData, itemType, onFormChange }) => {
             </Form.Select>
           </Form.Group>
         </Col>
+
+        <Col md={12}>
+          <Form.Group className="mb-4">
+            <Form.Label className="fw-semibold mb-2">Caption Text</Form.Label>
+            <Form.Control
+              type="text"
+              value={formData.captions?.caption || ''}
+              onChange={(e) => onFormChange('captions.caption', e.target.value)}
+              placeholder="Brief caption for detail images"
+              style={{
+                borderRadius: '8px',
+                border: '2px solid #e9ecef',
+                padding: '0.75rem 1rem',
+              }}
+            />
+          </Form.Group>
+        </Col>
+
+        <Col md={12}>
+          <Form.Group className="mb-4">
+            <Form.Label className="fw-semibold mb-2">Caption Full Description</Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={3}
+              value={formData.captions?.captionFullDescription || ''}
+              onChange={(e) => onFormChange('captions.captionFullDescription', e.target.value)}
+              placeholder="Detailed description for the caption"
+              style={{
+                borderRadius: '8px',
+                border: '2px solid #e9ecef',
+                padding: '0.75rem 1rem',
+              }}
+            />
+          </Form.Group>
+        </Col>
+
+        <Col md={12}>
+          <Form.Group className="mb-4">
+            <Form.Label className="fw-semibold mb-2">Caption Short Description</Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={2}
+              value={formData.captions?.captionShortDescription || ''}
+              onChange={(e) => onFormChange('captions.captionShortDescription', e.target.value)}
+              placeholder="Short description for the caption"
+              style={{
+                borderRadius: '8px',
+                border: '2px solid #e9ecef',
+                padding: '0.75rem 1rem',
+              }}
+            />
+          </Form.Group>
+        </Col>
       </Row>
     )
   }

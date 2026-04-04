@@ -49,17 +49,19 @@ const MediaSection = ({ formData, itemType, onFormChange }) => {
         </Col>
       )}
 
-      {isService && (
+      {(isService || isPortfolio) && (
         <>
           <Col md={6}>
             <Form.Group className="mb-4">
               <Form.Label className="fw-semibold mb-2">
-                Detail Image 1 <span className="text-danger">*</span>
+                Detail Image 1 <span className="text-muted small">(optional)</span>
               </Form.Label>
               <ImageUploader
                 currentImage={getCaptionImage('image1')}
                 onUpload={(url) => {
-                  onFormChange('detail_image_1', url)
+                  if (isService) {
+                    onFormChange('detail_image_1', url)
+                  }
                   onFormChange('captions.image1', url)
                 }}
               />
@@ -69,12 +71,14 @@ const MediaSection = ({ formData, itemType, onFormChange }) => {
           <Col md={6}>
             <Form.Group className="mb-4">
               <Form.Label className="fw-semibold mb-2">
-                Detail Image 2 <span className="text-danger">*</span>
+                Detail Image 2 <span className="text-muted small">(optional)</span>
               </Form.Label>
               <ImageUploader
                 currentImage={getCaptionImage('image2')}
                 onUpload={(url) => {
-                  onFormChange('detail_image_2', url)
+                  if (isService) {
+                    onFormChange('detail_image_2', url)
+                  }
                   onFormChange('captions.image2', url)
                 }}
               />

@@ -38,6 +38,22 @@ const CategorySection = ({ formData, itemType, categories, onFormChange }) => {
               <option value="legal">Legal</option>
               <option value="payment">Payment</option>
             </Form.Select>
+          ) : itemType === 'portfolio' ? (
+            <Form.Select
+              value={Array.isArray(formData.category) ? formData.category[0] : formData.category || ''}
+              onChange={(e) => onFormChange('category', [e.target.value])}
+              style={{
+                borderRadius: '8px',
+                border: '2px solid #e9ecef',
+                padding: '0.75rem 1rem',
+              }}>
+              <option value="">Select a category</option>
+              <option value="Residential">Residential</option>
+              <option value="Commercial">Commercial</option>
+              <option value="Hospitality">Hospitality</option>
+              <option value="Industrial">Industrial</option>
+              <option value="Mixed-Use">Mixed-Use</option>
+            </Form.Select>
           ) : (
             <Form.Select
               value={Array.isArray(formData.category) ? formData.category[0] : formData.category || ''}

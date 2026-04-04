@@ -43,6 +43,29 @@ export const mapFromDatabase = (itemType, item) => {
         }
     }
 
+    if (itemType === 'portfolio') {
+        return {
+            ...item,
+            shortDescription: item.short_description || item.shortDescription || '',
+            fullDescription: item.full_description || item.fullDescription || '',
+            thumbImage: item.thumb_image || item.thumbImage || '1.jpg',
+            img: item.img || item.thumb_image || item.thumbImage || '1.jpg',
+            category: item.category || [],
+            active: item.active !== false,
+            carousel: item.carousel || false,
+            filter: item.filter || '',
+            featured: item.featured || false,
+            captions: item.captions || {
+                image1: '31.jpg',
+                image2: '32.jpg',
+                caption: '',
+                captionFullDescription: '',
+                captionShortDescription: '',
+            },
+            reviews: item.reviews || [],
+        }
+    }
+
     return item
 }
 
@@ -96,6 +119,32 @@ export const mapToDatabase = (itemType, item) => {
             meta_title: item.meta_title || item.title || '',
             meta_description: item.meta_description || item.shortDescription || '',
             visible: item.visible !== false && item.active !== false,
+            order_index: Number(item.order_index ?? 0)
+        }
+    }
+
+    if (itemType === 'portfolio') {
+        return {
+            title: item.title || '',
+            designation: item.designation || '',
+            short_description: item.shortDescription || '',
+            full_description: item.fullDescription || '',
+            thumb_image: item.thumbImage || '1.jpg',
+            img: item.img || item.thumbImage || '1.jpg',
+            carousel: item.carousel || false,
+            active: item.active !== false,
+            category: item.category || [],
+            filter: item.filter || '',
+            featured: item.featured || false,
+            captions: item.captions || {
+                image1: '31.jpg',
+                image2: '32.jpg',
+                caption: '',
+                captionFullDescription: '',
+                captionShortDescription: '',
+            },
+            reviews: item.reviews || [],
+            visible: item.visible !== false,
             order_index: Number(item.order_index ?? 0)
         }
     }

@@ -229,7 +229,16 @@ const ContentItemManager = ({ itemType }) => {
     const missingFields = requiredFields.filter((field) => {
       const value = field.split('.').reduce((obj, key) => obj && obj[key], formData)
 
-      if (value === null || value === undefined || value === '') {
+      if (value === null || value === undefined) {
+        return true
+      }
+
+      // For portfolio images, empty strings are valid (will use defaults)
+      if (itemType === 'portfolio' && (field === 'thumbImage' || field === 'img')) {
+        return false // Don't require these fields to have values
+      }
+
+      if (value === '') {
         return true
       }
 
