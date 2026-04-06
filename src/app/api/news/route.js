@@ -30,7 +30,7 @@ export async function GET() {
       date: item.published_at ? new Date(item.published_at).toLocaleDateString() : new Date(item.created_at).toLocaleDateString(), // Format date
       author: {
         name: 'Maraseq Team',
-        img: '/img/logo.svg', // Use website logo path
+        img: '/logo.svg',
         description: 'Real estate experts providing insights and updates'
       }
     }));
