@@ -16,23 +16,38 @@ export default function LoginPage() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    console.log('Login attempt started');
+    console.log('Email:', email);
+    console.log('Password length:', password.length);
+    
     setError('');
     setLoading(true);
 
     try {
+      console.log('Calling Supabase auth...');
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
-      if (error) throw error;
+      console.log('Supabase response:', { data, error });
+
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
 
       // Store session
       if (data.session) {
+        console.log('Session received, storing and redirecting...');
         localStorage.setItem('supabase_session', JSON.stringify(data.session));
         router.push('/dashboards');
+      } else {
+        console.error('No session in response');
+        setError('Login failed: No session received');
       }
     } catch (error) {
+      console.error('Login error:', error);
       setError(error.message || 'Failed to login. Please check your credentials.');
     } finally {
       setLoading(false);
