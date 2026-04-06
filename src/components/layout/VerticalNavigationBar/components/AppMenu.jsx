@@ -7,6 +7,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import { Collapse } from 'react-bootstrap';
+import LogoutButton from '@/components/LogoutButton';
+
 const MenuItemWithChildren = ({
   item,
   className,
@@ -64,6 +66,19 @@ const MenuItemLink = ({
   item,
   className
 }) => {
+  // Handle logout specially
+  if (item.key === 'logout') {
+    return <LogoutButton className={clsx(className, {
+      disabled: item.isDisabled
+    })}>
+        {item.icon && <span className="nav-icon">
+            <IconifyIcon icon={item.icon} />
+          </span>}
+        <span className="nav-text ">{item.label}</span>
+        {item.badge && <span className={`badge badge-pill text-end bg-${item.badge.variant}`}>{item.badge.text}</span>}
+      </LogoutButton>;
+  }
+
   return <Link href={item.url ?? ''} target={item.target} className={clsx(className, {
     disabled: item.isDisabled
   })}>
