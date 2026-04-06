@@ -5,7 +5,6 @@
 // Core files
 @import "./node_modules/bootstrap/scss/functions";
 @import "./node_modules/bootstrap/scss/variables";
-@import 'gridjs/dist/theme/mermaid.css';
 
 
 @import "config/variables";
@@ -52,8 +51,6 @@
 @import "plugins/simplebar";
 @import "plugins/dropzone";
 @import "plugins/editors";
-@import "plugins/gridjs";
-@import "plugins/flatpicker";
 
 // Pages
 @import "pages/custom-react";
