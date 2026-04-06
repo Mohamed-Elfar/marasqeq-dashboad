@@ -41,7 +41,8 @@ export default function LoginPage() {
       if (data.session) {
         console.log('Session received, storing and redirecting...');
         localStorage.setItem('supabase_session', JSON.stringify(data.session));
-        router.push('/dashboards');
+        // Use window.location for hard redirect
+        window.location.href = '/dashboards';
       } else {
         console.error('No session in response');
         setError('Login failed: No session received');
