@@ -14,20 +14,31 @@ export default function ForgotPasswordPage() {
 
   const handleResetPassword = async (e) => {
     e.preventDefault();
+    console.log('Forgot password attempt started');
+    console.log('Email:', email);
+    
     setError('');
     setSuccess(false);
     setLoading(true);
 
     try {
+      console.log('Calling Supabase resetPasswordForEmail...');
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${window.location.origin}/reset-password`,
       });
 
-      if (error) throw error;
+      console.log('Supabase response:', { error });
 
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
+
+      console.log('Reset email sent successfully');
       setSuccess(true);
       setEmail('');
     } catch (error) {
+      console.error('Reset password error:', error);
       setError(error.message || 'Failed to send reset email. Please try again.');
     } finally {
       setLoading(false);
