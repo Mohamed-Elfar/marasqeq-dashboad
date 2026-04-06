@@ -1,7 +1,6 @@
 import '@/assets/scss/style.scss';
 import AppProvidersWrapper from '@/components/wrapper/AppProvidersWrapper';
 import { DEFAULT_PAGE_TITLE } from '@/context/constants';
-import favIcon from '@/assets/images/fav.svg';
 import { Roboto } from 'next/font/google';
 import Footer from '@/components/layout/Footer';
 import dynamic from 'next/dynamic';
@@ -22,14 +21,30 @@ export const metadata = {
     template: '%s | Maraseq - Content Management Dashboard',
     default: DEFAULT_PAGE_TITLE
   },
+  metadataBase: new URL(process.env.NEXT_PUBLIC_DASHBOARD_URL || 'https://dashboard.maraseqgroup.com'),
   description: 'Maraseq Content Management Dashboard',
   icons: {
     icon: [
-      { url: favIcon.src, type: 'image/svg+xml' },
-      { url: '/favicon.svg', type: 'image/svg+xml' }
+      { url: '/logo.svg', type: 'image/svg+xml' }
     ],
-    shortcut: favIcon.src,
-    apple: favIcon.src
+    shortcut: '/logo.svg',
+    apple: '/logo.svg'
+  },
+  openGraph: {
+    title: 'Maraseq - Content Management Dashboard',
+    description: 'Maraseq Content Management Dashboard',
+    images: [
+      {
+        url: '/logo.svg',
+        alt: 'Maraseq Logo'
+      }
+    ]
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Maraseq - Content Management Dashboard',
+    description: 'Maraseq Content Management Dashboard',
+    images: ['/logo.svg']
   }
 };
 export default function RootLayout({
