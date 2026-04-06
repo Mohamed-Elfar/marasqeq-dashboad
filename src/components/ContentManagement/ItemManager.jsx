@@ -34,14 +34,24 @@ const ContentItemManager = ({ itemType }) => {
       
       // Use dashboard's news API for news items
       const apiUrl = itemType === 'news' ? '/api/news' : `/api/content/items?type=${itemType}`
+      console.log(`[${itemType}] Fetching from:`, apiUrl);
+      
       const response = await fetch(apiUrl)
+      console.log(`[${itemType}] Response status:`, response.status, response.statusText);
+      
+      if (!response.ok) {
+        const errorText = await response.text()
+        console.error(`[${itemType}] API Error:`, errorText)
+        throw new Error(`API returned ${response.status}: ${errorText}`)
+      }
+      
       const data = await response.json()
       
       // For news API, data is the array directly, for others, extract from response
       const items = itemType === 'news' ? data : (data[itemType] || [])
       
-      console.log(`Dashboard fetchItems - Raw response for ${itemType}:`, data);
-      console.log(`Dashboard fetchItems - Items array for ${itemType}:`, items);
+      console.log(`[${itemType}] Raw response:`, data);
+      console.log(`[${itemType}] Items array:`, items);
 
       const sortedItems = [...items].sort((left, right) => {
         if (itemType === 'social' || itemType === 'faq') {
@@ -63,7 +73,7 @@ const ContentItemManager = ({ itemType }) => {
       setItems(sortedItems)
     } catch (err) {
       setError('Failed to load items')
-      console.error(err)
+      console.error(`[${itemType}] fetchItems error:`, err)
     } finally {
       setLoading(false)
     }
