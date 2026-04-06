@@ -1,10 +1,10 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import IconifyIcon from '@/components/wrapper/IconifyIcon';
 import { Card, CardBody, CardHeader, Col, Row } from 'react-bootstrap';
-export const metadata = {
-  title: 'Dashboard'
-};
+
 const page = () => {
   return <>
       <Row>
@@ -34,7 +34,7 @@ const page = () => {
             </CardHeader>
             <CardBody>
               <p className="text-muted mb-3">Manage content and section visibility for Home, About, FAQ, Contact, News, and Property pages.</p>
-              <Link href="/content-management/pages/home" className="btn btn-primary btn-sm">Open Pages</Link>
+              <Link href="/admin/content-management/pages/home" className="btn btn-primary btn-sm">Open Pages</Link>
             </CardBody>
           </Card>
         </Col>
@@ -46,8 +46,8 @@ const page = () => {
             <CardBody>
               <p className="text-muted mb-3">Add, edit, and remove property and news entries with images, videos, and details.</p>
               <div className="d-flex gap-2">
-                <Link href="/content-management/properties" className="btn btn-outline-primary btn-sm">Properties</Link>
-                <Link href="/content-management/news" className="btn btn-outline-primary btn-sm">News</Link>
+                <Link href="/admin/content-management/properties" className="btn btn-outline-primary btn-sm">Properties</Link>
+                <Link href="/admin/content-management/news" className="btn btn-outline-primary btn-sm">News</Link>
               </div>
             </CardBody>
           </Card>
@@ -59,7 +59,7 @@ const page = () => {
             </CardHeader>
             <CardBody>
               <p className="text-muted mb-3">Review contact messages from website users and mark them as open or resolved.</p>
-              <Link href="/content-management/support-center" className="btn btn-outline-primary btn-sm">Open Support Center</Link>
+              <Link href="/admin/content-management/support-center" className="btn btn-outline-primary btn-sm">Open Support Center</Link>
             </CardBody>
           </Card>
         </Col>
