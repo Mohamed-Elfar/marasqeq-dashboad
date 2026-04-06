@@ -27,18 +27,7 @@ const page = () => {
         </Col>
       </Row>
       <Row>
-        <Col lg={4}>
-          <Card>
-            <CardHeader>
-              <h5 className="mb-0">Edit Website Pages</h5>
-            </CardHeader>
-            <CardBody>
-              <p className="text-muted mb-3">Manage content and section visibility for Home, About, FAQ, Contact, News, and Property pages.</p>
-              <Link href="/content-management/pages/home" className="btn btn-primary btn-sm">Open Pages</Link>
-            </CardBody>
-          </Card>
-        </Col>
-        <Col lg={4}>
+        <Col lg={6}>
           <Card>
             <CardHeader>
               <h5 className="mb-0">Manage Properties & News</h5>
@@ -52,7 +41,7 @@ const page = () => {
             </CardBody>
           </Card>
         </Col>
-        <Col lg={4}>
+        <Col lg={6}>
           <Card>
             <CardHeader>
               <h5 className="mb-0">Support Center</h5>
