@@ -1,5 +1,6 @@
 import React from 'react'
 import { Form, Row, Col } from 'react-bootstrap'
+import ImageUploader from '../../../ImageUploader'
 
 const SpecificDetailsSection = ({ formData, itemType, onFormChange }) => {
   if (itemType === 'properties') {
@@ -99,6 +100,29 @@ const SpecificDetailsSection = ({ formData, itemType, onFormChange }) => {
                 padding: '0.75rem 1rem',
               }}
             />
+          </Form.Group>
+        </Col>
+
+        <Col md={12}>
+          <Form.Group className="mb-4">
+            <Form.Label className="fw-semibold mb-2">
+              Google Maps Embed URL <span className="text-muted small">(for map)</span>
+            </Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={2}
+              value={formData.mapEmbedUrl || ''}
+              onChange={(e) => onFormChange('mapEmbedUrl', e.target.value)}
+              placeholder="Paste the Google Maps embed URL here (e.g., https://www.google.com/maps/embed?pb=...)"
+              style={{
+                borderRadius: '8px',
+                border: '2px solid #e9ecef',
+                padding: '0.75rem 1rem',
+              }}
+            />
+            <small className="text-muted">
+              Go to Google Maps → Find location → Share → Embed a map → Copy the URL from the iframe src
+            </small>
           </Form.Group>
         </Col>
       </Row>

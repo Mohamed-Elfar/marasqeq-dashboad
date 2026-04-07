@@ -66,6 +66,28 @@ export const mapFromDatabase = (itemType, item) => {
         }
     }
 
+    if (itemType === 'properties') {
+        return {
+            ...item,
+            productImg: item.product_img || item.productImg || '',
+            shortDescription: item.short_description || item.shortDescription || '',
+            fullDescription: item.full_description || item.fullDescription || '',
+            propertyDetails: item.property_details || item.propertyDetails || {},
+            factsAndFeatures: item.facts_and_features || item.factsAndFeatures || {},
+            amenitiesList: item.amenities_list || item.amenitiesList || [],
+            propertyTypes: item.property_types || item.propertyTypes || [],
+            priceRange: item.price_range || item.priceRange || [],
+            bedBath: item.bed_bath || item.bedBath || [],
+            category: item.category || [],
+            mapEmbedUrl: item.map_embed_url || item.mapEmbedUrl || '',
+            videoUrl: item.video_url || item.videoUrl || '',
+            videoPoster: item.video_poster || item.videoPoster || '',
+            galleryImage1: item.gallery_images?.[0] || item.galleryImage1 || '',
+            galleryImage2: item.gallery_images?.[1] || item.galleryImage2 || '',
+            galleryImage3: item.gallery_images?.[2] || item.galleryImage3 || '',
+        }
+    }
+
     return item
 }
 
@@ -146,6 +168,76 @@ export const mapToDatabase = (itemType, item) => {
             reviews: item.reviews || [],
             visible: item.visible !== false,
             order_index: Number(item.order_index ?? 0)
+        }
+    }
+
+    if (itemType === 'properties') {
+        return {
+            title: item.title || '',
+            description: item.description || '',
+            short_description: item.shortDescription || '',
+            full_description: item.fullDescription || '',
+            price: item.price ?? null,
+            location: item.location || item.locantion || '',
+            property_type: item.property_type || item.propertyType || '',
+            bedrooms: item.bedrooms ?? null,
+            bathrooms: item.bathrooms ?? null,
+            area: item.area ?? null,
+            featured: item.featured === true,
+            status: item.status || 'available',
+            images: item.images || [],
+            meta_title: item.meta_title || item.title || '',
+            meta_description: item.meta_description || item.shortDescription || '',
+            visible: item.visible !== false,
+            order_index: Number(item.order_index ?? 0),
+            category_id: item.category_id || null,
+
+            // New JSON structure fields
+            product_img: item.productImg || item.product_img || '',
+            discount: item.discount ?? 0,
+            country: item.country === true,
+            district: item.district || '',
+            properties_count: item.properties || item.properties_count || 0,
+            new: item.new === true,
+            rent: item.rent === true,
+            rating_count: item.ratingCount || item.rating_count || 0,
+            rating: item.rating ?? 0,
+            sale_count: item.saleCount || item.sale_count || 0,
+            date: item.date || null,
+            comments: item.comments || 0,
+            path_description: item.pathDescription || item.path_description || '',
+            ideal_for: item.idealFor || item.ideal_for || '',
+            recommended_label: item.recommendedLabel || item.recommended_label || '',
+            opportunity_type: item.opportunityType || item.opportunity_type || '',
+            opportunity_stage: item.opportunityStage || item.opportunity_stage || '',
+
+            // JSONB fields
+            property_details: item.propertyDetails || item.property_details || {},
+            facts_and_features: item.factsAndFeatures || item.facts_and_features || {},
+            amenities1: item.amenities1 || [],
+            amenities2: item.amenities2 || [],
+            amenities3: item.amenities3 || [],
+            amenities_list: item.amenitiesList || item.AmenitiesList || item.amenities_list || [],
+            agent: item.agent || {},
+            gallery: item.gallery || {},
+            property_types: item.propertyTypes || item.property_types || [],
+            carousel: item.carousel || [],
+            tags: item.tags || item.tag || [],
+            category: item.category || [],
+            photo: item.photo || [],
+            video: item.video || [],
+            bed_bath: item.bedBath || item.bed_bath || [],
+            price_range: item.priceRange || item.price_range || [],
+
+            // Location and media fields
+            map_embed_url: item.mapEmbedUrl || item.map_embed_url || null,
+            video_url: item.videoUrl || item.video_url || null,
+            video_poster: item.videoPoster || item.video_poster || null,
+            gallery_images: [
+                item.galleryImage1,
+                item.galleryImage2,
+                item.galleryImage3
+            ].filter(url => url && url.trim())
         }
     }
 

@@ -223,7 +223,7 @@ const ContentItemManager = ({ itemType }) => {
     let requiredFields = []
 
     if (itemType === 'properties') {
-      requiredFields = ['title', 'description', 'category', 'date', 'image', 'price', 'location', 'bedrooms', 'bathrooms', 'area']
+      requiredFields = ['title', 'price', 'location']
     } else if (itemType === 'news') {
       requiredFields = ['title', 'fullDescription', 'shortDescription', 'category', 'type', 'author.name']
     } else if (itemType === 'services') {

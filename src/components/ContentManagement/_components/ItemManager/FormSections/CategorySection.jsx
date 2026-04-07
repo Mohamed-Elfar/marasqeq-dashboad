@@ -57,7 +57,14 @@ const CategorySection = ({ formData, itemType, categories, onFormChange }) => {
           ) : (
             <Form.Select
               value={Array.isArray(formData.category) ? formData.category[0] : formData.category || ''}
-              onChange={(e) => onFormChange('category', itemType === 'services' ? [e.target.value] : e.target.value)}
+              onChange={(e) => {
+                // For properties and services, save as array
+                if (itemType === 'properties' || itemType === 'services') {
+                  onFormChange('category', [e.target.value]);
+                } else {
+                  onFormChange('category', e.target.value);
+                }
+              }}
               style={{
                 borderRadius: '8px',
                 border: '2px solid #e9ecef',

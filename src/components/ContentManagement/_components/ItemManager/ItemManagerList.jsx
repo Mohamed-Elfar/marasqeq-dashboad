@@ -8,14 +8,24 @@ const ItemManagerList = ({ items, loading, itemType, onEdit, onDelete }) => {
       case 'properties':
         return {
           columns: ['Title', 'Category', 'Price', 'Location', 'Date', 'Actions'],
-          getRowData: (item) => [
-            item.title,
-            item.category,
-            item.price,
-            item.location,
-            item.date,
-            null, // Actions column
-          ],
+          getRowData: (item) => {
+            // Display category as-is from database
+            let categoryDisplay = '';
+            if (Array.isArray(item.category)) {
+              categoryDisplay = item.category.join(', ');
+            } else {
+              categoryDisplay = item.category || '';
+            }
+            
+            return [
+              item.title,
+              categoryDisplay,
+              item.price,
+              item.location,
+              item.date,
+              null, // Actions column
+            ];
+          },
         }
       case 'news':
         return {

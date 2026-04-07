@@ -83,48 +83,95 @@ const ImageUploader = ({ onUpload, currentImage }) => {
     <div>
       {error && <Alert variant="danger" className="mb-2">{error}</Alert>}
 
-      <Form.Group className="mb-3">
-        <Form.Label>Upload Image</Form.Label>
-        <Form.Control
-          ref={fileInputRef}
-          type="file"
-          accept="image/*"
-          onChange={handleFileChange}
-          disabled={uploading}
-        />
-        <Form.Text className="text-muted">
-          Max file size: 5MB (JPG, PNG, GIF, WebP)
-        </Form.Text>
-      </Form.Group>
-
-      {preview && (
-        <div className="mb-3">
-          <img
-            src={preview}
-            alt="Preview"
-            style={{ maxWidth: '100%', maxHeight: '300px', borderRadius: '4px' }}
-          />
-          <div className="mt-2">
-            <Button variant="outline-danger" size="sm" onClick={handleRemoveImage}>
-              Delete Image
+      <div className="mb-2">
+        {preview ? (
+          <div style={{ position: 'relative' }}>
+            <img
+              src={preview}
+              alt="Preview"
+              style={{ 
+                width: '100%', 
+                height: '150px', 
+                objectFit: 'cover',
+                borderRadius: '8px',
+                border: '1px solid #dee2e6'
+              }}
+            />
+            <Button 
+              variant="danger" 
+              size="sm" 
+              onClick={handleRemoveImage}
+              style={{
+                position: 'absolute',
+                top: '8px',
+                right: '8px',
+                padding: '4px 8px',
+                fontSize: '12px'
+              }}
+            >
+              Remove
             </Button>
           </div>
-          {uploading && (
-            <div className="mt-2">
-              <Spinner animation="border" role="status" size="sm" className="me-2" />
-              Uploading...
-            </div>
-          )}
-        </div>
-      )}
+        ) : (
+          <div 
+            style={{ 
+              width: '100%', 
+              height: '150px', 
+              backgroundColor: '#f8f9fa', 
+              border: '2px dashed #dee2e6',
+              borderRadius: '8px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#6c757d',
+              fontSize: '13px',
+              cursor: 'pointer'
+            }}
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <i className="bi bi-image" style={{ fontSize: '32px', marginBottom: '8px', opacity: 0.5 }}></i>
+            <div style={{ fontWeight: '500' }}>No Image</div>
+            <div style={{ fontSize: '11px', marginTop: '4px', opacity: 0.7 }}>Recommended: 800x600px</div>
+          </div>
+        )}
+        {uploading && (
+          <div className="mt-2 text-center">
+            <Spinner animation="border" role="status" size="sm" className="me-2" />
+            <span style={{ fontSize: '13px' }}>Uploading...</span>
+          </div>
+        )}
+      </div>
 
-      <Form.Group className="mb-3">
-        <Form.Label>or enter image URL</Form.Label>
+      <Form.Control
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        onChange={handleFileChange}
+        disabled={uploading}
+        style={{ display: 'none' }}
+      />
+
+      <div className="d-grid gap-2 mb-2">
+        <Button 
+          variant="outline-secondary" 
+          size="sm"
+          onClick={() => fileInputRef.current?.click()}
+          disabled={uploading}
+        >
+          <i className="bi bi-upload me-1"></i>
+          Choose File
+        </Button>
+      </div>
+
+      <Form.Group>
         <Form.Control
           type="text"
-          placeholder="/uploads/image.jpg or https://example.com/image.jpg"
+          size="sm"
+          placeholder="or paste image URL"
           defaultValue={currentImage}
           onChange={(e) => onUpload(e.target.value)}
+          style={{ fontSize: '13px' }}
         />
       </Form.Group>
     </div>
