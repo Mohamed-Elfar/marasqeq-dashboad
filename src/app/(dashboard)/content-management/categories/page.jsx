@@ -11,7 +11,8 @@ const CategoriesPage = () => {
   const [success, setSuccess] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const [editingCategory, setEditingCategory] = useState(null)
-  const [formData, setFormData] = useState({ name: '', description: '', type: 'properties' })
+  const [formData, setFormData] = useState({ name: '', description: '', type: 'properties', image_url: '' })
+  const [imagePreview, setImagePreview] = useState('')
 
   useEffect(() => {
     fetchCategories()
@@ -40,9 +41,11 @@ const CategoriesPage = () => {
     if (category) {
       setEditingCategory(category)
       setFormData(category)
+      setImagePreview(category.image_url || '')
     } else {
       setEditingCategory(null)
-      setFormData({ name: '', description: '', type: 'properties' })
+      setFormData({ name: '', description: '', type: 'properties', image_url: '' })
+      setImagePreview('')
     }
     setShowModal(true)
   }
@@ -113,6 +116,43 @@ const CategoriesPage = () => {
       ...prev,
       [field]: value,
     }))
+  }
+
+  const handleImageUpload = async (file) => {
+    if (!file) return
+
+    // Check file type
+    if (!file.type.startsWith('image/')) {
+      setError('Please select a valid image file')
+      return
+    }
+
+    // Check file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setError('Image size should be less than 5MB')
+      return
+    }
+
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to upload image')
+      }
+
+      const data = await response.json()
+      setImagePreview(data.url)
+      handleFormChange('image_url', data.url)
+    } catch (err) {
+      setError('Failed to upload image')
+      console.error(err)
+    }
   }
 
   if (loading) {
@@ -283,6 +323,70 @@ const CategoriesPage = () => {
                       </Form.Select>
                     </Form.Group>
                   </Col>
+
+                  {formData.type === 'properties' && (
+                    <Col md={12}>
+                      <Form.Group className="mb-3">
+                        <Form.Label className="fw-semibold mb-2">Category Image</Form.Label>
+                        <div className="d-flex flex-column gap-3">
+                          {imagePreview && (
+                            <div className="position-relative d-inline-block">
+                              <img
+                                src={imagePreview}
+                                alt="Category preview"
+                                style={{
+                                  width: '200px',
+                                  height: '150px',
+                                  objectFit: 'cover',
+                                  borderRadius: '8px',
+                                  border: '2px solid #e9ecef',
+                                }}
+                              />
+                              <Button
+                                variant="danger"
+                                size="sm"
+                                className="position-absolute top-0 end-0 m-2"
+                                onClick={() => {
+                                  setImagePreview('')
+                                  handleFormChange('image_url', '')
+                                }}
+                                style={{
+                                  borderRadius: '50%',
+                                  width: '30px',
+                                  height: '30px',
+                                  padding: '0',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                }}>
+                                <i className="bi bi-x"></i>
+                              </Button>
+                            </div>
+                          )}
+                          <div>
+                            <Form.Control
+                              type="file"
+                              accept="image/*"
+                              onChange={(e) => {
+                                const file = e.target.files[0]
+                                if (file) {
+                                  handleImageUpload(file)
+                                }
+                              }}
+                              style={{
+                                borderRadius: '8px',
+                                border: '2px solid #e9ecef',
+                                padding: '0.75rem 1rem',
+                              }}
+                            />
+                            <small className="text-muted mt-1 d-block">
+                              Upload an image for this property category (JPG, PNG, max 5MB)
+                            </small>
+                          </div>
+                        </div>
+                      </Form.Group>
+                    </Col>
+                  )}
                 </Row>
               </Card.Body>
             </Card>
