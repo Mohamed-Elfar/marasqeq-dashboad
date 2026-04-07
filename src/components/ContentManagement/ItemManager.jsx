@@ -318,11 +318,12 @@ const ContentItemManager = ({ itemType }) => {
     if (confirm('Are you sure you want to delete this item?')) {
       try {
         // Use dashboard's news API for news items
-        const apiUrl = itemType === 'news' ? '/api/news' : '/api/content/items'
+        const apiUrl = itemType === 'news' 
+          ? `/api/news?id=${itemId}` 
+          : `/api/content/items?id=${itemId}&type=${itemType}`
+        
         const response = await fetch(apiUrl, {
           method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ id: itemId }),
         })
 
         if (response.ok) {
@@ -330,12 +331,12 @@ const ContentItemManager = ({ itemType }) => {
           setSuccess(true)
           setTimeout(() => setSuccess(false), 3000)
         } else {
-          setError('Failed to delete item')
+          const errorData = await response.json().catch(() => null)
+          setError(errorData?.error || 'Failed to delete item')
         }
       } catch (err) {
         setError('Failed to delete item')
-            const errorData = await response.json().catch(() => null)
-            setError(errorData?.error || 'Failed to save item')
+        console.error(err)
       }
     }
   }
