@@ -44,6 +44,50 @@ const SpecificDetailsSection = ({ formData, itemType, onFormChange }) => {
           </Form.Group>
         </Col>
 
+        <Col md={6}>
+          <Form.Group className="mb-4">
+            <Form.Label className="fw-semibold mb-2">
+              Property Status <span className="text-danger">*</span>
+            </Form.Label>
+            <Form.Select
+              value={formData.status || 'for_sale'}
+              onChange={(e) => onFormChange('status', e.target.value)}
+              style={{
+                borderRadius: '8px',
+                border: '2px solid #e9ecef',
+                padding: '0.75rem 1rem',
+              }}
+            >
+              <option value="for_sale">For Sale</option>
+              <option value="for_rent">For Rent</option>
+              <option value="for_lease">For Lease</option>
+              <option value="sold">Sold</option>
+              <option value="rented">Rented</option>
+              <option value="pending">Pending</option>
+            </Form.Select>
+          </Form.Group>
+        </Col>
+
+        <Col md={6}>
+          <Form.Group className="mb-4">
+            <Form.Label className="fw-semibold mb-2">
+              Property Type <span className="text-muted small">(optional)</span>
+            </Form.Label>
+            <Form.Control
+              type="text"
+              value={formData.propertyType || ''}
+              onChange={(e) => onFormChange('propertyType', e.target.value)}
+              placeholder="e.g., Villa, Apartment, House"
+              style={{
+                borderRadius: '8px',
+                border: '2px solid #e9ecef',
+                padding: '0.75rem 1rem',
+              }}
+            />
+            <small className="text-muted">Type of property (Villa, Apartment, Townhouse, etc.)</small>
+          </Form.Group>
+        </Col>
+
         <Col md={4}>
           <Form.Group className="mb-4">
             <Form.Label className="fw-semibold mb-2">
@@ -100,6 +144,49 @@ const SpecificDetailsSection = ({ formData, itemType, onFormChange }) => {
                 padding: '0.75rem 1rem',
               }}
             />
+          </Form.Group>
+        </Col>
+
+        <Col md={6}>
+          <Form.Group className="mb-4">
+            <Form.Label className="fw-semibold mb-2">
+              Rooms <span className="text-muted small">(optional)</span>
+            </Form.Label>
+            <Form.Control
+              type="number"
+              value={formData.rooms || ''}
+              onChange={(e) => onFormChange('rooms', e.target.value)}
+              placeholder="e.g., 7"
+              min="0"
+              style={{
+                borderRadius: '8px',
+                border: '2px solid #e9ecef',
+                padding: '0.75rem 1rem',
+              }}
+            />
+            <small className="text-muted">Total number of rooms in the property</small>
+          </Form.Group>
+        </Col>
+
+        <Col md={6}>
+          <Form.Group className="mb-4">
+            <Form.Label className="fw-semibold mb-2">
+              Year Built <span className="text-muted small">(optional)</span>
+            </Form.Label>
+            <Form.Control
+              type="number"
+              value={formData.yearBuilt || ''}
+              onChange={(e) => onFormChange('yearBuilt', e.target.value)}
+              placeholder="e.g., 2020"
+              min="1800"
+              max={new Date().getFullYear() + 5}
+              style={{
+                borderRadius: '8px',
+                border: '2px solid #e9ecef',
+                padding: '0.75rem 1rem',
+              }}
+            />
+            <small className="text-muted">Year the property was built</small>
           </Form.Group>
         </Col>
 

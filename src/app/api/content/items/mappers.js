@@ -69,7 +69,11 @@ export const mapFromDatabase = (itemType, item) => {
     if (itemType === 'properties') {
         return {
             ...item,
-            productImg: item.product_img || item.productImg || '',
+            status: item.status || 'for_sale',
+            propertyType: item.property_type || item.propertyType || '',
+            rooms: item.rooms || 0,
+            yearBuilt: item.year_built || item.yearBuilt || null,
+            productImg: item.product_img || item.productImg || null,
             shortDescription: item.short_description || item.shortDescription || '',
             fullDescription: item.full_description || item.fullDescription || '',
             propertyDetails: item.property_details || item.propertyDetails || {},
@@ -179,12 +183,14 @@ export const mapToDatabase = (itemType, item) => {
             full_description: item.fullDescription || '',
             price: item.price ?? null,
             location: item.location || item.locantion || '',
-            property_type: item.property_type || item.propertyType || '',
+            property_type: item.propertyType || item.property_type || '',
             bedrooms: item.bedrooms ?? null,
             bathrooms: item.bathrooms ?? null,
+            rooms: item.rooms ?? null,
+            year_built: item.yearBuilt ?? null,
             area: item.area ?? null,
             featured: item.featured === true,
-            status: item.status || 'available',
+            status: item.status || 'for_sale',
             images: item.images || [],
             meta_title: item.meta_title || item.title || '',
             meta_description: item.meta_description || item.shortDescription || '',
@@ -193,7 +199,7 @@ export const mapToDatabase = (itemType, item) => {
             category_id: item.category_id || null,
 
             // New JSON structure fields
-            product_img: item.productImg || item.product_img || '',
+            product_img: item.productImg !== undefined ? item.productImg : (item.product_img || null),
             discount: item.discount ?? 0,
             country: item.country === true,
             district: item.district || '',
