@@ -19,17 +19,17 @@ export const metadata = {
   description: 'Maraseq Content Management Dashboard',
   icons: {
     icon: [
-      { url: '/logo.svg', type: 'image/svg+xml' }
+      { url: '/favicon.svg', type: 'image/svg+xml' }
     ],
-    shortcut: '/logo.svg',
-    apple: '/logo.svg'
+    shortcut: '/favicon.svg',
+    apple: '/favicon.svg'
   },
   openGraph: {
     title: 'Maraseq - Content Management Dashboard',
     description: 'Maraseq Content Management Dashboard',
     images: [
       {
-        url: '/logo.svg',
+        url: '/favicon.svg',
         alt: 'Maraseq Logo'
       }
     ]
@@ -38,7 +38,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: 'Maraseq - Content Management Dashboard',
     description: 'Maraseq Content Management Dashboard',
-    images: ['/logo.svg']
+    images: ['/favicon.svg']
   }
 };
 
