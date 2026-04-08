@@ -1,8 +1,27 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Form, Row, Col } from 'react-bootstrap'
 import ImageUploader from '../../../ImageUploader'
 
 const SpecificDetailsSection = ({ formData, itemType, onFormChange }) => {
+  const [formOptions, setFormOptions] = useState({
+    objectives: []
+  })
+
+  useEffect(() => {
+    if (itemType === 'properties') {
+      fetchFormOptions()
+    }
+  }, [itemType])
+
+  const fetchFormOptions = async () => {
+    try {
+      const response = await fetch('/api/form-options?type=objectives')
+      const data = await response.json()
+      setFormOptions(data)
+    } catch (err) {
+      console.error('Failed to fetch form options:', err)
+    }
+  }
   if (itemType === 'properties') {
     return (
       <Row>
@@ -65,6 +84,34 @@ const SpecificDetailsSection = ({ formData, itemType, onFormChange }) => {
               <option value="rented">Rented</option>
               <option value="pending">Pending</option>
             </Form.Select>
+          </Form.Group>
+        </Col>
+
+        <Col md={6}>
+          <Form.Group className="mb-4">
+            <Form.Label className="fw-semibold mb-2">
+              Objective <span className="text-danger">*</span>
+            </Form.Label>
+            <Form.Select
+              value={formData.objective || ''}
+              onChange={(e) => onFormChange('objective', e.target.value)}
+              style={{
+                borderRadius: '8px',
+                border: '2px solid #e9ecef',
+                padding: '0.75rem 1rem',
+              }}
+            >
+              <option value="">Select objective</option>
+              {formOptions.objectives
+                .filter(option => option.active)
+                .sort((a, b) => (a.order_index || 0) - (b.order_index || 0))
+                .map((option) => (
+                  <option key={option.id} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+            </Form.Select>
+            <small className="text-muted">Select the primary objective for this property</small>
           </Form.Group>
         </Col>
 

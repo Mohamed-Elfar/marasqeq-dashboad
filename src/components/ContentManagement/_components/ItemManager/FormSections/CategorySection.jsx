@@ -7,7 +7,7 @@ const CategorySection = ({ formData, itemType, categories, onFormChange }) => {
       <Col md={6}>
         <Form.Group className="mb-3">
           <Form.Label className="fw-semibold mb-2">
-            {itemType === 'social' ? 'Position' : itemType === 'properties' ? 'House Type / Company' : 'Category'} <span className="text-danger">*</span>
+            {itemType === 'social' ? 'Position' : itemType === 'properties' ? 'Property Type' : 'Category'} <span className="text-danger">*</span>
           </Form.Label>
           {itemType === 'social' ? (
             <Form.Select
@@ -70,15 +70,17 @@ const CategorySection = ({ formData, itemType, categories, onFormChange }) => {
                 border: '2px solid #e9ecef',
                 padding: '0.75rem 1rem',
               }}>
-              <option value="">Select a category</option>
-              {categories.map((cat) => (
+              <option value="">Select property type</option>
+              {categories
+                .filter(cat => cat.type === 'properties')
+                .map((cat) => (
                 <option key={cat.id} value={cat.name}>
                   {cat.name}
                 </option>
               ))}
             </Form.Select>
           )}
-          {itemType === 'properties' && <small className="text-muted">Select the house type or company category for this property</small>}
+          {itemType === 'properties' && <small className="text-muted">Select the property type for this listing</small>}
           {itemType === 'services' && <small className="text-muted">Select primary category for this service</small>}
           {itemType === 'social' && <small className="text-muted">Choose where this social media link will appear</small>}
         </Form.Group>
