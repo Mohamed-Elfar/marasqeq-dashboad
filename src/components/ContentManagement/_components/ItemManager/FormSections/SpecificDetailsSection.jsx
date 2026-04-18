@@ -135,7 +135,7 @@ const SpecificDetailsSection = ({ formData, itemType, onFormChange }) => {
           </Form.Group>
         </Col>
 
-        <Col md={4}>
+        <Col md={3}>
           <Form.Group className="mb-4">
             <Form.Label className="fw-semibold mb-2">
               Bedrooms <span className="text-danger">*</span>
@@ -155,7 +155,7 @@ const SpecificDetailsSection = ({ formData, itemType, onFormChange }) => {
           </Form.Group>
         </Col>
 
-        <Col md={4}>
+        <Col md={3}>
           <Form.Group className="mb-4">
             <Form.Label className="fw-semibold mb-2">
               Bathrooms <span className="text-danger">*</span>
@@ -175,10 +175,10 @@ const SpecificDetailsSection = ({ formData, itemType, onFormChange }) => {
           </Form.Group>
         </Col>
 
-        <Col md={4}>
+        <Col md={3}>
           <Form.Group className="mb-4">
             <Form.Label className="fw-semibold mb-2">
-              Area (sq ft) <span className="text-danger">*</span>
+              Area <span className="text-danger">*</span>
             </Form.Label>
             <Form.Control
               type="text"
@@ -191,6 +191,33 @@ const SpecificDetailsSection = ({ formData, itemType, onFormChange }) => {
                 padding: '0.75rem 1rem',
               }}
             />
+          </Form.Group>
+        </Col>
+
+        <Col md={3}>
+          <Form.Group className="mb-4">
+            <Form.Label className="fw-semibold mb-2">
+              Unit Type
+            </Form.Label>
+            <Form.Select
+              value={formData.unitType || 'sq_m'}
+              onChange={(e) => onFormChange('unitType', e.target.value)}
+              style={{
+                borderRadius: '8px',
+                border: '2px solid #e9ecef',
+                padding: '0.75rem 1rem',
+              }}
+            >
+              <option value="sq_m">Square Meter (m²)</option>
+              <option value="sq_ft">Square Foot (sq ft)</option>
+              <option value="m">Meter (m)</option>
+              <option value="feddan">Feddan</option>
+              <option value="kirat">Kirat</option>
+              <option value="sahm">Sahm</option>
+              <option value="hectare">Hectare (ha)</option>
+              <option value="acre">Acre</option>
+            </Form.Select>
+            <small className="text-muted">Select the unit of measurement</small>
           </Form.Group>
         </Col>
 
