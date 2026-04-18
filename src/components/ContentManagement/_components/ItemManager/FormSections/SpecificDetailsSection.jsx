@@ -90,6 +90,32 @@ const SpecificDetailsSection = ({ formData, itemType, onFormChange }) => {
         <Col md={6}>
           <Form.Group className="mb-4">
             <Form.Label className="fw-semibold mb-2">
+              Finish Status
+            </Form.Label>
+            <Form.Select
+              value={formData.finishStatus || 'without_finish'}
+              onChange={(e) => onFormChange('finishStatus', e.target.value)}
+              style={{
+                borderRadius: '8px',
+                border: '2px solid #e9ecef',
+                padding: '0.75rem 1rem',
+              }}
+            >
+              <option value="without_finish">Without Finish</option>
+              <option value="semi_finished">Semi Finished</option>
+              <option value="fully_finished">Fully Finished</option>
+              <option value="super_lux">Super Lux</option>
+              <option value="lux">Lux</option>
+              <option value="deluxe_finish">Deluxe Finish</option>
+              <option value="furnished">Furnished</option>
+            </Form.Select>
+            <small className="text-muted">Select the property finish condition</small>
+          </Form.Group>
+        </Col>
+
+        <Col md={6}>
+          <Form.Group className="mb-4">
+            <Form.Label className="fw-semibold mb-2">
               Objective <span className="text-danger">*</span>
             </Form.Label>
             <Form.Select
