@@ -36,7 +36,7 @@ const ContentItemManager = ({ itemType }) => {
       const apiUrl = itemType === 'news' ? '/api/news' : `/api/content/items?type=${itemType}`
       console.log(`[${itemType}] Fetching from:`, apiUrl);
       
-      const response = await fetch(apiUrl)
+      const response = await fetch(apiUrl, { cache: 'no-store' })
       console.log(`[${itemType}] Response status:`, response.status, response.statusText);
       
       if (!response.ok) {
@@ -81,7 +81,7 @@ const ContentItemManager = ({ itemType }) => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch(`/api/content/categories?type=${itemType}`)
+      const response = await fetch(`/api/content/categories?type=${itemType}`, { cache: 'no-store' })
       const data = await response.json()
       setCategories(data.categories || [])
     } catch (err) {

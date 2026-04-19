@@ -24,6 +24,7 @@ const SpecificDetailsSection = ({ formData, itemType, onFormChange }) => {
   }
   if (itemType === 'properties') {
     return (
+      <>
       <Row>
         <Col md={6}>
           <Form.Group className="mb-4">
@@ -246,7 +247,106 @@ const SpecificDetailsSection = ({ formData, itemType, onFormChange }) => {
             <small className="text-muted">Select the unit of measurement</small>
           </Form.Group>
         </Col>
+      </Row>
 
+      {/* Area Breakdown Section */}
+      <Row className="mb-4">
+        <Col xs={12}>
+          <h6 className="text-muted mb-3" style={{ fontSize: '0.9rem', fontWeight: 600 }}>
+            Area Breakdown (Uses selected Unit Type)
+          </h6>
+        </Col>
+
+        <Col md={3}>
+          <Form.Group className="mb-4">
+            <Form.Label className="fw-semibold mb-2">
+              Total Area
+            </Form.Label>
+            <Form.Control
+              type="number"
+              value={formData.totalArea || ''}
+              onChange={(e) => onFormChange('totalArea', e.target.value)}
+              placeholder="e.g., 2800"
+              min="0"
+              step="0.01"
+              style={{
+                borderRadius: '8px',
+                border: '2px solid #e9ecef',
+                padding: '0.75rem 1rem',
+              }}
+            />
+            <small className="text-muted">Total property area</small>
+          </Form.Group>
+        </Col>
+
+        <Col md={3}>
+          <Form.Group className="mb-4">
+            <Form.Label className="fw-semibold mb-2">
+              Net Area
+            </Form.Label>
+            <Form.Control
+              type="number"
+              value={formData.netArea || ''}
+              onChange={(e) => onFormChange('netArea', e.target.value)}
+              placeholder="e.g., 2500"
+              min="0"
+              step="0.01"
+              style={{
+                borderRadius: '8px',
+                border: '2px solid #e9ecef',
+                padding: '0.75rem 1rem',
+              }}
+            />
+            <small className="text-muted">Net usable area</small>
+          </Form.Group>
+        </Col>
+
+        <Col md={3}>
+          <Form.Group className="mb-4">
+            <Form.Label className="fw-semibold mb-2">
+              Built-up Area
+            </Form.Label>
+            <Form.Control
+              type="number"
+              value={formData.builtUpArea || ''}
+              onChange={(e) => onFormChange('builtUpArea', e.target.value)}
+              placeholder="e.g., 2600"
+              min="0"
+              step="0.01"
+              style={{
+                borderRadius: '8px',
+                border: '2px solid #e9ecef',
+                padding: '0.75rem 1rem',
+              }}
+            />
+            <small className="text-muted">Built-up area</small>
+          </Form.Group>
+        </Col>
+
+        <Col md={3}>
+          <Form.Group className="mb-4">
+            <Form.Label className="fw-semibold mb-2">
+              Land Area
+            </Form.Label>
+            <Form.Control
+              type="number"
+              value={formData.landArea || ''}
+              onChange={(e) => onFormChange('landArea', e.target.value)}
+              placeholder="e.g., 3000"
+              min="0"
+              step="0.01"
+              style={{
+                borderRadius: '8px',
+                border: '2px solid #e9ecef',
+                padding: '0.75rem 1rem',
+              }}
+            />
+            <small className="text-muted">Land area</small>
+          </Form.Group>
+        </Col>
+      </Row>
+
+      <Row>
         <Col md={6}>
           <Form.Group className="mb-4">
             <Form.Label className="fw-semibold mb-2">
@@ -313,6 +413,7 @@ const SpecificDetailsSection = ({ formData, itemType, onFormChange }) => {
           </Form.Group>
         </Col>
       </Row>
+      </>
     )
   }
 
