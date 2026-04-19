@@ -13,13 +13,25 @@ const LeftSideBarToggle = () => {
     changeMenu: {
       size: changeMenuSize
     },
-    toggleBackdrop
+    toggleBackdrop,
+    showBackdrop
   } = useLayoutContext();
   const pathname = usePathname();
   const {
     width
   } = useViewPort();
-  const isFirstRender = useRef(true);
+  const lastPathname = useRef(pathname);
+
+  // Use refs for stable access in useEffect without triggering re-runs
+  const changeMenuSizeRef = useRef(changeMenuSize);
+  changeMenuSizeRef.current = changeMenuSize;
+  const toggleBackdropRef = useRef(toggleBackdrop);
+  toggleBackdropRef.current = toggleBackdrop;
+  const showBackdropRef = useRef(showBackdrop);
+  showBackdropRef.current = showBackdrop;
+  const sizeRef = useRef(size);
+  sizeRef.current = size;
+
   const handleMenuSize = () => {
     // Mobile: keep sidebar hidden and only open/close with backdrop overlay.
     if (width <= 1140) {
@@ -35,31 +47,34 @@ const LeftSideBarToggle = () => {
 
     if (size === 'condensed') changeMenuSize('default');else if (size === 'default') changeMenuSize('condensed');
   };
+
   useEffect(() => {
-    const htmlTag = document.getElementsByTagName('html')[0];
-
     if (width <= 1140) {
-      if (size !== 'hidden') {
-        changeMenuSize('hidden');
+      if (sizeRef.current !== 'hidden') {
+        changeMenuSizeRef.current('hidden');
       }
 
-      // Close mobile overlay on route changes.
-      if (!isFirstRender.current && htmlTag.classList.contains('sidebar-enable')) {
-        toggleBackdrop();
+      // Close mobile overlay ONLY on route changes.
+      if (pathname !== lastPathname.current) {
+        if (showBackdropRef.current) {
+          toggleBackdropRef.current();
+        }
+        lastPathname.current = pathname;
       }
-
-      isFirstRender.current = false;
       return;
     }
 
     // Returning to desktop should restore normal default/condensed behavior.
-    if (size === 'hidden') {
-      if (htmlTag.classList.contains('sidebar-enable')) {
-        toggleBackdrop();
+    if (sizeRef.current === 'hidden') {
+      if (showBackdropRef.current) {
+        toggleBackdropRef.current();
       }
-      changeMenuSize('default');
+      changeMenuSizeRef.current('default');
     }
-  }, [pathname, width, size, changeMenuSize, toggleBackdrop]);
+    
+    // Always sync pathname on desktop to prevent sudden closures when resizing back to mobile
+    lastPathname.current = pathname;
+  }, [pathname, width]);
   return <div className="topbar-item">
       <button type="button" onClick={handleMenuSize} className="button-toggle-menu topbar-button">
         <IconifyIcon icon="solar:hamburger-menu-outline" width={24} height={24} className="fs-24  align-middle" />

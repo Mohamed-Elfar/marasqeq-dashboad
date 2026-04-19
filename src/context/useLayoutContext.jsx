@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, use, useCallback, useEffect, useMemo, useState } from 'react';
+import { createContext, use, useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import { toggleDocumentAttribute } from '@/utils/layout';
 import useQueryParams from '@/hooks/useQueryParams';
 import useLocalStorage from '@/hooks/useLocalStorage';
@@ -99,15 +99,32 @@ const LayoutProvider = ({
     toggle: toggleActivityStream
   };
 
+  const lastOpenedTime = useRef(0);
+
   // toggle backdrop
   const toggleBackdrop = useCallback(() => {
     const htmlTag = document.getElementsByTagName('html')[0];
-    if (offcanvasStates.showBackdrop) htmlTag.classList.remove('sidebar-enable');else htmlTag.classList.add('sidebar-enable');
-    setOffcanvasStates({
-      ...offcanvasStates,
-      showBackdrop: !offcanvasStates.showBackdrop
+    
+    setOffcanvasStates(prev => {
+      const isCurrentlyOpen = prev.showBackdrop;
+      
+      // Ghost click protection: ignore close requests within 400ms of opening
+      if (isCurrentlyOpen) {
+        if (Date.now() - lastOpenedTime.current < 400) {
+          return prev; 
+        }
+        htmlTag.classList.remove('sidebar-enable');
+      } else {
+        lastOpenedTime.current = Date.now();
+        htmlTag.classList.add('sidebar-enable');
+      }
+      
+      return {
+        ...prev,
+        showBackdrop: !isCurrentlyOpen
+      };
     });
-  }, [offcanvasStates.showBackdrop]);
+  }, []);
   useEffect(() => {
     toggleDocumentAttribute('data-bs-theme', settings.theme);
     toggleDocumentAttribute('data-topbar-color', settings.topbarTheme);
@@ -133,6 +150,7 @@ const LayoutProvider = ({
     themeCustomizer,
     activityStream,
     toggleBackdrop,
+    showBackdrop: offcanvasStates.showBackdrop,
     resetSettings
   }), [settings, offcanvasStates])}>
       {children}
