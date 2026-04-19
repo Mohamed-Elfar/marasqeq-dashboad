@@ -95,6 +95,7 @@ export const mapFromDatabase = (itemType, item) => {
             galleryImage1: item.gallery_images?.[0] || item.galleryImage1 || '',
             galleryImage2: item.gallery_images?.[1] || item.galleryImage2 || '',
             galleryImage3: item.gallery_images?.[2] || item.galleryImage3 || '',
+            galleryImages: item.gallery_images || item.galleryImages || [],
         }
     }
 
@@ -251,11 +252,13 @@ export const mapToDatabase = (itemType, item) => {
             map_embed_url: item.mapEmbedUrl || item.map_embed_url || null,
             video_url: item.videoUrl || item.video_url || null,
             video_poster: item.videoPoster || item.video_poster || null,
-            gallery_images: [
-                item.galleryImage1,
-                item.galleryImage2,
-                item.galleryImage3
-            ].filter(url => url && url.trim())
+            gallery_images: item.galleryImages?.length > 0
+                ? item.galleryImages.filter(url => url && url.trim())
+                : [
+                    item.galleryImage1,
+                    item.galleryImage2,
+                    item.galleryImage3
+                ].filter(url => url && url.trim())
         }
     }
 

@@ -127,37 +127,67 @@ const MediaSection = ({ formData, itemType, onFormChange }) => {
             <Form.Label className="fw-semibold mb-2">
               Gallery Images <span className="text-muted small">(optional)</span>
             </Form.Label>
-            <small className="text-muted d-block mb-3">Upload up to 3 images for the property gallery</small>
+            <small className="text-muted d-block mb-3">Add as many images as needed for the property gallery</small>
           </Col>
 
-          <Col md={4}>
-            <Form.Group className="mb-4">
-              <Form.Label className="fw-semibold mb-2">Gallery Image 1</Form.Label>
-              <ImageUploader
-                currentImage={formData.galleryImage1 || ''}
-                onUpload={(url) => onFormChange('galleryImage1', url)}
-              />
-            </Form.Group>
-          </Col>
+          {(formData.galleryImages || []).map((image, index) => (
+            <Col md={4} key={index}>
+              <Form.Group className="mb-4">
+                <div className="d-flex justify-content-between align-items-center mb-2">
+                  <Form.Label className="fw-semibold mb-0">Gallery Image {index + 1}</Form.Label>
+                  <button
+                    type="button"
+                    className="btn btn-outline-danger btn-sm"
+                    onClick={() => {
+                      const newImages = [...(formData.galleryImages || [])];
+                      newImages.splice(index, 1);
+                      onFormChange('galleryImages', newImages);
+                    }}
+                    style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem' }}
+                  >
+                    Remove
+                  </button>
+                </div>
+                <ImageUploader
+                  currentImage={image || ''}
+                  onUpload={(url) => {
+                    const newImages = [...(formData.galleryImages || [])];
+                    newImages[index] = url;
+                    onFormChange('galleryImages', newImages);
+                  }}
+                />
+              </Form.Group>
+            </Col>
+          ))}
 
-          <Col md={4}>
-            <Form.Group className="mb-4">
-              <Form.Label className="fw-semibold mb-2">Gallery Image 2</Form.Label>
-              <ImageUploader
-                currentImage={formData.galleryImage2 || ''}
-                onUpload={(url) => onFormChange('galleryImage2', url)}
-              />
-            </Form.Group>
-          </Col>
-
-          <Col md={4}>
-            <Form.Group className="mb-4">
-              <Form.Label className="fw-semibold mb-2">Gallery Image 3</Form.Label>
-              <ImageUploader
-                currentImage={formData.galleryImage3 || ''}
-                onUpload={(url) => onFormChange('galleryImage3', url)}
-              />
-            </Form.Group>
+          <Col md={12} className="mb-4">
+            <button
+              type="button"
+              className="btn btn-outline-primary"
+              onClick={() => {
+                const newImages = [...(formData.galleryImages || []), ''];
+                onFormChange('galleryImages', newImages);
+              }}
+              style={{
+                borderRadius: '8px',
+                padding: '0.5rem 1.5rem',
+                border: '2px dashed #6c757d',
+                background: 'transparent',
+                color: '#6c757d',
+                fontWeight: 500,
+                width: '100%',
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.borderColor = '#0d6efd';
+                e.target.style.color = '#0d6efd';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.borderColor = '#6c757d';
+                e.target.style.color = '#6c757d';
+              }}
+            >
+              + Add Gallery Image
+            </button>
           </Col>
         </>
       )}
