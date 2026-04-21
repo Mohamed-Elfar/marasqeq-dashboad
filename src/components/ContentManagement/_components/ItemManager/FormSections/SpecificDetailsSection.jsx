@@ -347,7 +347,7 @@ const SpecificDetailsSection = ({ formData, itemType, onFormChange }) => {
       </Row>
 
       <Row>
-        <Col md={6}>
+        <Col md={4}>
           <Form.Group className="mb-4">
             <Form.Label className="fw-semibold mb-2">
               Rooms <span className="text-muted small">(optional)</span>
@@ -365,6 +365,87 @@ const SpecificDetailsSection = ({ formData, itemType, onFormChange }) => {
               }}
             />
             <small className="text-muted">Total number of rooms in the property</small>
+          </Form.Group>
+        </Col>
+        <Col md={4}>
+          <Form.Group className="mb-4">
+            <Form.Label className="fw-semibold mb-2">
+              Living Room <span className="text-muted small">(optional)</span>
+            </Form.Label>
+            <Form.Control
+              type="number"
+              value={formData.livingRoom || ''}
+              onChange={(e) => onFormChange('livingRoom', e.target.value)}
+              placeholder="e.g., 1"
+              min="0"
+              style={{
+                borderRadius: '8px',
+                border: '2px solid #e9ecef',
+                padding: '0.75rem 1rem',
+              }}
+            />
+            <small className="text-muted">Number of living rooms</small>
+          </Form.Group>
+        </Col>
+        <Col md={4}>
+          <Form.Group className="mb-4">
+            <Form.Label className="fw-semibold mb-2">
+              Nanny Room <span className="text-muted small">(optional)</span>
+            </Form.Label>
+            <Form.Control
+              type="number"
+              value={formData.nannyRoom || ''}
+              onChange={(e) => onFormChange('nannyRoom', e.target.value)}
+              placeholder="e.g., 1"
+              min="0"
+              style={{
+                borderRadius: '8px',
+                border: '2px solid #e9ecef',
+                padding: '0.75rem 1rem',
+              }}
+            />
+            <small className="text-muted">Number of nanny rooms</small>
+          </Form.Group>
+        </Col>
+
+        <Col md={6}>
+          <Form.Group className="mb-4">
+            <Form.Label className="fw-semibold mb-2">
+              Other distinctive addition <span className="text-muted small">(optional)</span>
+            </Form.Label>
+            <Form.Control
+              type="text"
+              value={formData.otherDistinctiveAddition || ''}
+              onChange={(e) => onFormChange('otherDistinctiveAddition', e.target.value)}
+              placeholder="e.g., Private elevator, Rooftop garden"
+              style={{
+                borderRadius: '8px',
+                border: '2px solid #e9ecef',
+                padding: '0.75rem 1rem',
+              }}
+            />
+            <small className="text-muted">Describe any other distinctive additions</small>
+          </Form.Group>
+        </Col>
+
+        <Col md={6}>
+          <Form.Group className="mb-4">
+            <Form.Label className="fw-semibold mb-2">
+              Number of floors <span className="text-muted small">(optional)</span>
+            </Form.Label>
+            <Form.Control
+              type="number"
+              value={formData.numberOfFloors || ''}
+              onChange={(e) => onFormChange('numberOfFloors', e.target.value)}
+              placeholder="e.g., 3"
+              min="0"
+              style={{
+                borderRadius: '8px',
+                border: '2px solid #e9ecef',
+                padding: '0.75rem 1rem',
+              }}
+            />
+            <small className="text-muted">Total number of floors in the property</small>
           </Form.Group>
         </Col>
 

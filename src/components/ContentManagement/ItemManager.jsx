@@ -91,9 +91,16 @@ const ContentItemManager = ({ itemType }) => {
 
   const initializeForm = (item = null) => {
     if (item) {
-      console.log('Dashboard initializeForm - Item data:', item);
+      // Flatten livingRoom and nannyRoom from propertyDetails for editing
+      let patchedItem = { ...item };
+      if (itemType === 'properties' && item.propertyDetails) {
+        patchedItem.livingRoom = item.propertyDetails.livingRoom ?? '';
+        patchedItem.nannyRoom = item.propertyDetails.nannyRoom ?? '';
+        patchedItem.otherDistinctiveAddition = item.propertyDetails.otherDistinctiveAddition ?? '';
+        patchedItem.numberOfFloors = item.propertyDetails.numberOfFloors ?? '';
+      }
       setEditingItem(item)
-      setFormData(item)
+      setFormData(patchedItem)
     } else {
       setEditingItem(null)
       if (itemType === 'portfolio') {

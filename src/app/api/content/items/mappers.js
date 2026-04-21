@@ -183,6 +183,14 @@ export const mapToDatabase = (itemType, item) => {
     }
 
     if (itemType === 'properties') {
+        // Merge livingRoom and nannyRoom into property_details
+        const propertyDetails = {
+            ...(item.propertyDetails || item.property_details || {}),
+            livingRoom: item.livingRoom ?? (item.propertyDetails?.livingRoom ?? 0),
+            nannyRoom: item.nannyRoom ?? (item.propertyDetails?.nannyRoom ?? 0),
+            otherDistinctiveAddition: item.otherDistinctiveAddition ?? (item.propertyDetails?.otherDistinctiveAddition ?? ''),
+            numberOfFloors: item.numberOfFloors ?? (item.propertyDetails?.numberOfFloors ?? 0)
+        };
         return {
             title: item.title || '',
             description: item.description || '',
@@ -231,7 +239,7 @@ export const mapToDatabase = (itemType, item) => {
             opportunity_stage: item.opportunityStage || item.opportunity_stage || '',
 
             // JSONB fields
-            property_details: item.propertyDetails || item.property_details || {},
+            property_details: propertyDetails,
             facts_and_features: item.factsAndFeatures || item.facts_and_features || {},
             amenities1: item.amenities1 || [],
             amenities2: item.amenities2 || [],
