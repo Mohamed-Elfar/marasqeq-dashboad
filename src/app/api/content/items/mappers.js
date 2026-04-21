@@ -127,7 +127,8 @@ export const mapToDatabase = (itemType, item) => {
             answer: item.answer || '',
             category: item.category || 'general',
             active: item.active !== false,
-            order_index: Number.isFinite(orderValue) && orderValue > 0 ? orderValue : 1
+            order_index: Number.isFinite(orderValue) && orderValue > 0 ? orderValue : 1,
+            currency: item.currency || 'USD',
         }
     }
 
@@ -147,6 +148,7 @@ export const mapToDatabase = (itemType, item) => {
             detail_image_1: detailImage1,
             detail_image_2: detailImage2,
             price: item.price ?? null,
+            currency: item.currency || 'USD',
             category_id: item.category_id || null,
             featured: item.featured === true,
             meta_title: item.meta_title || item.title || '',
@@ -178,6 +180,7 @@ export const mapToDatabase = (itemType, item) => {
             },
             reviews: item.reviews || [],
             visible: item.visible !== false,
+            currency: item.currency || 'USD',
             order_index: Number(item.order_index ?? 0)
         }
     }
@@ -196,6 +199,7 @@ export const mapToDatabase = (itemType, item) => {
             description: item.description || '',
             short_description: item.shortDescription || '',
             full_description: item.fullDescription || '',
+            currency: item.currency || 'USD',
             price: item.price ?? null,
             location: item.location || item.locantion || '',
             property_type: item.propertyType || item.property_type || '',
@@ -215,6 +219,7 @@ export const mapToDatabase = (itemType, item) => {
             images: item.images || [],
             meta_title: item.meta_title || item.title || '',
             meta_description: item.meta_description || item.shortDescription || '',
+            currency: item.currency || 'USD',
             visible: item.visible !== false,
             order_index: Number(item.order_index ?? 0),
             category_id: item.category_id || null,
@@ -248,6 +253,7 @@ export const mapToDatabase = (itemType, item) => {
             agent: item.agent || {},
             gallery: item.gallery || {},
             property_types: item.propertyTypes || item.property_types || [],
+            currency: item.currency || 'USD',
             carousel: item.carousel || [],
             tags: item.tags || item.tag || [],
             category: item.category || [],
@@ -266,7 +272,8 @@ export const mapToDatabase = (itemType, item) => {
                     item.galleryImage1,
                     item.galleryImage2,
                     item.galleryImage3
-                ].filter(url => url && url.trim())
+                ].filter(url => url && url.trim()),
+            currency: item.currency || 'USD',
         }
     }
 

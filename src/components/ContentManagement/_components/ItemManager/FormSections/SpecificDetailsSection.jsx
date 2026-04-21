@@ -26,7 +26,7 @@ const SpecificDetailsSection = ({ formData, itemType, onFormChange }) => {
     return (
       <>
       <Row>
-        <Col md={6}>
+        <Col md={4}>
           <Form.Group className="mb-4">
             <Form.Label className="fw-semibold mb-2">
               Price <span className="text-danger">*</span>
@@ -35,13 +35,32 @@ const SpecificDetailsSection = ({ formData, itemType, onFormChange }) => {
               type="text"
               value={formData.price || ''}
               onChange={(e) => onFormChange('price', e.target.value)}
-              placeholder="e.g., $250,000"
+              placeholder="e.g., 250,000"
               style={{
                 borderRadius: '8px',
                 border: '2px solid #e9ecef',
                 padding: '0.75rem 1rem',
               }}
             />
+          </Form.Group>
+        </Col>
+        <Col md={2}>
+          <Form.Group className="mb-4">
+            <Form.Label className="fw-semibold mb-2">
+              Currency <span className="text-danger">*</span>
+            </Form.Label>
+            <Form.Select
+              value={formData.currency || 'USD'}
+              onChange={(e) => onFormChange('currency', e.target.value)}
+              style={{
+                borderRadius: '8px',
+                border: '2px solid #e9ecef',
+                padding: '0.75rem 1rem',
+              }}
+            >
+              <option value="USD"> USD</option>
+              <option value="EGP">EGP</option>
+            </Form.Select>
           </Form.Group>
         </Col>
 

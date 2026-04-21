@@ -4,7 +4,7 @@ import { getFormOptions, createFormOption, updateFormOption, deleteFormOption } 
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url)
-    const type = searchParams.get('type') // locations, propertyTypes, or objectives
+    const type = searchParams.get('type') // locations, propertyTypes, objectives, or priceTypes
     const includeInactive = searchParams.get('includeInactive') === 'true'
 
     if (type) {
@@ -13,16 +13,18 @@ export async function GET(request) {
     }
 
     // Return all types
-    const [locations, propertyTypes, objectives] = await Promise.all([
+    const [locations, propertyTypes, objectives, priceTypes] = await Promise.all([
       getFormOptions('locations', includeInactive),
       getFormOptions('property_types', includeInactive),
-      getFormOptions('objectives', includeInactive)
+      getFormOptions('objectives', includeInactive),
+      getFormOptions('price_types', includeInactive)
     ])
 
     return NextResponse.json({
       locations,
       propertyTypes,
-      objectives
+      objectives,
+      priceTypes
     })
   } catch (error) {
     console.error('Error fetching form options:', error)
@@ -49,7 +51,8 @@ export async function POST(request) {
     const typeMapping = {
       'locations': 'locations',
       'propertyTypes': 'property_types',
-      'objectives': 'objectives'
+      'objectives': 'objectives',
+      'priceTypes': 'price_types'
     }
 
     const dbType = typeMapping[type] || type
