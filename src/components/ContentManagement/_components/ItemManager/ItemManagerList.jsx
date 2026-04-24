@@ -2,6 +2,20 @@ import React from 'react'
 import { Card, Table, Button, Spinner } from 'react-bootstrap'
 import SocialIcon from '../SocialIcon'
 
+const formatPrice = (value) => {
+  // Convert to string if not already a string
+  const stringValue = String(value || '')
+  
+  // Remove all non-digit characters and dots
+  let cleanValue = stringValue.replace(/[^0-9]/g, '')
+  
+  // If empty, return empty
+  if (!cleanValue) return ''
+  
+  // Add dots as thousands separators (e.g., 2300100 becomes 2.300.100)
+  return cleanValue.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+}
+
 const ItemManagerList = ({ items, loading, itemType, onEdit, onDelete }) => {
   const getItemFields = () => {
     switch (itemType) {
@@ -20,7 +34,7 @@ const ItemManagerList = ({ items, loading, itemType, onEdit, onDelete }) => {
             return [
               item.title,
               categoryDisplay,
-              item.price,
+              formatPrice(item.price),
               item.location,
               item.date,
               null, // Actions column

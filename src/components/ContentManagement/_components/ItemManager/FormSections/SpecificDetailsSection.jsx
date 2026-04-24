@@ -1,6 +1,27 @@
 import React, { useState, useEffect } from 'react'
 import { Form, Row, Col } from 'react-bootstrap'
-import ImageUploader from '../../../ImageUploader'
+
+const formatPrice = (value) => {
+  // Convert to string if not already a string
+  const stringValue = String(value || '')
+  
+  // Remove all non-digit characters and dots
+  let cleanValue = stringValue.replace(/[^0-9]/g, '')
+  
+  // If empty, return empty
+  if (!cleanValue) return ''
+  
+  // Add dots as thousands separators (e.g., 2300100 becomes 2.300.100)
+  return cleanValue.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+}
+
+const cleanPriceForDatabase = (value) => {
+  // Convert to string if not already a string
+  const stringValue = String(value || '')
+  
+  // Remove all non-digit characters for database storage
+  return stringValue.replace(/[^0-9]/g, '')
+}
 
 const SpecificDetailsSection = ({ formData, itemType, onFormChange }) => {
   const [formOptions, setFormOptions] = useState({
@@ -33,9 +54,13 @@ const SpecificDetailsSection = ({ formData, itemType, onFormChange }) => {
             </Form.Label>
             <Form.Control
               type="text"
-              value={formData.price || ''}
-              onChange={(e) => onFormChange('price', e.target.value)}
-              placeholder="e.g., 250,000"
+              value={formatPrice(formData.price || '')}
+              onChange={(e) => {
+                const rawValue = e.target.value
+                const cleanValue = cleanPriceForDatabase(rawValue)
+                onFormChange('price', cleanValue)
+              }}
+              placeholder="e.g., 2.500.000"
               style={{
                 borderRadius: '8px',
                 border: '2px solid #e9ecef',
