@@ -153,6 +153,43 @@ const ContentItemManager = ({ itemType }) => {
           active: true,
           order: nextSocialOrder,
         })
+      } else if (itemType === 'properties') {
+        setFormData({
+          title: '',
+          description: '',
+          shortDescription: '',
+          fullDescription: '',
+          price: '',
+          location: '',
+          propertyType: '',
+          bedrooms: '',
+          bathrooms: '',
+          rooms: '',
+          yearBuilt: '',
+          totalArea: '',
+          netArea: '',
+          builtUpArea: '',
+          landArea: '',
+          finishStatus: 'without_finish',
+          unitType: 'sq_m',
+          status: 'for_sale',
+          featured: false,
+          visible: true,
+          category: [],
+          productImg: '',
+          propertyDetails: {
+            livingRoom: 0,
+            nannyRoom: 0,
+            otherDistinctiveAddition: '',
+            numberOfFloors: 0
+          },
+          factsAndFeatures: {},
+          amenitiesList: [],
+          mapEmbedUrl: '',
+          videoUrl: '',
+          videoPoster: '',
+          galleryImages: [],
+        })
       } else if (itemType === 'news') {
         const nextNewsOrder = items.reduce((highest, currentItem) => {
           const currentOrder = Number(currentItem.order ?? currentItem.order_index ?? 0)

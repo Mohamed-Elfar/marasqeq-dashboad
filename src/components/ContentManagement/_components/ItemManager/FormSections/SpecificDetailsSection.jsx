@@ -69,17 +69,49 @@ const SpecificDetailsSection = ({ formData, itemType, onFormChange }) => {
             <Form.Label className="fw-semibold mb-2">
               Location <span className="text-danger">*</span>
             </Form.Label>
-            <Form.Control
-              type="text"
+            <Form.Select
               value={formData.location || ''}
               onChange={(e) => onFormChange('location', e.target.value)}
-              placeholder="e.g., New York, NY"
               style={{
                 borderRadius: '8px',
                 border: '2px solid #e9ecef',
                 padding: '0.75rem 1rem',
               }}
-            />
+            >
+              <option value="">Select a location...</option>
+              <option value="New Cairo">New Cairo</option>
+              <option value="New Capital">New Capital</option>
+              <option value="Sheikh Zayed">Sheikh Zayed</option>
+              <option value="Fifth Settlement">Fifth Settlement</option>
+              <option value="North Coast">North Coast</option>
+              <option value="Cairo">Cairo</option>
+              <option value="Giza">Giza</option>
+              <option value="Alexandria">Alexandria</option>
+              <option value="Qalyubia">Qalyubia</option>
+              <option value="Dakahlia">Dakahlia</option>
+              <option value="Sharqia">Sharqia</option>
+              <option value="Gharbia">Gharbia</option>
+              <option value="Monufia">Monufia</option>
+              <option value="Beheira">Beheira</option>
+              <option value="Kafr El Sheikh">Kafr El Sheikh</option>
+              <option value="Damietta">Damietta</option>
+              <option value="Port Said">Port Said</option>
+              <option value="Ismailia">Ismailia</option>
+              <option value="Suez">Suez</option>
+              <option value="Fayoum">Fayoum</option>
+              <option value="Beni Suef">Beni Suef</option>
+              <option value="Minya">Minya</option>
+              <option value="Assiut">Assiut</option>
+              <option value="Sohag">Sohag</option>
+              <option value="Qena">Qena</option>
+              <option value="Luxor">Luxor</option>
+              <option value="Aswan">Aswan</option>
+              <option value="Red Sea">Red Sea</option>
+              <option value="New Valley">New Valley</option>
+              <option value="Matrouh">Matrouh</option>
+              <option value="North Sinai">North Sinai</option>
+              <option value="South Sinai">South Sinai</option>
+            </Form.Select>
           </Form.Group>
         </Col>
 
