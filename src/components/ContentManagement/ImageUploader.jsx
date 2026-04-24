@@ -45,6 +45,38 @@ const ImageUploader = ({ onUpload, currentImage }) => {
     }
   };
 
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDragEnter = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const files = e.dataTransfer?.files;
+    if (!files) return;
+
+    // Handle the first image file
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      if (file.type.startsWith('image/')) {
+        await uploadImage(file);
+        break;
+      }
+    }
+  };
+
   const handlePaste = async (e) => {
     e.preventDefault();
     const items = e.clipboardData?.items;
@@ -170,14 +202,19 @@ const ImageUploader = ({ onUpload, currentImage }) => {
               justifyContent: 'center',
               color: '#6c757d',
               fontSize: '13px',
-              cursor: 'pointer'
+              cursor: 'pointer',
+              transition: 'all 0.3s ease'
             }}
             onClick={() => fileInputRef.current?.click()}
+            onDragOver={handleDragOver}
+            onDragEnter={handleDragEnter}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
           >
-            <i className="bi bi-image" style={{ fontSize: '32px', marginBottom: '8px', opacity: 0.5 }}></i>
-            <div style={{ fontWeight: '500' }}>Click to upload or paste image</div>
+            <i className="bi bi-cloud-upload" style={{ fontSize: '32px', marginBottom: '8px', opacity: 0.5 }}></i>
+            <div style={{ fontWeight: '500' }}>Click, paste, or drop image here</div>
             <div style={{ fontSize: '11px', marginTop: '4px', opacity: 0.7 }}>Recommended: 800x600px • Max: 5MB</div>
-            <div style={{ fontSize: '11px', marginTop: '2px', opacity: 0.6, fontStyle: 'italic' }}>You can also paste images from clipboard (Ctrl+V)</div>
+            <div style={{ fontSize: '11px', marginTop: '2px', opacity: 0.6, fontStyle: 'italic' }}>Drag & drop • Paste (Ctrl+V) • Click to browse</div>
           </div>
         )}
         {uploading && (
