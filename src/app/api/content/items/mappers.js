@@ -269,7 +269,7 @@ export const mapToDatabase = (itemType, item) => {
             price_range: item.priceRange || item.price_range || [],
 
             // Location and media fields
-            map_embed_url: item.mapEmbedUrl || item.map_embed_url || null,
+            map_embed_url: item.mapEmbedUrl !== undefined ? (item.mapEmbedUrl === '' ? null : item.mapEmbedUrl) : (item.map_embed_url || null),
             video_url: videoUrl || '',
             video_poster: videoPoster || '',
             gallery_images: galleryImages,
