@@ -147,7 +147,7 @@ const ItemManagerList = ({ items, loading, itemType, onEdit, onDelete }) => {
                   return (
                     <tr key={item.id}>
                       {rowData.map((data, index) => (
-                        <td key={index}>
+                        <td key={index} className={index === 0 || index === 3 ? "w-25" : ""}>
                           {index === rowData.length - 1 ? (
                             // Actions column
                             <>
