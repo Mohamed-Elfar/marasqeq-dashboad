@@ -1,6 +1,7 @@
 import React from 'react'
 import { Form, Row, Col } from 'react-bootstrap'
 import ImageUploader from '../../../ImageUploader'
+import VideoUploader from '../../../VideoUploader'
 
 const MediaSection = ({ formData, itemType, onFormChange }) => {
   // Don't show media section for social media and FAQ
@@ -93,20 +94,13 @@ const MediaSection = ({ formData, itemType, onFormChange }) => {
           <Col md={6}>
             <Form.Group className="mb-4">
               <Form.Label className="fw-semibold mb-2">
-                Video URL <span className="text-muted small">(optional)</span>
+                Upload Video <span className="text-muted small">(optional)</span>
               </Form.Label>
-              <Form.Control
-                type="text"
-                value={formData.videoUrl || ''}
-                onChange={(e) => onFormChange('videoUrl', e.target.value)}
-                placeholder="e.g., https://www.youtube.com/watch?v=..."
-                style={{
-                  borderRadius: '8px',
-                  border: '2px solid #e9ecef',
-                  padding: '0.75rem 1rem',
-                }}
+              <VideoUploader
+                currentVideo={formData.videoUrl}
+                onUpload={(url) => onFormChange('videoUrl', url)}
               />
-              <small className="text-muted">YouTube or Vimeo video URL for property tour</small>
+              <small className="text-muted">Upload a video file for property tour (MP4, WebM, OGG, MOV, AVI)</small>
             </Form.Group>
           </Col>
 
