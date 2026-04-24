@@ -8,10 +8,33 @@ const ImageUploader = ({ onUpload, currentImage }) => {
   const [error, setError] = useState(null);
   const [preview, setPreview] = useState(currentImage);
   const fileInputRef = useRef(null);
+  const dropZoneRef = useRef(null);
 
   useEffect(() => {
     setPreview(currentImage || '');
   }, [currentImage]);
+
+  useEffect(() => {
+    const handlePasteEvent = (e) => {
+      // Only handle paste if the click or focus is within this uploader
+      const target = e.target;
+      const uploaderElement = dropZoneRef.current;
+      
+      if (!uploaderElement || !uploaderElement.contains(target)) {
+        return; // Don't handle paste for other uploaders
+      }
+      
+      handlePaste(e);
+    };
+
+    // Add paste event listener to the document
+    document.addEventListener('paste', handlePasteEvent);
+
+    // Cleanup
+    return () => {
+      document.removeEventListener('paste', handlePasteEvent);
+    };
+  }, []);
 
   const handleRemoveImage = () => {
     setPreview('');
@@ -22,16 +45,24 @@ const ImageUploader = ({ onUpload, currentImage }) => {
     }
   };
 
-  const handleFileChange = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const handlePaste = async (e) => {
+    e.preventDefault();
+    const items = e.clipboardData?.items;
+    if (!items) return;
 
-    // Validate file type
-    if (!file.type.startsWith('image/')) {
-      setError('Please select an image file');
-      return;
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      if (item.type.startsWith('image/')) {
+        const file = item.getAsFile();
+        if (file) {
+          await uploadImage(file);
+          break;
+        }
+      }
     }
+  };
 
+  const uploadImage = async (file) => {
     // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
       setError('File size must be less than 5MB');
@@ -79,8 +110,21 @@ const ImageUploader = ({ onUpload, currentImage }) => {
     }
   };
 
+  const handleFileChange = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      setError('Please select an image file');
+      return;
+    }
+
+    await uploadImage(file);
+  };
+
   return (
-    <div>
+    <div ref={dropZoneRef}>
       {error && <Alert variant="danger" className="mb-2">{error}</Alert>}
 
       <div className="mb-2">
@@ -131,8 +175,9 @@ const ImageUploader = ({ onUpload, currentImage }) => {
             onClick={() => fileInputRef.current?.click()}
           >
             <i className="bi bi-image" style={{ fontSize: '32px', marginBottom: '8px', opacity: 0.5 }}></i>
-            <div style={{ fontWeight: '500' }}>No Image</div>
-            <div style={{ fontSize: '11px', marginTop: '4px', opacity: 0.7 }}>Recommended: 800x600px</div>
+            <div style={{ fontWeight: '500' }}>Click to upload or paste image</div>
+            <div style={{ fontSize: '11px', marginTop: '4px', opacity: 0.7 }}>Recommended: 800x600px • Max: 5MB</div>
+            <div style={{ fontSize: '11px', marginTop: '2px', opacity: 0.6, fontStyle: 'italic' }}>You can also paste images from clipboard (Ctrl+V)</div>
           </div>
         )}
         {uploading && (
