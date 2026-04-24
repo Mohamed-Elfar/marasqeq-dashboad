@@ -194,6 +194,12 @@ export const mapToDatabase = (itemType, item) => {
             otherDistinctiveAddition: item.otherDistinctiveAddition ?? (item.propertyDetails?.otherDistinctiveAddition ?? ''),
             numberOfFloors: item.numberOfFloors ?? (item.propertyDetails?.numberOfFloors ?? 0)
         };
+
+        // Always send empty array/string if removed, so DB is updated
+        const galleryImages = Array.isArray(item.galleryImages) ? item.galleryImages.filter(url => url && url.trim()) : [];
+        const videoUrl = typeof item.videoUrl === 'string' ? item.videoUrl : (item.video_url || '');
+        const videoPoster = typeof item.videoPoster === 'string' ? item.videoPoster : (item.video_poster || '');
+
         return {
             title: item.title || '',
             description: item.description || '',
@@ -264,15 +270,9 @@ export const mapToDatabase = (itemType, item) => {
 
             // Location and media fields
             map_embed_url: item.mapEmbedUrl || item.map_embed_url || null,
-            video_url: item.videoUrl || item.video_url || null,
-            video_poster: item.videoPoster || item.video_poster || null,
-            gallery_images: item.galleryImages?.length > 0
-                ? item.galleryImages.filter(url => url && url.trim())
-                : [
-                    item.galleryImage1,
-                    item.galleryImage2,
-                    item.galleryImage3
-                ].filter(url => url && url.trim()),
+            video_url: videoUrl || '',
+            video_poster: videoPoster || '',
+            gallery_images: galleryImages,
             currency: item.currency || 'USD',
         }
     }

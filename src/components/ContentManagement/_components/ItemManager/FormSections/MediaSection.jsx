@@ -36,6 +36,7 @@ const MediaSection = ({ formData, itemType, onFormChange }) => {
           <ImageUploader
             currentImage={isService || isPortfolio ? formData.thumbImage : isNews ? formData.featured_image : isProperty ? formData.productImg : formData.image}
             onUpload={(url) => onFormChange(isService || isPortfolio ? 'thumbImage' : isNews ? 'featured_image' : isProperty ? 'productImg' : 'image', url)}
+            onRemove={() => onFormChange(isService || isPortfolio ? 'thumbImage' : isNews ? 'featured_image' : isProperty ? 'productImg' : 'image', '')}
           />
         </Form.Group>
       </Col>
@@ -66,6 +67,12 @@ const MediaSection = ({ formData, itemType, onFormChange }) => {
                   }
                   onFormChange('captions.image1', url)
                 }}
+                onRemove={() => {
+                  if (isService) {
+                    onFormChange('detail_image_1', '')
+                  }
+                  onFormChange('captions.image1', '')
+                }}
               />
             </Form.Group>
           </Col>
@@ -83,6 +90,12 @@ const MediaSection = ({ formData, itemType, onFormChange }) => {
                   }
                   onFormChange('captions.image2', url)
                 }}
+                onRemove={() => {
+                  if (isService) {
+                    onFormChange('detail_image_2', '')
+                  }
+                  onFormChange('captions.image2', '')
+                }}
               />
             </Form.Group>
           </Col>
@@ -99,6 +112,7 @@ const MediaSection = ({ formData, itemType, onFormChange }) => {
               <VideoUploader
                 currentVideo={formData.videoUrl}
                 onUpload={(url) => onFormChange('videoUrl', url)}
+                onRemove={() => onFormChange('videoUrl', '')}
               />
               <small className="text-muted">Upload a video file for property tour (MP4, WebM, OGG, MOV, AVI)</small>
             </Form.Group>
@@ -112,6 +126,7 @@ const MediaSection = ({ formData, itemType, onFormChange }) => {
               <ImageUploader
                 currentImage={formData.videoPoster}
                 onUpload={(url) => onFormChange('videoPoster', url)}
+                onRemove={() => onFormChange('videoPoster', '')}
               />
               <small className="text-muted">Background image shown before video plays</small>
             </Form.Group>
