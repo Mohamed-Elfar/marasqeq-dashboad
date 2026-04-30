@@ -149,6 +149,7 @@ const ContentItemManager = ({ itemType }) => {
           name: '',
           icon: 'FaFacebookF',
           url: '',
+          qrImage: '',
           position: ['header', 'footer', 'news'],
           active: true,
           order: nextSocialOrder,

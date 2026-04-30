@@ -8,7 +8,8 @@ export const mapFromDatabase = (itemType, item) => {
     if (itemType === 'social') {
         return {
             ...item,
-            order: item.order ?? item.order_index ?? 1
+            order: item.order ?? item.order_index ?? 1,
+            qrImage: item.qr_image || item.qrImage || ''
         }
     }
 
@@ -109,6 +110,7 @@ export const mapToDatabase = (itemType, item) => {
             name: item.name || '',
             icon: item.icon || '',
             url: item.url || '',
+            qr_image: item.qrImage || item.qr_image || null,
             position: item.position || ['header', 'footer', 'news'],
             active: item.active !== false,
             order_index: item.order ?? item.order_index ?? 1

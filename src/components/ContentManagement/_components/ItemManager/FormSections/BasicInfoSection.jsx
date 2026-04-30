@@ -1,5 +1,6 @@
 import React from 'react'
 import { Form, Row, Col } from 'react-bootstrap'
+import ImageUploader from '../../../ImageUploader'
 
 const BasicInfoSection = ({ formData, itemType, onFormChange }) => {
   return (
@@ -122,6 +123,18 @@ const BasicInfoSection = ({ formData, itemType, onFormChange }) => {
                   }}
                 />
               </div>
+            </Form.Group>
+          </Col>
+
+          <Col md={12}>
+            <Form.Group className="mb-4">
+              <Form.Label className="fw-semibold mb-2">
+                QR Code Image <span className="text-muted small">(optional)</span>
+              </Form.Label>
+              <ImageUploader
+                currentImage={formData.qrImage || ''}
+                onUpload={(url) => onFormChange('qrImage', url)}
+              />
             </Form.Group>
           </Col>
         </>
