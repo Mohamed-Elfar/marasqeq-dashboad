@@ -186,6 +186,18 @@ export const MENU_ITEMS = [
 
     url: '/content-management/pages/services'
 
+  },
+
+  {
+
+    key: 'terms-page',
+
+    label: 'Terms & Conditions',
+
+    icon: 'bi-file-text',
+
+    url: '/content-management/pages/terms-conditions'
+
   }
 
 

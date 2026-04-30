@@ -44,6 +44,12 @@ const SiteSettingsEditor = ({ pageKey = 'home', fieldsOnly = null }) => {
         return [
           { key: 'home_video_url', label: 'Home Page Video URL', type: 'text', placeholder: 'https://www.youtube.com/watch?v=...' },
           { key: 'show_property_types', label: 'Show Showcase Section', type: 'checkbox' },
+          { key: 'show_statistics', label: 'Show Statistics Section', type: 'checkbox' },
+        ];
+      case 'terms':
+        return [
+          { key: 'terms_title', label: 'Terms & Conditions Title', type: 'text', placeholder: 'Enter title' },
+          { key: 'terms_content', label: 'Terms & Conditions Content', type: 'textarea', placeholder: 'Enter terms and conditions content' },
         ];
       case 'about':
         return [
