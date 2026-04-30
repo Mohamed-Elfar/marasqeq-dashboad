@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Button, Card, Alert, Spinner } from 'react-bootstrap';
 import VideoUploader from './VideoUploader';
 
-const SiteSettingsEditor = ({ pageKey = 'home' }) => {
+const SiteSettingsEditor = ({ pageKey = 'home', fieldsOnly = null }) => {
   const [settings, setSettings] = useState({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -43,6 +43,7 @@ const SiteSettingsEditor = ({ pageKey = 'home' }) => {
       case 'home':
         return [
           { key: 'home_video_url', label: 'Home Page Video URL', type: 'text', placeholder: 'https://www.youtube.com/watch?v=...' },
+          { key: 'show_property_types', label: 'Show Showcase Section', type: 'checkbox' },
         ];
       case 'about':
         return [
@@ -134,7 +135,7 @@ const SiteSettingsEditor = ({ pageKey = 'home' }) => {
       {pageKey === 'home' ? (
         <Card className="mb-3">
           <Card.Body>
-            {getPageSettings().map(field => (
+            {getPageSettings().filter(field => !fieldsOnly || fieldsOnly.includes(field.key)).map(field => (
               <Form.Group key={field.key} className="mb-3">
                 {pageKey === 'home' && field.key === 'home_video_url' ? (
                   <>
@@ -161,6 +162,14 @@ const SiteSettingsEditor = ({ pageKey = 'home' }) => {
                       </Form.Text>
                     </div>
                   </>
+                ) : field.type === 'checkbox' ? (
+                  <Form.Check
+                    type="checkbox"
+                    id={field.key}
+                    label={field.label}
+                    checked={settings[field.key] === 'true' || settings[field.key] === true}
+                    onChange={(e) => handleFieldChange(field.key, e.target.checked.toString())}
+                  />
                 ) : (
                   <>
                     <Form.Label>{field.label}</Form.Label>
@@ -192,7 +201,7 @@ const SiteSettingsEditor = ({ pageKey = 'home' }) => {
             <h6 className="mb-0">{pageKey.charAt(0).toUpperCase() + pageKey.slice(1)} Page Settings</h6>
           </Card.Header>
           <Card.Body>
-            {getPageSettings().map(field => (
+            {getPageSettings().filter(field => !fieldsOnly || fieldsOnly.includes(field.key)).map(field => (
               <Form.Group key={field.key} className="mb-3">
                 <Form.Label>{field.label}</Form.Label>
                 {field.type === 'textarea' ? (
