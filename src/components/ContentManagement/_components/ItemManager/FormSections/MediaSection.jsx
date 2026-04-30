@@ -198,6 +198,101 @@ const MediaSection = ({ formData, itemType, onFormChange }) => {
               + Add Gallery Image
             </button>
           </Col>
+
+          {/* Floor Plans */}
+          <Col md={12}>
+            <hr />
+            <Form.Label className="fw-semibold mb-2">
+              Floor Plans <span className="text-muted small">(optional)</span>
+            </Form.Label>
+            <small className="text-muted d-block mb-3">Each floor plan needs a label and at least an image or description to appear on the website</small>
+          </Col>
+
+          {(formData.floorPlans || []).map((plan, index) => (
+            <Col md={12} key={index} className="mb-4 p-3" style={{ background: '#f8f9fa', borderRadius: '8px', border: '1px solid #dee2e6' }}>
+              <div className="d-flex justify-content-between align-items-center mb-3">
+                <strong>Floor Plan {index + 1}</strong>
+                <button
+                  type="button"
+                  className="btn btn-outline-danger btn-sm"
+                  onClick={() => {
+                    const updated = [...(formData.floorPlans || [])];
+                    updated.splice(index, 1);
+                    onFormChange('floorPlans', updated);
+                  }}
+                  style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem' }}
+                >
+                  Remove
+                </button>
+              </div>
+              <Row>
+                <Col md={4}>
+                  <Form.Group className="mb-3">
+                    <Form.Label className="fw-semibold mb-1" style={{ fontSize: '13px' }}>Label (e.g. First Floor)</Form.Label>
+                    <Form.Control
+                      type="text"
+                      size="sm"
+                      placeholder="e.g. First Floor"
+                      value={plan.label || ''}
+                      onChange={(e) => {
+                        const updated = [...(formData.floorPlans || [])];
+                        updated[index] = { ...updated[index], label: e.target.value };
+                        onFormChange('floorPlans', updated);
+                      }}
+                    />
+                  </Form.Group>
+                  <Form.Group className="mb-3">
+                    <Form.Label className="fw-semibold mb-1" style={{ fontSize: '13px' }}>Description</Form.Label>
+                    <Form.Control
+                      as="textarea"
+                      rows={4}
+                      size="sm"
+                      placeholder="Describe this floor..."
+                      value={plan.description || ''}
+                      onChange={(e) => {
+                        const updated = [...(formData.floorPlans || [])];
+                        updated[index] = { ...updated[index], description: e.target.value };
+                        onFormChange('floorPlans', updated);
+                      }}
+                    />
+                  </Form.Group>
+                </Col>
+                <Col md={8}>
+                  <Form.Label className="fw-semibold mb-1" style={{ fontSize: '13px' }}>Floor Plan Image</Form.Label>
+                  <ImageUploader
+                    currentImage={plan.image || ''}
+                    onUpload={(url) => {
+                      const updated = [...(formData.floorPlans || [])];
+                      updated[index] = { ...updated[index], image: url };
+                      onFormChange('floorPlans', updated);
+                    }}
+                  />
+                </Col>
+              </Row>
+            </Col>
+          ))}
+
+          <Col md={12} className="mb-4">
+            <button
+              type="button"
+              className="btn btn-outline-success"
+              onClick={() => {
+                const updated = [...(formData.floorPlans || []), { label: '', image: '', description: '' }];
+                onFormChange('floorPlans', updated);
+              }}
+              style={{
+                borderRadius: '8px',
+                padding: '0.5rem 1.5rem',
+                border: '2px dashed #198754',
+                background: 'transparent',
+                color: '#198754',
+                fontWeight: 500,
+                width: '100%',
+              }}
+            >
+              + Add Floor Plan
+            </button>
+          </Col>
         </>
       )}
     </Row>

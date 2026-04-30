@@ -96,6 +96,7 @@ export const mapFromDatabase = (itemType, item) => {
             galleryImage2: item.gallery_images?.[1] || item.galleryImage2 || '',
             galleryImage3: item.gallery_images?.[2] || item.galleryImage3 || '',
             galleryImages: item.gallery_images || item.galleryImages || [],
+            floorPlans: item.floor_plans || item.floorPlans || [],
         }
     }
 
@@ -273,6 +274,7 @@ export const mapToDatabase = (itemType, item) => {
             video_url: videoUrl || '',
             video_poster: videoPoster || '',
             gallery_images: galleryImages,
+            floor_plans: Array.isArray(item.floorPlans) ? item.floorPlans : (item.floor_plans || []),
             currency: item.currency || 'USD',
         }
     }

@@ -189,6 +189,7 @@ const ContentItemManager = ({ itemType }) => {
           videoUrl: '',
           videoPoster: '',
           galleryImages: [],
+          floorPlans: [],
         })
       } else if (itemType === 'news') {
         const nextNewsOrder = items.reduce((highest, currentItem) => {
