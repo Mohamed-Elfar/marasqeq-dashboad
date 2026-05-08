@@ -213,8 +213,13 @@ const SectionEditor = ({ section, onUpdate, onRemove }) => {
               >
                 Cancel
               </Button>
-              <Button variant="danger" size="sm" onClick={() => onRemove(section.id)}>
-                Delete Section
+              <Button
+                variant="link"
+                size="sm"
+                className="text-danger p-0 text-decoration-none fw-semibold"
+                onClick={() => onRemove(section.id)}
+              >
+                Delete
               </Button>
             </div>
           </>
@@ -223,7 +228,12 @@ const SectionEditor = ({ section, onUpdate, onRemove }) => {
             <p className="mb-2 small text-muted" style={{ whiteSpace: 'pre-wrap' }}>
               {JSON.stringify(content, null, 2)}
             </p>
-            <Button variant="outline-primary" size="sm" onClick={() => setIsEditing(true)}>
+            <Button
+              variant="link"
+              size="sm"
+              className="text-primary p-0 text-decoration-none fw-semibold"
+              onClick={() => setIsEditing(true)}
+            >
               Edit
             </Button>
           </>

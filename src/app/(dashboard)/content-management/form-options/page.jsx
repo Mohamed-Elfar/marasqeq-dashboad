@@ -186,19 +186,20 @@ const FormOptionsManager = () => {
                     <td>{option.order || '-'}</td>
                     <td className="text-end">
                       <Button
-                        variant="outline-primary"
+                        variant="link"
                         size="sm"
-                        className="me-2"
+                        className="text-primary me-3 p-0 text-decoration-none fw-semibold"
                         onClick={() => handleEdit(type, option)}
                       >
-                        <i className="bi bi-pencil"></i>
+                        Edit
                       </Button>
                       <Button
-                        variant="outline-danger"
+                        variant="link"
                         size="sm"
+                        className="text-danger p-0 text-decoration-none fw-semibold"
                         onClick={() => handleDelete(type, option.id)}
                       >
-                        <i className="bi bi-trash"></i>
+                        Delete
                       </Button>
                     </td>
                   </tr>

@@ -151,10 +151,20 @@ const ItemManagerList = ({ items, loading, itemType, onEdit, onDelete }) => {
                           {index === rowData.length - 1 ? (
                             // Actions column
                             <>
-                              <Button variant="outline-primary" size="sm" className="me-2" onClick={() => onEdit(item)}>
+                              <Button
+                                variant="link"
+                                size="sm"
+                                className="text-primary me-3 p-0 text-decoration-none fw-semibold"
+                                onClick={() => onEdit(item)}
+                              >
                                 Edit
                               </Button>
-                              <Button variant="outline-danger" size="sm" onClick={() => onDelete(item.id)}>
+                              <Button
+                                variant="link"
+                                size="sm"
+                                className="text-danger p-0 text-decoration-none fw-semibold"
+                                onClick={() => onDelete(item.id)}
+                              >
                                 Delete
                               </Button>
                             </>

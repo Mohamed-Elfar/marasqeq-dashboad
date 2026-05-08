@@ -230,10 +230,20 @@ const CategoriesPage = () => {
                         </span>
                       </td>
                       <td>
-                        <Button variant="outline-primary" size="sm" className="me-2" onClick={() => initializeForm(category)}>
+                        <Button
+                          variant="link"
+                          size="sm"
+                          className="text-primary me-3 p-0 text-decoration-none fw-semibold"
+                          onClick={() => initializeForm(category)}
+                        >
                           Edit
                         </Button>
-                        <Button variant="outline-danger" size="sm" onClick={() => handleDeleteCategory(category.id)}>
+                        <Button
+                          variant="link"
+                          size="sm"
+                          className="text-danger p-0 text-decoration-none fw-semibold"
+                          onClick={() => handleDeleteCategory(category.id)}
+                        >
                           Delete
                         </Button>
                       </td>
