@@ -1,9 +1,31 @@
 import React from 'react'
-import { Form, Row, Col } from 'react-bootstrap'
+import { Form, Row, Col, Spinner } from 'react-bootstrap'
+import { translateText } from '@/utils/translate'
+import { HiOutlineTranslate } from 'react-icons/hi'
 import ImageUploader from '../../../ImageUploader'
 import VideoUploader from '../../../VideoUploader'
 
 const MediaSection = ({ formData, itemType, onFormChange }) => {
+  const [translating, setTranslating] = React.useState({})
+
+  const handleTranslateFloorPlan = async (index, sourceField, targetField) => {
+    const text = formData.floorPlans[index][sourceField]
+    if (!text) return
+
+    const key = `floorPlan-${index}-${targetField}`
+    setTranslating(prev => ({ ...prev, [key]: true }))
+    try {
+      const translated = await translateText(text)
+      if (translated) {
+        const updated = [...(formData.floorPlans || [])]
+        updated[index] = { ...updated[index], [targetField]: translated }
+        onFormChange('floorPlans', updated)
+      }
+    } finally {
+      setTranslating(prev => ({ ...prev, [key]: false }))
+    }
+  }
+
   // Don't show media section for social media and FAQ
   if (itemType === 'social' || itemType === 'faq') {
     return null
@@ -229,32 +251,107 @@ const MediaSection = ({ formData, itemType, onFormChange }) => {
                 <Col md={4}>
                   <Form.Group className="mb-3">
                     <Form.Label className="fw-semibold mb-1" style={{ fontSize: '13px' }}>Label (e.g. First Floor)</Form.Label>
-                    <Form.Control
-                      type="text"
-                      size="sm"
-                      placeholder="e.g. First Floor"
-                      value={plan.label || ''}
-                      onChange={(e) => {
-                        const updated = [...(formData.floorPlans || [])];
-                        updated[index] = { ...updated[index], label: e.target.value };
-                        onFormChange('floorPlans', updated);
-                      }}
-                    />
+                    <div className="d-flex align-items-center gap-2 mb-2">
+                      <Form.Control
+                        type="text"
+                        size="sm"
+                        placeholder="e.g. First Floor"
+                        value={plan.label || ''}
+                        onChange={(e) => {
+                          const updated = [...(formData.floorPlans || [])];
+                          updated[index] = { ...updated[index], label: e.target.value };
+                          onFormChange('floorPlans', updated);
+                        }}
+                      />
+                      <button
+                        type="button"
+                        className="btn btn-outline-primary btn-sm d-flex align-items-center justify-content-center"
+                        style={{ height: '31px', width: '31px' }}
+                        onClick={() => handleTranslateFloorPlan(index, 'label', 'label_ar')}
+                        disabled={translating[`floorPlan-${index}-label_ar`]}
+                        title="Translate"
+                      >
+                        {translating[`floorPlan-${index}-label_ar`] ? <Spinner animation="border" size="sm" /> : <HiOutlineTranslate size={14} />}
+                      </button>
+                    </div>
+                    <div className="d-flex align-items-center gap-2">
+                      <Form.Control
+                        type="text"
+                        size="sm"
+                        dir="rtl"
+                        placeholder="الملصق بالعربية..."
+                        value={plan.label_ar || ''}
+                        onChange={(e) => {
+                          const updated = [...(formData.floorPlans || [])];
+                          updated[index] = { ...updated[index], label_ar: e.target.value };
+                          onFormChange('floorPlans', updated);
+                        }}
+                        style={{ backgroundColor: '#f8f9fa' }}
+                      />
+                      <button
+                        type="button"
+                        className="btn btn-outline-primary btn-sm d-flex align-items-center justify-content-center"
+                        style={{ height: '31px', width: '31px' }}
+                        onClick={() => handleTranslateFloorPlan(index, 'label_ar', 'label')}
+                        disabled={translating[`floorPlan-${index}-label`]}
+                        title="Translate"
+                      >
+                        {translating[`floorPlan-${index}-label`] ? <Spinner animation="border" size="sm" /> : <HiOutlineTranslate size={14} />}
+                      </button>
+                    </div>
                   </Form.Group>
                   <Form.Group className="mb-3">
                     <Form.Label className="fw-semibold mb-1" style={{ fontSize: '13px' }}>Description</Form.Label>
-                    <Form.Control
-                      as="textarea"
-                      rows={4}
-                      size="sm"
-                      placeholder="Describe this floor..."
-                      value={plan.description || ''}
-                      onChange={(e) => {
-                        const updated = [...(formData.floorPlans || [])];
-                        updated[index] = { ...updated[index], description: e.target.value };
-                        onFormChange('floorPlans', updated);
-                      }}
-                    />
+                    <div className="position-relative mb-2">
+                      <Form.Control
+                        as="textarea"
+                        rows={3}
+                        size="sm"
+                        placeholder="Describe this floor..."
+                        value={plan.description || ''}
+                        onChange={(e) => {
+                          const updated = [...(formData.floorPlans || [])];
+                          updated[index] = { ...updated[index], description: e.target.value };
+                          onFormChange('floorPlans', updated);
+                        }}
+                      />
+                      <button
+                        type="button"
+                        className="btn btn-outline-primary btn-sm d-flex align-items-center justify-content-center position-absolute"
+                        style={{ bottom: '5px', right: '5px', height: '28px', width: '28px' }}
+                        onClick={() => handleTranslateFloorPlan(index, 'description', 'description_ar')}
+                        disabled={translating[`floorPlan-${index}-description_ar`]}
+                        title="Translate"
+                      >
+                        {translating[`floorPlan-${index}-description_ar`] ? <Spinner animation="border" size="sm" /> : <HiOutlineTranslate size={14} />}
+                      </button>
+                    </div>
+                    <div className="position-relative">
+                      <Form.Control
+                        as="textarea"
+                        rows={3}
+                        size="sm"
+                        dir="rtl"
+                        placeholder="الوصف بالعربية..."
+                        value={plan.description_ar || ''}
+                        onChange={(e) => {
+                          const updated = [...(formData.floorPlans || [])];
+                          updated[index] = { ...updated[index], description_ar: e.target.value };
+                          onFormChange('floorPlans', updated);
+                        }}
+                        style={{ backgroundColor: '#f8f9fa' }}
+                      />
+                      <button
+                        type="button"
+                        className="btn btn-outline-primary btn-sm d-flex align-items-center justify-content-center position-absolute"
+                        style={{ bottom: '5px', left: '5px', height: '28px', width: '28px' }}
+                        onClick={() => handleTranslateFloorPlan(index, 'description_ar', 'description')}
+                        disabled={translating[`floorPlan-${index}-description`]}
+                        title="Translate"
+                      >
+                        {translating[`floorPlan-${index}-description`] ? <Spinner animation="border" size="sm" /> : <HiOutlineTranslate size={14} />}
+                      </button>
+                    </div>
                   </Form.Group>
                 </Col>
                 <Col md={8}>

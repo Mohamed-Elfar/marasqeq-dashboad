@@ -1,0 +1,233 @@
+// 
+// RTL Overrides
+// 
+
+[dir="rtl"] {
+
+    // General Layout
+    .page-content {
+        margin-left: 0;
+        margin-right: $sidebar-width;
+    }
+
+    // Sidebar
+    .app-sidebar {
+        left: auto;
+        right: 0;
+        border-right: none !important;
+        border-left: $card-border-width solid $sidebar-border-color !important;
+
+        .menu-arrow {
+            left: calc($sidebar-item-padding-x * 1.5);
+            right: auto;
+            margin-left: 0;
+            margin-right: auto;
+            transform: rotate(180deg);
+        }
+
+        .navbar-nav {
+            padding-right: 0 !important;
+            padding-left: $sidebar-item-padding-x !important;
+
+            .nav-item {
+                .nav-link {
+                    .badge {
+                        margin-left: 0;
+                        margin-right: auto;
+                    }
+                }
+
+                [aria-expanded='true'] {
+                    .menu-arrow {
+                        transform: rotate(0deg);
+                    }
+                }
+            }
+
+            .sub-navbar-nav {
+                padding-left: $sidebar-item-padding-x;
+                padding-right: 0;
+
+                .menu-arrow {
+                    left: 0;
+                    right: auto;
+                }
+            }
+        }
+    }
+
+    // Topbar
+    .app-topbar {
+        padding-left: 0;
+        padding-right: $sidebar-width;
+
+        .app-search {
+            .form-control {
+                padding-left: 15px;
+                padding-right: 40px;
+            }
+
+            .search-widget-icon {
+                left: auto;
+                right: 11px;
+            }
+
+            .search-widget-icon-close {
+                left: 7px;
+                right: auto !important;
+            }
+        }
+
+        .topbar-badge {
+            left: -7px;
+            right: auto;
+        }
+    }
+
+    // Sidebar Sizes
+    &[data-sidebar-size='condensed'] {
+        .app-sidebar {
+            width: $sidebar-width-sm;
+            min-width: $sidebar-width-sm;
+
+            .navbar-nav {
+
+                .sub-nav-item,
+                .nav-item {
+                    &:hover {
+
+                        >.collapse,
+                        >.collapsing {
+                            left: auto;
+                            right: 100%;
+
+                            >.sub-navbar-nav {
+                                padding-left: 0;
+                                padding-right: 0;
+                            }
+                        }
+                    }
+                }
+
+                >.nav-item {
+                    &:hover {
+                        >.nav-link {
+                            >.nav-text {
+                                left: auto;
+                                right: calc($sidebar-width-sm - 2px - 20px);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .app-topbar {
+            padding-left: 0;
+            padding-right: $sidebar-width-sm;
+        }
+
+        .page-content {
+            margin-left: 0;
+            margin-right: $sidebar-width-sm;
+        }
+    }
+
+    &[data-sidebar-size='hidden'] {
+        .app-sidebar {
+            margin-left: 0;
+            margin-right: calc($sidebar-width * -1);
+        }
+
+        .page-content {
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+        &.sidebar-enable {
+            .app-sidebar {
+                margin-left: 0;
+                margin-right: 0;
+            }
+        }
+
+        .app-topbar {
+            padding: 0 $spacer;
+        }
+    }
+
+    // Small Hover
+    &[data-sidebar-size='sm-hover'] {
+        .app-topbar {
+            padding-left: 0;
+            padding-right: $sidebar-width-sm;
+        }
+
+        .page-content {
+            margin-left: 0;
+            margin-right: $sidebar-width-sm;
+        }
+
+        .app-sidebar:not(:hover) {
+            width: $sidebar-width-sm;
+            min-width: $sidebar-width-sm;
+        }
+
+        .app-sidebar {
+            &:hover {
+                .button-sm-hover {
+                    text-align: start;
+                    left: 10px;
+                    right: auto;
+                }
+            }
+        }
+    }
+
+    // Modal Fixes
+    .modal-header {
+        display: flex !important;
+        flex-direction: row !important; // Standard RTL row: [Title Right] [Btn Left]
+        justify-content: space-between !important;
+        align-items: center !important;
+
+        .btn-close {
+            margin: 0 !important;
+            padding: 0.5rem !important;
+        }
+    }
+
+    // Button Spacing
+    .btn + .btn {
+        margin-left: 0 !important;
+        margin-right: 0.5rem !important;
+    }
+
+    // Alignment Fixes
+    .text-end {
+        text-align: left !important;
+    }
+    .text-start {
+        text-align: right !important;
+    }
+
+    // Add New Item Button (Header)
+    .align-items-center.mb-4 {
+        .text-end {
+            display: flex;
+            justify-content: flex-end !important; // Forces the 'Add New' button to the left in RTL
+        }
+    }
+
+    .text-primary.me-3.p-0.text-decoration-none.fw-semibold {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+
+    // Form Select Arrow Position
+    .form-select {
+        background-position: left .75rem center !important;
+        padding-left: 2.25rem !important;
+        padding-right: 1rem !important;
+    }
+}

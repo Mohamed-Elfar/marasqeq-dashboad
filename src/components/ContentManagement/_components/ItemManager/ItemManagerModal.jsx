@@ -1,9 +1,68 @@
 import React, { useState } from 'react'
-import { Modal, Button, Spinner, Tabs, Tab } from 'react-bootstrap'
+import { Modal, Button, Spinner, Tabs, Tab, Badge } from 'react-bootstrap'
 import ItemManagerForm from './ItemManagerForm'
+import { translateText } from '@/utils/translate'
+import { HiOutlineSparkles } from 'react-icons/hi'
 
 const ItemManagerModal = ({ show, onHide, editingItem, formData, itemType, categories, onFormChange, onSave, saving }) => {
   const [activeTab, setActiveTab] = useState('basic')
+  const [magicTranslating, setMagicTranslating] = useState(false)
+
+  const handleMagicTranslate = async () => {
+    setMagicTranslating(true)
+    try {
+      // 1. Regular fields
+      const pairs = [
+        ['title', 'title_ar'],
+        ['question', 'question_ar'],
+        ['answer', 'answer_ar'],
+        ['designation', 'designation_ar'],
+        ['short_description', 'short_description_ar'],
+        ['full_description', 'full_description_ar'],
+        ['location', 'location_ar'],
+        ['propertyType', 'propertyType_ar'],
+        ['otherDistinctiveAddition', 'otherDistinctiveAddition_ar'],
+        ['filter', 'filter_ar'],
+        ['authorName', 'authorName_ar'],
+        ['authorRole', 'authorRole_ar'],
+      ]
+
+      for (const [en, ar] of pairs) {
+        if (formData[en] && !formData[ar]) {
+          const translated = await translateText(formData[en])
+          if (translated) onFormChange(ar, translated)
+        } else if (!formData[en] && formData[ar]) {
+          const translated = await translateText(formData[ar])
+          if (translated) onFormChange(en, translated)
+        }
+      }
+
+      // 2. Nested objects - Floor Plans
+      if (formData.floorPlans && Array.isArray(formData.floorPlans)) {
+        const updatedPlans = await Promise.all(
+          formData.floorPlans.map(async (plan) => {
+            const newPlan = { ...plan }
+            if (plan.label && !plan.label_ar) {
+              newPlan.label_ar = await translateText(plan.label)
+            } else if (!plan.label && plan.label_ar) {
+              newPlan.label = await translateText(plan.label_ar)
+            }
+            if (plan.description && !plan.description_ar) {
+              newPlan.description_ar = await translateText(plan.description)
+            } else if (!plan.description && plan.description_ar) {
+              newPlan.description = await translateText(plan.description_ar)
+            }
+            return newPlan
+          })
+        )
+        onFormChange('floorPlans', updatedPlans)
+      }
+    } catch (error) {
+      console.error('Magic translate failed:', error)
+    } finally {
+      setMagicTranslating(false)
+    }
+  }
 
   const getTabTitle = (key) => {
     const icons = {
@@ -66,13 +125,37 @@ const ItemManagerModal = ({ show, onHide, editingItem, formData, itemType, categ
           color: '#ffffff',
           padding: '1.5rem 2rem',
         }}>
-        <Modal.Title className="d-flex align-items-center gap-2 mb-0" style={{ color: '#ffffff' }}>
-          <i className={`bi ${editingItem ? 'bi-pencil-square' : 'bi-plus-circle'} fs-4`}></i>
-          <span className="fw-bold">
-            {editingItem
-              ? `Edit ${itemType.charAt(0).toUpperCase() + itemType.slice(1, -1)}`
-              : `Add New ${itemType.charAt(0).toUpperCase() + itemType.slice(1, -1)}`}
-          </span>
+        <Modal.Title className="d-flex align-items-center justify-content-between w-100 mb-0" style={{ color: '#ffffff' }}>
+          <div className="d-flex align-items-center gap-2">
+            <i className={`bi ${editingItem ? 'bi-pencil-square' : 'bi-plus-circle'} fs-4`}></i>
+            <span className="fw-bold">
+              {editingItem
+                ? `Edit ${itemType.charAt(0).toUpperCase() + itemType.slice(1, -1)}`
+                : `Add New ${itemType.charAt(0).toUpperCase() + itemType.slice(1, -1)}`}
+            </span>
+          </div>
+          <Button
+            variant="light"
+            size="sm"
+            className="d-flex align-items-center gap-2 px-3 py-2 ms-auto me-4"
+            style={{ 
+              borderRadius: '30px', 
+              fontSize: '0.85rem', 
+              fontWeight: 600,
+              color: '#1a6a61',
+              border: 'none',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+            }}
+            onClick={handleMagicTranslate}
+            disabled={magicTranslating}
+          >
+            {magicTranslating ? (
+              <Spinner animation="border" size="sm" />
+            ) : (
+              <HiOutlineSparkles size={18} className="text-warning" />
+            )}
+            Magic Translate All
+          </Button>
         </Modal.Title>
       </Modal.Header>
 

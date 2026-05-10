@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { Form, Row, Col } from 'react-bootstrap'
+import { Form, Row, Col, Spinner } from 'react-bootstrap'
+import { translateText } from '@/utils/translate'
+import { HiOutlineTranslate } from 'react-icons/hi'
 
 const formatPrice = (value) => {
   // Convert to string if not already a string
@@ -24,6 +26,23 @@ const cleanPriceForDatabase = (value) => {
 }
 
 const SpecificDetailsSection = ({ formData, itemType, onFormChange }) => {
+  const [translating, setTranslating] = React.useState({})
+
+  const handleTranslate = async (sourceField, targetField) => {
+    const text = formData[sourceField]
+    if (!text) return
+
+    setTranslating(prev => ({ ...prev, [targetField]: true }))
+    try {
+      const translated = await translateText(text)
+      if (translated) {
+        onFormChange(targetField, translated)
+      }
+    } finally {
+      setTranslating(prev => ({ ...prev, [targetField]: false }))
+    }
+  }
+
   const [formOptions, setFormOptions] = useState({
     objectives: []
   })
@@ -94,49 +113,94 @@ const SpecificDetailsSection = ({ formData, itemType, onFormChange }) => {
             <Form.Label className="fw-semibold mb-2">
               Location <span className="text-danger">*</span>
             </Form.Label>
-            <Form.Select
-              value={formData.location || ''}
-              onChange={(e) => onFormChange('location', e.target.value)}
-              style={{
-                borderRadius: '8px',
-                border: '2px solid #e9ecef',
-                padding: '0.75rem 1rem',
-              }}
-            >
-              <option value="">Select a location...</option>
-              <option value="New Cairo">New Cairo</option>
-              <option value="New Capital">New Capital</option>
-              <option value="Sheikh Zayed">Sheikh Zayed</option>
-              <option value="Fifth Settlement">Fifth Settlement</option>
-              <option value="North Coast">North Coast</option>
-              <option value="Cairo">Cairo</option>
-              <option value="Giza">Giza</option>
-              <option value="Alexandria">Alexandria</option>
-              <option value="Qalyubia">Qalyubia</option>
-              <option value="Dakahlia">Dakahlia</option>
-              <option value="Sharqia">Sharqia</option>
-              <option value="Gharbia">Gharbia</option>
-              <option value="Monufia">Monufia</option>
-              <option value="Beheira">Beheira</option>
-              <option value="Kafr El Sheikh">Kafr El Sheikh</option>
-              <option value="Damietta">Damietta</option>
-              <option value="Port Said">Port Said</option>
-              <option value="Ismailia">Ismailia</option>
-              <option value="Suez">Suez</option>
-              <option value="Fayoum">Fayoum</option>
-              <option value="Beni Suef">Beni Suef</option>
-              <option value="Minya">Minya</option>
-              <option value="Assiut">Assiut</option>
-              <option value="Sohag">Sohag</option>
-              <option value="Qena">Qena</option>
-              <option value="Luxor">Luxor</option>
-              <option value="Aswan">Aswan</option>
-              <option value="Red Sea">Red Sea</option>
-              <option value="New Valley">New Valley</option>
-              <option value="Matrouh">Matrouh</option>
-              <option value="North Sinai">North Sinai</option>
-              <option value="South Sinai">South Sinai</option>
-            </Form.Select>
+            <div className="d-flex align-items-center gap-2">
+              <div className="flex-grow-1">
+                <Form.Select
+                  value={formData.location || ''}
+                  onChange={(e) => onFormChange('location', e.target.value)}
+                  style={{
+                    borderRadius: '8px',
+                    border: '2px solid #e9ecef',
+                    padding: '0.75rem 1rem',
+                  }}
+                >
+                  <option value="">Select a location...</option>
+                  <option value="New Cairo">New Cairo</option>
+                  <option value="New Capital">New Capital</option>
+                  <option value="Sheikh Zayed">Sheikh Zayed</option>
+                  <option value="Fifth Settlement">Fifth Settlement</option>
+                  <option value="North Coast">North Coast</option>
+                  <option value="Cairo">Cairo</option>
+                  <option value="Giza">Giza</option>
+                  <option value="Alexandria">Alexandria</option>
+                  <option value="Qalyubia">Qalyubia</option>
+                  <option value="Dakahlia">Dakahlia</option>
+                  <option value="Sharqia">Sharqia</option>
+                  <option value="Gharbia">Gharbia</option>
+                  <option value="Monufia">Monufia</option>
+                  <option value="Beheira">Beheira</option>
+                  <option value="Kafr El Sheikh">Kafr El Sheikh</option>
+                  <option value="Damietta">Damietta</option>
+                  <option value="Port Said">Port Said</option>
+                  <option value="Ismailia">Ismailia</option>
+                  <option value="Suez">Suez</option>
+                  <option value="Fayoum">Fayoum</option>
+                  <option value="Beni Suef">Beni Suef</option>
+                  <option value="Minya">Minya</option>
+                  <option value="Assiut">Assiut</option>
+                  <option value="Sohag">Sohag</option>
+                  <option value="Qena">Qena</option>
+                  <option value="Luxor">Luxor</option>
+                  <option value="Aswan">Aswan</option>
+                  <option value="Red Sea">Red Sea</option>
+                  <option value="New Valley">New Valley</option>
+                  <option value="Matrouh">Matrouh</option>
+                  <option value="North Sinai">North Sinai</option>
+                  <option value="South Sinai">South Sinai</option>
+                </Form.Select>
+              </div>
+              <button
+                type="button"
+                className="btn btn-outline-primary d-flex align-items-center justify-content-center"
+                style={{ borderRadius: '8px', height: '54px', width: '54px' }}
+                onClick={() => handleTranslate('location', 'location_ar')}
+                disabled={translating['location_ar']}
+                title="Translate"
+              >
+                {translating['location_ar'] ? <Spinner animation="border" size="sm" /> : <HiOutlineTranslate size={20} />}
+              </button>
+            </div>
+          </Form.Group>
+
+          <Form.Group className="mb-4">
+            <Form.Label className="fw-semibold mb-2">Location (Arabic)</Form.Label>
+            <div className="d-flex align-items-center gap-2">
+              <div className="flex-grow-1">
+                <Form.Control
+                  type="text"
+                  dir="rtl"
+                  value={formData.location_ar || ''}
+                  onChange={(e) => onFormChange('location_ar', e.target.value)}
+                  placeholder="الموقع بالعربية..."
+                  style={{
+                    borderRadius: '8px',
+                    border: '2px solid #e9ecef',
+                    padding: '0.75rem 1rem',
+                    backgroundColor: '#f8f9fa'
+                  }}
+                />
+              </div>
+              <button
+                type="button"
+                className="btn btn-outline-primary d-flex align-items-center justify-content-center"
+                style={{ borderRadius: '8px', height: '54px', width: '54px' }}
+                onClick={() => handleTranslate('location_ar', 'location')}
+                disabled={translating['location']}
+                title="Translate"
+              >
+                {translating['location'] ? <Spinner animation="border" size="sm" /> : <HiOutlineTranslate size={20} />}
+              </button>
+            </div>
           </Form.Group>
         </Col>
 
@@ -223,18 +287,63 @@ const SpecificDetailsSection = ({ formData, itemType, onFormChange }) => {
             <Form.Label className="fw-semibold mb-2">
               Property Type <span className="text-muted small">(optional)</span>
             </Form.Label>
-            <Form.Control
-              type="text"
-              value={formData.propertyType || ''}
-              onChange={(e) => onFormChange('propertyType', e.target.value)}
-              placeholder="e.g., Villa, Apartment, House"
-              style={{
-                borderRadius: '8px',
-                border: '2px solid #e9ecef',
-                padding: '0.75rem 1rem',
-              }}
-            />
+            <div className="d-flex align-items-center gap-2">
+              <div className="flex-grow-1">
+                <Form.Control
+                  type="text"
+                  value={formData.propertyType || ''}
+                  onChange={(e) => onFormChange('propertyType', e.target.value)}
+                  placeholder="e.g., Villa, Apartment, House"
+                  style={{
+                    borderRadius: '8px',
+                    border: '2px solid #e9ecef',
+                    padding: '0.75rem 1rem',
+                  }}
+                />
+              </div>
+              <button
+                type="button"
+                className="btn btn-outline-primary d-flex align-items-center justify-content-center"
+                style={{ borderRadius: '8px', height: '54px', width: '54px' }}
+                onClick={() => handleTranslate('propertyType', 'propertyType_ar')}
+                disabled={translating['propertyType_ar']}
+                title="Translate"
+              >
+                {translating['propertyType_ar'] ? <Spinner animation="border" size="sm" /> : <HiOutlineTranslate size={20} />}
+              </button>
+            </div>
             <small className="text-muted">Type of property (Villa, Apartment, Townhouse, etc.)</small>
+          </Form.Group>
+
+          <Form.Group className="mb-4">
+            <Form.Label className="fw-semibold mb-2">Property Type (Arabic)</Form.Label>
+            <div className="d-flex align-items-center gap-2">
+              <div className="flex-grow-1">
+                <Form.Control
+                  type="text"
+                  dir="rtl"
+                  value={formData.propertyType_ar || ''}
+                  onChange={(e) => onFormChange('propertyType_ar', e.target.value)}
+                  placeholder="نوع العقار بالعربية..."
+                  style={{
+                    borderRadius: '8px',
+                    border: '2px solid #e9ecef',
+                    padding: '0.75rem 1rem',
+                    backgroundColor: '#f8f9fa'
+                  }}
+                />
+              </div>
+              <button
+                type="button"
+                className="btn btn-outline-primary d-flex align-items-center justify-content-center"
+                style={{ borderRadius: '8px', height: '54px', width: '54px' }}
+                onClick={() => handleTranslate('propertyType_ar', 'propertyType')}
+                disabled={translating['propertyType']}
+                title="Translate"
+              >
+                {translating['propertyType'] ? <Spinner animation="border" size="sm" /> : <HiOutlineTranslate size={20} />}
+              </button>
+            </div>
           </Form.Group>
         </Col>
 
@@ -283,17 +392,61 @@ const SpecificDetailsSection = ({ formData, itemType, onFormChange }) => {
             <Form.Label className="fw-semibold mb-2">
               Area <span className="text-danger">*</span>
             </Form.Label>
-            <Form.Control
-              type="text"
-              value={formData.area || ''}
-              onChange={(e) => onFormChange('area', e.target.value)}
-              placeholder="e.g., 2,500"
-              style={{
-                borderRadius: '8px',
-                border: '2px solid #e9ecef',
-                padding: '0.75rem 1rem',
-              }}
-            />
+            <div className="d-flex align-items-center gap-2">
+              <div className="flex-grow-1">
+                <Form.Control
+                  type="text"
+                  value={formData.area || ''}
+                  onChange={(e) => onFormChange('area', e.target.value)}
+                  placeholder="e.g., 2,500"
+                  style={{
+                    borderRadius: '8px',
+                    border: '2px solid #e9ecef',
+                    padding: '0.75rem 1rem',
+                  }}
+                />
+              </div>
+              <button
+                type="button"
+                className="btn btn-outline-primary d-flex align-items-center justify-content-center"
+                style={{ borderRadius: '8px', height: '54px', width: '54px' }}
+                onClick={() => handleTranslate('area', 'area_ar')}
+                disabled={translating['area_ar']}
+                title="Translate"
+              >
+                {translating['area_ar'] ? <Spinner animation="border" size="sm" /> : <HiOutlineTranslate size={20} />}
+              </button>
+            </div>
+          </Form.Group>
+          <Form.Group className="mb-4">
+            <Form.Label className="fw-semibold mb-2">Area (Arabic)</Form.Label>
+            <div className="d-flex align-items-center gap-2">
+              <div className="flex-grow-1">
+                <Form.Control
+                  type="text"
+                  dir="rtl"
+                  value={formData.area_ar || ''}
+                  onChange={(e) => onFormChange('area_ar', e.target.value)}
+                  placeholder="المساحة بالعربية..."
+                  style={{
+                    borderRadius: '8px',
+                    border: '2px solid #e9ecef',
+                    padding: '0.75rem 1rem',
+                    backgroundColor: '#f8f9fa'
+                  }}
+                />
+              </div>
+              <button
+                type="button"
+                className="btn btn-outline-primary d-flex align-items-center justify-content-center"
+                style={{ borderRadius: '8px', height: '54px', width: '54px' }}
+                onClick={() => handleTranslate('area_ar', 'area')}
+                disabled={translating['area']}
+                title="Translate"
+              >
+                {translating['area'] ? <Spinner animation="border" size="sm" /> : <HiOutlineTranslate size={20} />}
+              </button>
+            </div>
           </Form.Group>
         </Col>
 
@@ -489,18 +642,63 @@ const SpecificDetailsSection = ({ formData, itemType, onFormChange }) => {
             <Form.Label className="fw-semibold mb-2">
               Other distinctive addition <span className="text-muted small">(optional)</span>
             </Form.Label>
-            <Form.Control
-              type="text"
-              value={formData.otherDistinctiveAddition || ''}
-              onChange={(e) => onFormChange('otherDistinctiveAddition', e.target.value)}
-              placeholder="e.g., Private elevator, Rooftop garden"
-              style={{
-                borderRadius: '8px',
-                border: '2px solid #e9ecef',
-                padding: '0.75rem 1rem',
-              }}
-            />
+            <div className="d-flex align-items-center gap-2">
+              <div className="flex-grow-1">
+                <Form.Control
+                  type="text"
+                  value={formData.otherDistinctiveAddition || ''}
+                  onChange={(e) => onFormChange('otherDistinctiveAddition', e.target.value)}
+                  placeholder="e.g., Private elevator, Rooftop garden"
+                  style={{
+                    borderRadius: '8px',
+                    border: '2px solid #e9ecef',
+                    padding: '0.75rem 1rem',
+                  }}
+                />
+              </div>
+              <button
+                type="button"
+                className="btn btn-outline-primary d-flex align-items-center justify-content-center"
+                style={{ borderRadius: '8px', height: '54px', width: '54px' }}
+                onClick={() => handleTranslate('otherDistinctiveAddition', 'otherDistinctiveAddition_ar')}
+                disabled={translating['otherDistinctiveAddition_ar']}
+                title="Translate"
+              >
+                {translating['otherDistinctiveAddition_ar'] ? <Spinner animation="border" size="sm" /> : <HiOutlineTranslate size={20} />}
+              </button>
+            </div>
             <small className="text-muted">Describe any other distinctive additions</small>
+          </Form.Group>
+
+          <Form.Group className="mb-4">
+            <Form.Label className="fw-semibold mb-2">Other Addition (Arabic)</Form.Label>
+            <div className="d-flex align-items-center gap-2">
+              <div className="flex-grow-1">
+                <Form.Control
+                  type="text"
+                  dir="rtl"
+                  value={formData.otherDistinctiveAddition_ar || ''}
+                  onChange={(e) => onFormChange('otherDistinctiveAddition_ar', e.target.value)}
+                  placeholder="إضافات مميزة أخرى..."
+                  style={{
+                    borderRadius: '8px',
+                    border: '2px solid #e9ecef',
+                    padding: '0.75rem 1rem',
+                    backgroundColor: '#f8f9fa'
+                  }}
+                />
+              </div>
+              <button
+                type="button"
+                className="btn btn-outline-primary d-flex align-items-center justify-content-center"
+                style={{ borderRadius: '8px', height: '54px', width: '54px' }}
+                onClick={() => handleTranslate('otherDistinctiveAddition_ar', 'otherDistinctiveAddition')}
+                disabled={translating['otherDistinctiveAddition']}
+                title="Translate"
+              >
+                {translating['otherDistinctiveAddition'] ? <Spinner animation="border" size="sm" /> : <HiOutlineTranslate size={20} />}
+              </button>
+            </div>
           </Form.Group>
         </Col>
 

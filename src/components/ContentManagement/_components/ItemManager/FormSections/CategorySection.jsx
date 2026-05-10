@@ -1,7 +1,26 @@
 import React from 'react'
-import { Form, Row, Col } from 'react-bootstrap'
+import { Form, Row, Col, Spinner } from 'react-bootstrap'
+import { translateText } from '@/utils/translate'
+import { HiOutlineTranslate } from 'react-icons/hi'
 
 const CategorySection = ({ formData, itemType, categories, onFormChange }) => {
+  const [translating, setTranslating] = React.useState({})
+
+  const handleTranslate = async (sourceField, targetField) => {
+    const text = formData[sourceField]
+    if (!text) return
+
+    setTranslating(prev => ({ ...prev, [targetField]: true }))
+    try {
+      const translated = await translateText(text)
+      if (translated) {
+        onFormChange(targetField, translated)
+      }
+    } finally {
+      setTranslating(prev => ({ ...prev, [targetField]: false }))
+    }
+  }
+
   return (
     <Row>
       <Col md={6}>
@@ -139,19 +158,64 @@ const CategorySection = ({ formData, itemType, categories, onFormChange }) => {
             <Form.Label className="fw-semibold mb-2">
               Filter Type <span className="text-danger">*</span>
             </Form.Label>
-            <Form.Control
-              type="text"
-              value={formData.filter || ''}
-              onChange={(e) => onFormChange('filter', e.target.value)}
-              placeholder="Houses, Retail, etc."
-              style={{
-                borderRadius: '8px',
-                border: '2px solid #e9ecef',
-                padding: '0.75rem 1rem',
-              }}
-            />
-          </Form.Group>
-        </Col>
+          <div className="d-flex align-items-center gap-2">
+            <div className="flex-grow-1">
+              <Form.Control
+                type="text"
+                value={formData.filter || ''}
+                onChange={(e) => onFormChange('filter', e.target.value)}
+                placeholder="Houses, Retail, etc."
+                style={{
+                  borderRadius: '8px',
+                  border: '2px solid #e9ecef',
+                  padding: '0.75rem 1rem',
+                }}
+              />
+            </div>
+            <button
+              type="button"
+              className="btn btn-outline-primary d-flex align-items-center justify-content-center"
+              style={{ borderRadius: '8px', height: '54px', width: '54px' }}
+              onClick={() => handleTranslate('filter', 'filter_ar')}
+              disabled={translating['filter_ar']}
+              title="Translate"
+            >
+              {translating['filter_ar'] ? <Spinner animation="border" size="sm" /> : <HiOutlineTranslate size={20} />}
+            </button>
+          </div>
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label className="fw-semibold mb-2">Filter Type (Arabic)</Form.Label>
+          <div className="d-flex align-items-center gap-2">
+            <div className="flex-grow-1">
+              <Form.Control
+                type="text"
+                dir="rtl"
+                value={formData.filter_ar || ''}
+                onChange={(e) => onFormChange('filter_ar', e.target.value)}
+                placeholder="نوع الفلتر بالعربية..."
+                style={{
+                  borderRadius: '8px',
+                  border: '2px solid #e9ecef',
+                  padding: '0.75rem 1rem',
+                  backgroundColor: '#f8f9fa'
+                }}
+              />
+            </div>
+            <button
+              type="button"
+              className="btn btn-outline-primary d-flex align-items-center justify-content-center"
+              style={{ borderRadius: '8px', height: '54px', width: '54px' }}
+              onClick={() => handleTranslate('filter_ar', 'filter')}
+              disabled={translating['filter']}
+              title="Translate"
+            >
+              {translating['filter'] ? <Spinner animation="border" size="sm" /> : <HiOutlineTranslate size={20} />}
+            </button>
+          </div>
+        </Form.Group>
+      </Col>
       )}
 
       {itemType === 'news' && (

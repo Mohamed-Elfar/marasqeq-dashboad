@@ -9,14 +9,18 @@ export const mapFromDatabase = (itemType, item) => {
         return {
             ...item,
             order: item.order ?? item.order_index ?? 1,
-            qrImage: item.qr_image || item.qrImage || ''
+            qrImage: item.qr_image || item.qrImage || '',
+            name_ar: item.name_ar || '',
+            url_ar: item.url_ar || ''
         }
     }
 
     if (itemType === 'faq') {
         return {
             ...item,
-            order: item.order ?? item.order_index ?? 1
+            order: item.order ?? item.order_index ?? 1,
+            question_ar: item.question_ar || '',
+            answer_ar: item.answer_ar || ''
         }
     }
 
@@ -34,6 +38,9 @@ export const mapFromDatabase = (itemType, item) => {
             coreFeature: false,
             detail_image_1: item.detail_image_1 || '',
             detail_image_2: item.detail_image_2 || '',
+            title_ar: item.title_ar || '',
+            short_description_ar: item.short_description_ar || '',
+            full_description_ar: item.full_description_ar || '',
             captions: {
                 image1: item.detail_image_1 || '',
                 image2: item.detail_image_2 || '',
@@ -55,7 +62,12 @@ export const mapFromDatabase = (itemType, item) => {
             active: item.active !== false,
             carousel: item.carousel || false,
             filter: item.filter || '',
+            filter_ar: item.filter_ar || '',
             featured: item.featured || false,
+            title_ar: item.title_ar || '',
+            short_description_ar: item.short_description_ar || '',
+            full_description_ar: item.full_description_ar || '',
+            designation_ar: item.designation_ar || '',
             captions: item.captions || {
                 image1: '31.jpg',
                 image2: '32.jpg',
@@ -78,11 +90,22 @@ export const mapFromDatabase = (itemType, item) => {
             finishStatus: item.finish_status || 'without_finish',
             totalArea: item.total_area ?? null,
             netArea: item.net_area ?? null,
-            builtUpArea: item.built_up_area ?? null,
+            built_up_area: item.built_up_area ?? null,
             landArea: item.land_area ?? null,
             productImg: item.product_img || item.productImg || null,
             shortDescription: item.short_description || item.shortDescription || '',
             fullDescription: item.full_description || item.fullDescription || '',
+            title_ar: item.title_ar || '',
+            short_description_ar: item.short_description_ar || '',
+            full_description_ar: item.full_description_ar || '',
+            location_ar: item.location_ar || '',
+            area_ar: item.area_ar || '',
+            propertyType_ar: item.propertyType_ar || item.property_type_ar || '',
+            livingRoom: item.living_rooms || 0,
+            nannyRoom: item.nanny_rooms || 0,
+            numberOfFloors: item.number_of_floors || 0,
+            otherDistinctiveAddition: item.other_distinctive_addition || '',
+            otherDistinctiveAddition_ar: item.other_distinctive_addition_ar || '',
             propertyDetails: item.property_details || item.propertyDetails || {},
             factsAndFeatures: item.facts_and_features || item.factsAndFeatures || {},
             amenitiesList: item.amenities_list || item.amenitiesList || [],
@@ -108,8 +131,10 @@ export const mapToDatabase = (itemType, item) => {
     if (itemType === 'social') {
         const mapped = {
             name: item.name || '',
+            name_ar: item.name_ar || '',
             icon: item.icon || '',
             url: item.url || '',
+            url_ar: item.url_ar || '',
             qr_image: item.qrImage || item.qr_image || null,
             position: item.position || ['header', 'footer', 'news'],
             active: item.active !== false,
@@ -127,7 +152,9 @@ export const mapToDatabase = (itemType, item) => {
         const orderValue = Number(item.order ?? item.order_index ?? 1)
         return {
             question: item.question || '',
+            question_ar: item.question_ar || '',
             answer: item.answer || '',
+            answer_ar: item.answer_ar || '',
             category: item.category || 'general',
             active: item.active !== false,
             order_index: Number.isFinite(orderValue) && orderValue > 0 ? orderValue : 1,
@@ -144,7 +171,10 @@ export const mapToDatabase = (itemType, item) => {
 
         return {
             title: item.title || '',
+            title_ar: item.title_ar || '',
             description: item.fullDescription || item.description || item.shortDescription || '',
+            full_description_ar: item.full_description_ar || '',
+            short_description_ar: item.short_description_ar || '',
             icon: item.icon || '',
             featured_image: featuredImage,
             img: mainImage,
@@ -164,15 +194,20 @@ export const mapToDatabase = (itemType, item) => {
     if (itemType === 'portfolio') {
         return {
             title: item.title || '',
+            title_ar: item.title_ar || '',
             designation: item.designation || '',
+            designation_ar: item.designation_ar || '',
             short_description: item.shortDescription || '',
+            short_description_ar: item.short_description_ar || '',
             full_description: item.fullDescription || '',
+            full_description_ar: item.full_description_ar || '',
             thumb_image: item.thumbImage || '1.jpg',
             img: item.img || item.thumbImage || '1.jpg',
             carousel: item.carousel || false,
             active: item.active !== false,
             category: item.category || [],
             filter: item.filter || '',
+            filter_ar: item.filter_ar || '',
             featured: item.featured || false,
             captions: item.captions || {
                 image1: '31.jpg',
@@ -205,18 +240,24 @@ export const mapToDatabase = (itemType, item) => {
 
         return {
             title: item.title || '',
+            title_ar: item.title_ar || '',
             description: item.description || '',
             short_description: item.shortDescription || '',
+            short_description_ar: item.short_description_ar || '',
             full_description: item.fullDescription || '',
+            full_description_ar: item.full_description_ar || '',
             currency: item.currency || 'USD',
             price: item.price ?? null,
             location: item.location || item.locantion || '',
+            location_ar: item.location_ar || '',
             property_type: item.propertyType || item.property_type || '',
+            property_type_ar: item.propertyType_ar || '',
             bedrooms: item.bedrooms ?? null,
             bathrooms: item.bathrooms ?? null,
             rooms: item.rooms ?? null,
             year_built: item.yearBuilt ?? null,
             area: item.area ?? null,
+            area_ar: item.area_ar || '',
             unit_type: item.unitType || 'sq_m',
             finish_status: item.finishStatus || 'without_finish',
             total_area: item.totalArea ?? null,
@@ -228,10 +269,16 @@ export const mapToDatabase = (itemType, item) => {
             images: item.images || [],
             meta_title: item.meta_title || item.title || '',
             meta_description: item.meta_description || item.shortDescription || '',
-            currency: item.currency || 'USD',
             visible: item.visible !== false,
             order_index: Number(item.order_index ?? 0),
             category_id: item.category_id || null,
+
+            // New property detail columns
+            living_rooms: item.livingRoom ?? 0,
+            nanny_rooms: item.nannyRoom ?? 0,
+            number_of_floors: item.numberOfFloors ?? 0,
+            other_distinctive_addition: item.otherDistinctiveAddition || '',
+            other_distinctive_addition_ar: item.otherDistinctiveAddition_ar || '',
 
             // New JSON structure fields
             product_img: item.productImg !== undefined ? item.productImg : (item.product_img || null),
@@ -262,7 +309,6 @@ export const mapToDatabase = (itemType, item) => {
             agent: item.agent || {},
             gallery: item.gallery || {},
             property_types: item.propertyTypes || item.property_types || [],
-            currency: item.currency || 'USD',
             carousel: item.carousel || [],
             tags: item.tags || item.tag || [],
             category: item.category || [],
@@ -277,7 +323,6 @@ export const mapToDatabase = (itemType, item) => {
             video_poster: videoPoster || '',
             gallery_images: galleryImages,
             floor_plans: Array.isArray(item.floorPlans) ? item.floorPlans : (item.floor_plans || []),
-            currency: item.currency || 'USD',
         }
     }
 
